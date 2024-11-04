@@ -1,43 +1,132 @@
-version: '3'
-
 services:
-  payload:
-    image: node:18-alpine
-    ports:
-      - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm dev"
-    depends_on:
-      - mongo
-      # - postgres
-    env_file:
-      - .env
 
-  # Ensure your DATABASE_URI uses 'mongo' as the hostname ie. mongodb://mongo/my-db-name
-  mongo:
-    image: mongo:latest
-    ports:
-      - '27017:27017'
+  watchtower:
+    image: containrrr/watchtower
     command:
-      - --storageEngine=wiredTiger
+      - "--label-enable"
+      - "--interval"
+      - "30"
+      - "--rolling-restart"
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - web
 
-  # Uncomment the following to use postgres
-  # postgres:
-  #   restart: always
-  #   image: postgres:latest
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
+  reverse-proxy:
+    image: traefik:v3.1
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=romandenysovsk@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - web
+
+  kromka-app:
+    image: ghcr.io/romandenysov/kromka-app:prod
+    env_file:
+      - ../.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kromka-app.rule=Host(`pekarenkromka.sk`) || Host(`www.pekarenkromka.sk`)"
+      - "traefik.http.routers.kromka-app.entrypoints=websecure"
+      - "traefik.http.routers.kromka-app.tls.certresolver=myresolver"
+      - "com.centurylinklabs.watchtower.enable=true"
+    deploy:
+      mode: replicated
+      replicas: 3
+    restart: always
+    depends_on:
+      - postgres
+    # ports:
+    #   - '127.0.0.1:3000:3000'
+    # environment:
+    #   NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
+    #   DATABASE_URI: ${DATABASE_URI}
+    #   PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+    #   AUTH_SECRET: ${AUTH_SECRET}
+    #   AUTH_GOOGLE_ID: ${AUTH_GOOGLE_ID}
+    #   AUTH_GOOGLE_SECRET: ${AUTH_GOOGLE_SECRET}
+    #   NEXT_PUBLIC_MAPS_API_KEY: ${NEXT_PUBLIC_MAPS_API_KEY}
+    #   EMAIL_SERVER: ${EMAIL_SERVER}
+    #   EMAIL_FROM: ${EMAIL_FROM}
+    #   EMAIL_HOST: ${EMAIL_HOST}
+    #   EMAIL_PASS: ${EMAIL_PASS}
+    #   AUTH_RESEND_KEY: ${AUTH_RESEND_KEY}
+    #   NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${NEXT_PUBLIC_STRIPE_PUBLIC_KEY}
+    #   STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+    secrets:
+      - postgres-password
+      # - DATABASE_URI
+      # - PAYLOAD_SECRET
+      # - AUTH_SECRET
+      # - AUTH_GOOGLE_ID
+      # - AUTH_GOOGLE_SECRET
+      # - EMAIL_PASS
+      # - AUTH_RESEND_KEY
+      # - STRIPE_SECRET_KEY
+    networks:
+      - web
+    expose:
+      - "3000"
+
+  postgres:
+    image: postgres:16
+    restart: always
+    container_name: kromka-app-postgres
+    user: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=kromka-app
+    secrets:
+      - postgres-password
+    networks:
+      - web
 
 volumes:
-  data:
-  # pgdata:
-  node_modules:
+  postgres_data:
+  letsencrypt:
+
+secrets:
+  postgres-password:
+    file: ../db/password.txt
+  # DATABASE_URI:
+  #   external: true
+  # PAYLOAD_SECRET:
+  #   external: true
+  # AUTH_SECRET:
+  #   external: true
+  # AUTH_GOOGLE_ID:
+  #   external: true
+  # AUTH_GOOGLE_SECRET:
+  #   external: true
+  # EMAIL_PASS:
+  #   external: true
+  # AUTH_RESEND_KEY:
+  #   external: true
+  # STRIPE_SECRET_KEY:
+  #   external: true
+
+networks:
+  web:

@@ -1,0 +1,75 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"a11y": {
+				"noAriaUnsupportedElements": "warn",
+				"noBlankTarget": "off",
+				"useAltText": "warn",
+				"useAriaPropsForRole": "warn",
+				"useValidAriaProps": "warn",
+				"useValidAriaValues": "warn"
+			},
+			"correctness": {
+				"noChildrenProp": "error",
+				"useExhaustiveDependencies": "warn",
+				"useHookAtTopLevel": "info",
+				"useJsxKeyInIterable": "error",
+				"noUnusedImports": "warn"
+			},
+			"security": {
+				"noDangerouslySetInnerHtmlWithChildren": "error"
+			},
+			"suspicious": {
+				"noCommentText": "warn",
+				"noConsoleLog": "info"
+			},
+			"nursery": {
+				"useSortedClasses": {
+					"fix": "safe",
+					"level": "error",
+					"options": {}
+				}
+			}
+		}
+},
+	"overrides": [
+		{
+			"include": ["**/*/ts?(x)"]
+		}
+	],
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineEnding": "lf",
+		"lineWidth": 80,
+		"attributePosition": "auto"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"javascript": {
+		"formatter": {
+			"jsxQuoteStyle": "single",
+			"quoteProperties": "asNeeded",
+			"trailingCommas": "none",
+			"semicolons": "asNeeded",
+			"arrowParentheses": "always",
+			"bracketSpacing": false,
+			"bracketSameLine": true,
+			"lineEnding": "lf",
+			"quoteStyle": "single",
+			"attributePosition": "auto"
+		}
+	},
+	"json":{
+		"formatter": {
+			"lineEnding": "lf",
+			"trailingCommas": "all"
+		}
+	}
+}
