@@ -129,13 +129,14 @@ export interface Product {
   price: number;
   optsPrice?: number | null;
   images: {
-    image?: (string | null) | Media;
+    image: string | Media;
     id?: string | null;
   }[];
   order?: number | null;
   isFeatured?: boolean | null;
   priceId?: string | null;
   stripeId?: string | null;
+  createdBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -148,8 +149,12 @@ export interface Category {
   title: string;
   slug?: string | null;
   order?: number | null;
-  image?: (string | null) | Media;
+  image: string | Media;
   isVisible?: boolean | null;
+  products?: {
+    docs?: (string | Product)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -243,6 +248,10 @@ export interface Profile {
     name?: string | null;
     phone?: string | null;
     email?: string | null;
+  };
+  customerOptions?: {
+    store?: (string | null) | Store;
+    method?: ('store' | 'card') | null;
   };
   options: {
     terms: boolean;
@@ -555,6 +564,7 @@ export interface ProductsSelect<T extends boolean = true> {
   isFeatured?: T;
   priceId?: T;
   stripeId?: T;
+  createdBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -705,7 +715,6 @@ export interface CommentsSelect<T extends boolean = true> {
  * via the `definition` "profiles_select".
  */
 export interface ProfilesSelect<T extends boolean = true> {
-  id?: T;
   user?: T;
   contacts?:
     | T
@@ -713,6 +722,12 @@ export interface ProfilesSelect<T extends boolean = true> {
         name?: T;
         phone?: T;
         email?: T;
+      };
+  customerOptions?:
+    | T
+    | {
+        store?: T;
+        method?: T;
       };
   options?:
     | T
@@ -765,6 +780,7 @@ export interface CategoriesSelect<T extends boolean = true> {
   order?: T;
   image?: T;
   isVisible?: T;
+  products?: T;
   updatedAt?: T;
   createdAt?: T;
 }
