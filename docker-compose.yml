@@ -59,7 +59,7 @@ services:
     secrets:
       - postgres-password
     networks:
-      - web
+      - web # обязательно подключен к сети web
       - internal
     expose:
       - '3000'
