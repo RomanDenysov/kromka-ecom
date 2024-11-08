@@ -46,7 +46,7 @@ services:
       - ../.env
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.kromka-ecom.rule=Host(`pekarenkromka.sk`)'
+      - 'traefik.http.routers.kromka-ecom.rule=Host(`pekarenkromka.sk`) || Host(`www.pekarenkromka.sk`)'
       - 'traefik.http.routers.kromka-ecom.entrypoints=websecure'
       - 'traefik.http.routers.kromka-ecom.tls.certresolver=myresolver'
       - 'com.centurylinklabs.watchtower.enable=true'
