@@ -40,15 +40,15 @@ services:
       - 'traefik.http.routers.letsencrypt.tls.certresolver=myresolver'
       - 'com.centurylinklabs.watchtower.enable=true'
 
-  kromka-app:
+  kromka-ecom:
     image: ghcr.io/romandenysov/kromka-ecom:prod
     env_file:
       - ../.env
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.kromka-app.rule=Host(`pekarenkromka.sk`)'
-      - 'traefik.http.routers.kromka-app.entrypoints=websecure'
-      - 'traefik.http.routers.kromka-app.tls.certresolver=myresolver'
+      - 'traefik.http.routers.kromka-ecom.rule=Host(`pekarenkromka.sk`)'
+      - 'traefik.http.routers.kromka-ecom.entrypoints=websecure'
+      - 'traefik.http.routers.kromka-ecom.tls.certresolver=myresolver'
       - 'com.centurylinklabs.watchtower.enable=true'
     restart: always
     deploy:
@@ -67,7 +67,7 @@ services:
   postgres:
     image: postgres:16
     restart: always
-    container_name: kromka-app-postgres
+    container_name: kromka-ecom-postgres
     user: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -79,7 +79,7 @@ services:
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-password
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=kromka-app
+      - POSTGRES_DB=kromka-ecom
     secrets:
       - postgres-password
     networks:
