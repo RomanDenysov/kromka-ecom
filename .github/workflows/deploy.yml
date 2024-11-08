@@ -12,6 +12,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Docker BuildKit
+        # Enable Docker BuildKit for optimized caching
+        run: |
+          echo '{"experimental": true, "features": { "buildkit": true }}' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: Cache pnpm store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: "${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}"
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -24,6 +38,8 @@ jobs:
         with:
           context: .
           push: true
+          cache-from: type=gha,scope=kromka-ecom
+          cache-to: type=gha,scope=kromka-ecom,mode=max
           tags: ghcr.io/romandenysov/kromka-ecom:prod
           build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
