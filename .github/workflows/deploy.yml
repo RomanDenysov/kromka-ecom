@@ -38,7 +38,7 @@ jobs:
           push: true
           tags: ghcr.io/romandenysov/kromka-app:prod
           build-args: |
-            DATABASE_URI=${{ secrets.DATABASE_URI }}
+            DATABASE_URL=${{ secrets.DATABASE_URI }}
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
             AUTH_SECRET=${{ secrets.AUTH_SECRET }}
             AUTH_GOOGLE_ID=${{ secrets.AUTH_GOOGLE_ID }}
@@ -53,7 +53,7 @@ jobs:
             NEXT_PUBLIC_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_MAPS_API_KEY }}
           secrets: |
             NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}
-            DATABASE_URI=${{ secrets.DATABASE_URI }}
+            DATABASE_URL=${{ secrets.DATABASE_URI }}
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
             AUTH_SECRET=${{ secrets.AUTH_SECRET }}
             AUTH_GOOGLE_ID=${{ secrets.AUTH_GOOGLE_ID }}
