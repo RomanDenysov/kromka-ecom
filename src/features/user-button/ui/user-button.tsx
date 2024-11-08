@@ -1,7 +1,8 @@
+'use client'
+
 import { BookLockIcon, LogInIcon, SettingsIcon, ShoppingBag, UserIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
-import { auth } from '~/lib/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '~/lib/ui/components/avatar'
 import {
   DropdownMenu,
@@ -13,7 +14,7 @@ import {
 } from '~/lib/ui/components/dropdown-menu'
 import { cn, getNameInitials } from '~/lib/utils'
 import { LogoutButton } from './logout-button'
-import { api } from '~/trpc/server'
+import { api } from '~/trpc/react'
 
 // TODO: move options to config file
 const BUTTON_OPTIONS = [
@@ -22,8 +23,8 @@ const BUTTON_OPTIONS = [
   { label: 'Settings', href: '/settings', icon: SettingsIcon },
 ]
 
-const UserButton = async () => {
-  const user = await api.users.getUser()
+const UserButton = () => {
+  const { data: user } = api.users.getUser.useQuery()
   const isAdmin = user?.role === 'admin'
 
   console.log('USER', user)
@@ -65,17 +66,6 @@ const UserButton = async () => {
                   </>
                 )}
               </Suspense>
-              {/* {isAdmin && (
-                <>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href={{ pathname: '/admin', query: { user: user.id } }}>
-                      <BookLockIcon size={20} className="mr-2" />
-                      Admin Panel
-                    </Link>
-                  </DropdownMenuItem>
-                </>
-              )} */}
               <DropdownMenuSeparator />
               <LogoutButton />
             </DropdownMenuGroup>
