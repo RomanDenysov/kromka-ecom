@@ -23,7 +23,7 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # Объявление аргументов сборки
-ARG DATABASE_URI
+ARG DATABASE_URL
 ARG PAYLOAD_SECRET
 ARG AUTH_SECRET
 ARG AUTH_GOOGLE_ID
@@ -38,7 +38,7 @@ ARG NEXT_PUBLIC_STRIPE_PUBLIC_KEY
 ARG NEXT_PUBLIC_MAPS_API_KEY
 
 # Установка переменных окружения только для этапа сборки
-ENV DATABASE_URI=$DATABASE_URI
+ENV DATABASE_URL=$DATABASE_URI
 ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 ENV AUTH_SECRET=$AUTH_SECRET
 ENV AUTH_GOOGLE_ID=$AUTH_GOOGLE_ID
