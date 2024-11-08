@@ -41,7 +41,7 @@ services:
       - 'com.centurylinklabs.watchtower.enable=true'
 
   kromka-app:
-    image: ghcr.io/romandenysov/kromka-app:prod
+    image: ghcr.io/romandenysov/kromka-ecom:prod
     env_file:
       - ../.env
     labels:
