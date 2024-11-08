@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   watchtower:
     image: containrrr/watchtower
@@ -199,3 +197,4 @@ volumes:
   letsencrypt:
   portainer_data:
   prometheus_data:
+  uptime-kuma-data:
