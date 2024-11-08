@@ -16,6 +16,22 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# В секции builder после COPY . .
+RUN echo "NODE_ENV=production" >> .env
+RUN echo "DATABASE_URL=${DATABASE_URL}" >> .env
+RUN echo "PAYLOAD_SECRET=${PAYLOAD_SECRET}" >> .env
+RUN echo "AUTH_SECRET=${AUTH_SECRET}" >> .env
+RUN echo "AUTH_GOOGLE_ID=${AUTH_GOOGLE_ID}" >> .env
+RUN echo "AUTH_GOOGLE_SECRET=${AUTH_GOOGLE_SECRET}" >> .env
+RUN echo "EMAIL_SERVER=${EMAIL_SERVER}" >> .env
+RUN echo "EMAIL_FROM=${EMAIL_FROM}" >> .env
+RUN echo "EMAIL_HOST=${EMAIL_HOST}" >> .env
+RUN echo "EMAIL_PASS=${EMAIL_PASS}" >> .env
+RUN echo "STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}" >> .env
+RUN echo "NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}" >> .env
+RUN echo "NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${NEXT_PUBLIC_STRIPE_PUBLIC_KEY}" >> .env
+RUN echo "NEXT_PUBLIC_MAPS_API_KEY=${NEXT_PUBLIC_MAPS_API_KEY}" >> .env
+
 # Объявление аргументов сборки
 ARG DATABASE_URL
 ARG PAYLOAD_SECRET
@@ -48,6 +64,9 @@ ENV NEXT_PUBLIC_MAPS_API_KEY=$NEXT_PUBLIC_MAPS_API_KEY
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+RUN echo "Checking environment variables:"
+RUN printenv | grep -E 'DATABASE_URL|NODE_ENV|NEXT_PUBLIC'
+RUN echo "Starting build..."
 RUN pnpm run build
 
 # Production image
