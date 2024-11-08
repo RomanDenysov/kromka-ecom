@@ -33,6 +33,12 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
     networks:
       - web
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.letsencrypt.rule=Host(`traefik.pekarenkromka.sk`)'
+      - 'traefik.http.routers.letsencrypt.entrypoints=websecure'
+      - 'traefik.http.routers.letsencrypt.tls.certresolver=myresolver'
+      - 'com.centurylinklabs.watchtower.enable=true'
 
   kromka-ecom:
     image: ghcr.io/romandenysov/kromka-ecom:prod
@@ -44,41 +50,17 @@ services:
       - 'traefik.http.routers.kromka-ecom.entrypoints=websecure'
       - 'traefik.http.routers.kromka-ecom.tls.certresolver=myresolver'
       - 'com.centurylinklabs.watchtower.enable=true'
+    restart: always
     deploy:
       mode: replicated
       replicas: 3
-    restart: always
     depends_on:
       - postgres
-    # ports:
-    #   - '127.0.0.1:3000:3000'
-    # environment:
-    #   NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
-    #   DATABASE_URI: ${DATABASE_URI}
-    #   PAYLOAD_SECRET: ${PAYLOAD_SECRET}
-    #   AUTH_SECRET: ${AUTH_SECRET}
-    #   AUTH_GOOGLE_ID: ${AUTH_GOOGLE_ID}
-    #   AUTH_GOOGLE_SECRET: ${AUTH_GOOGLE_SECRET}
-    #   NEXT_PUBLIC_MAPS_API_KEY: ${NEXT_PUBLIC_MAPS_API_KEY}
-    #   EMAIL_SERVER: ${EMAIL_SERVER}
-    #   EMAIL_FROM: ${EMAIL_FROM}
-    #   EMAIL_HOST: ${EMAIL_HOST}
-    #   EMAIL_PASS: ${EMAIL_PASS}
-    #   AUTH_RESEND_KEY: ${AUTH_RESEND_KEY}
-    #   NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${NEXT_PUBLIC_STRIPE_PUBLIC_KEY}
-    #   STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
     secrets:
       - postgres-password
-      # - DATABASE_URI
-      # - PAYLOAD_SECRET
-      # - AUTH_SECRET
-      # - AUTH_GOOGLE_ID
-      # - AUTH_GOOGLE_SECRET
-      # - EMAIL_PASS
-      # - AUTH_RESEND_KEY
-      # - STRIPE_SECRET_KEY
     networks:
       - web
+      - internal
     expose:
       - '3000'
 
@@ -101,31 +83,118 @@ services:
     secrets:
       - postgres-password
     networks:
-      - web
+      - internal
 
-volumes:
-  postgres_data:
-  letsencrypt:
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: romandenysovsk@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: kromka2024
+    depends_on:
+      - postgres
+    networks:
+      - web
+      - internal
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pgadmin.rule=Host(`pgadmin.pekarenkromka.sk`)'
+      - 'traefik.http.routers.pgadmin.entrypoints=websecure'
+      - 'traefik.http.routers.pgadmin.tls.certresolver=myresolver'
+      - 'com.centurylinklabs.watchtower.enable=true'
+
+  portainer:
+    image: portainer/portainer-ce
+    restart: always
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - web
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.portainer.rule=Host(`portainer.pekarenkromka.sk`)'
+      - 'traefik.http.routers.portainer.entrypoints=websecure'
+      - 'traefik.http.routers.portainer.tls.certresolver=myresolver'
+      - 'com.centurylinklabs.watchtower.enable=true'
+
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - internal
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.prometheus.rule=Host(`prometheus.pekarenkromka.sk`)'
+      - 'traefik.http.routers.prometheus.entrypoints=websecure'
+      - 'traefik.http.routers.prometheus.tls.certresolver=myresolver'
+      - 'com.centurylinklabs.watchtower.enable=true'
+
+  grafana:
+    image: grafana/grafana
+    restart: always
+    depends_on:
+      - prometheus
+    networks:
+      - web
+      - internal
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.grafana.rule=Host(`grafana.pekarenkromka.sk`)'
+      - 'traefik.http.routers.grafana.entrypoints=websecure'
+      - 'traefik.http.routers.grafana.tls.certresolver=myresolver'
+      - 'com.centurylinklabs.watchtower.enable=true'
+
+  uptime-kuma:
+    image: louislam/uptime-kuma
+    restart: always
+    volumes:
+      - uptime-kuma-data:/app/data
+    networks:
+      - web
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.uptime-kuma.rule=Host(`uptime.pekarenkromka.sk`)'
+      - 'traefik.http.routers.uptime-kuma.entrypoints=websecure'
+      - 'traefik.http.routers.uptime-kuma.tls.certresolver=myresolver'
+      - 'com.centurylinklabs.watchtower.enable=true'
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    restart: always
+    networks:
+      - internal
+    expose:
+      - '9100'
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
 
 secrets:
   postgres-password:
     file: ../db/password.txt
-  # DATABASE_URI:
-  #   external: true
-  # PAYLOAD_SECRET:
-  #   external: true
-  # AUTH_SECRET:
-  #   external: true
-  # AUTH_GOOGLE_ID:
-  #   external: true
-  # AUTH_GOOGLE_SECRET:
-  #   external: true
-  # EMAIL_PASS:
-  #   external: true
-  # AUTH_RESEND_KEY:
-  #   external: true
-  # STRIPE_SECRET_KEY:
-  #   external: true
 
 networks:
   web:
+    external: false
+  internal:
+    external: false
+
+volumes:
+  postgres_data:
+  letsencrypt:
+  portainer_data:
+  prometheus_data:
+  uptime-kuma-data:
