@@ -26,7 +26,7 @@ jobs:
           push: true
           tags: ghcr.io/romandenysov/kromka-app:prod
           build-args: |
-            DATABASE_URL=${{ secrets.DATABASE_URI }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
             AUTH_SECRET=${{ secrets.AUTH_SECRET }}
             AUTH_GOOGLE_ID=${{ secrets.AUTH_GOOGLE_ID }}
