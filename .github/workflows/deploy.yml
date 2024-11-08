@@ -14,16 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 18
-
-      # - name: Install dependencies
-      #   run: |
-      #     corepack enable
-      #     pnpm install --frozen-lockfile
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -33,22 +23,35 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
+        env:
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
+          AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
+          EMAIL_SERVER: ${{ secrets.EMAIL_SERVER }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+          NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
+          NEXT_PUBLIC_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_MAPS_API_KEY }}
         with:
           context: .
           push: true
           tags: ghcr.io/romandenysov/kromka-app:prod
-          build-args: |
-            DATABASE_URL=${{ secrets.DATABASE_URI }}
-            PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
-            AUTH_SECRET=${{ secrets.AUTH_SECRET }}
-            AUTH_GOOGLE_ID=${{ secrets.AUTH_GOOGLE_ID }}
-            AUTH_GOOGLE_SECRET=${{ secrets.AUTH_GOOGLE_SECRET }}
-            EMAIL_SERVER=${{ secrets.EMAIL_SERVER }}
-            EMAIL_FROM=${{ secrets.EMAIL_FROM }}
-            EMAIL_HOST=${{ secrets.EMAIL_HOST }}
-            EMAIL_PASS=${{ secrets.EMAIL_PASS }}
-            STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
-            NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}
-            NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
-            NEXT_PUBLIC_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_MAPS_API_KEY }}
-          secrets: inherit
+          secrets: |
+            id=DATABASE_URL,env=DATABASE_URI
+            id=PAYLOAD_SECRET,env=PAYLOAD_SECRET
+            id=AUTH_SECRET,env=AUTH_SECRET
+            id=AUTH_GOOGLE_ID,env=AUTH_GOOGLE_ID
+            id=AUTH_GOOGLE_SECRET,env=AUTH_GOOGLE_SECRET
+            id=EMAIL_SERVER,env=EMAIL_SERVER
+            id=EMAIL_FROM,env=EMAIL_FROM
+            id=EMAIL_HOST,env=EMAIL_HOST
+            id=EMAIL_PASS,env=EMAIL_PASS
+            id=STRIPE_SECRET_KEY,env=STRIPE_SECRET_KEY
+            id=NEXT_PUBLIC_SERVER_URL,env=NEXT_PUBLIC_SERVER_URL
+            id=NEXT_PUBLIC_STRIPE_PUBLIC_KEY,env=NEXT_PUBLIC_STRIPE_PUBLIC_KEY
+            id=NEXT_PUBLIC_MAPS_API_KEY,env=NEXT_PUBLIC_MAPS_API_KEY
