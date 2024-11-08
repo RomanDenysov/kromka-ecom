@@ -8,8 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_BUILDKIT: 1
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,7 +25,7 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/romandenysov/kromka-app:prod
-          secrets: |
+          build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URI }}
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
             AUTH_SECRET=${{ secrets.AUTH_SECRET }}
