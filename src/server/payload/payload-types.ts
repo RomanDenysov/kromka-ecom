@@ -277,7 +277,9 @@ export interface Store {
         id?: string | null;
       }[]
     | null;
+  image: string | Media;
   address: string;
+  addressUrl: string;
   contacts: {
     phone: string;
     email?: string | null;
@@ -798,7 +800,9 @@ export interface StoresSelect<T extends boolean = true> {
         quantity?: T;
         id?: T;
       };
+  image?: T;
   address?: T;
+  addressUrl?: T;
   contacts?:
     | T
     | {

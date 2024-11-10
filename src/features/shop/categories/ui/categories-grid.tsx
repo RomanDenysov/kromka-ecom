@@ -1,18 +1,22 @@
-'use client'
-import { api } from '~/trpc/react'
 import GridItem from './grid-item'
 import { Heading } from '~/lib/ui/heading'
 import AnimatedBackground from '~/lib/ui/motion/animated-background'
 import Link from 'next/link'
+import { Category } from '@payload-types'
 
-export default function CategoriesGrid() {
-  const { data: categories } = api.categories.getAll.useQuery()
+type Props = {
+  categories: Category[]
+  storeSlug?: string
+}
 
+export default function CategoriesGrid({ categories, storeSlug }: Props) {
   if (!categories) return null
+
+  let storeSlugNavigation = storeSlug ? storeSlug : 'all'
 
   return (
     <>
-      <Heading title={`Categories (${categories?.length})`} className="mb-5" />
+      <Heading title={`Categories (${categories?.length})`} />
       <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 md:gap-2 mx-auto">
         <AnimatedBackground
           className="rounded-lg bg-accent"
@@ -25,7 +29,7 @@ export default function CategoriesGrid() {
               <Link
                 data-id={category.id}
                 key={category.id}
-                href={{ pathname: `/shop/${category.slug}` }}
+                href={{ pathname: `/shop/${storeSlugNavigation}/${category.slug}` }}
                 className="flex flex-col size-auto rounded-lg"
               >
                 <GridItem

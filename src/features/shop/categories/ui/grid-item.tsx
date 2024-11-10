@@ -15,11 +15,11 @@ const GridItem = ({ title, image, total }: Props) => {
           src={image}
           alt={title}
           fill
-          className="brightness-90 object-cover object-center rounded-lg absolute inset-0 z-0 hover:scale-105 transition duration-300 ease-in-out"
+          className="brightness-90 object-cover object-center rounded-lg absolute inset-0 z-0 group-hover:scale-[1.02] group-hover:brightness-95 transition duration-300 ease-in-out"
         />
       </div>
       <div className="p-0.5">
-        <h4 className="text-xl font-semebold text-primary">{title}</h4>
+        <h4 className="text-xl font-semibold line-clamp-2 text-primary">{title}</h4>
         <span className="text-sm text-muted-foreground">{generateProductQuantityStr(total)}</span>
       </div>
     </div>

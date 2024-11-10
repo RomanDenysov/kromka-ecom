@@ -7,6 +7,7 @@ import type { Product } from '~/server/payload/payload-types'
 import { cn, formatPrice } from '~/lib/utils'
 import { FastAddButton } from '~/features/products-reel/ui'
 import { ImageSlider } from '~/lib/ui/image-slider'
+import { useParams } from 'next/navigation'
 
 type Props = {
   product: Product | null
@@ -15,6 +16,9 @@ type Props = {
 
 const ProductsListing = React.memo(({ product, index }: Props) => {
   const [isVisible, setIsVisible] = React.useState<boolean>(false)
+  const params = useParams()
+  const { store } = params
+  const storeSlug = store ? store : 'all'
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,7 +48,7 @@ const ProductsListing = React.memo(({ product, index }: Props) => {
         <div className="flex w-full flex-col">
           <Link
             href={{
-              pathname: `/shop/${categorySlug}/${product.slug}`,
+              pathname: `/shop/${storeSlug}/${categorySlug}/${product.slug}`,
             }}
           >
             <ImageSlider urls={validUrls} />
