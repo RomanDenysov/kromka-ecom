@@ -88,9 +88,11 @@ export const ImageSlider = ({ urls, brightness = true }: ImageSliderProps) => {
         {urls.map((url) => (
           <SwiperSlide key={`image-${url}`} className="-z-10 relative h-full w-full">
             <Image
-              width={1000}
-              height={1000}
               loading="eager"
+              decoding="sync"
+              quality={65}
+              width={500}
+              height={500}
               className={cn(
                 '-z-10 h-full w-full object-cover object-center transition delay-100 duration-200 group-hover:scale-[1.03]',
                 brightness && 'group-hover:brightness-90',

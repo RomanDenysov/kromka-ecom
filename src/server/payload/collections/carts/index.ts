@@ -1,10 +1,11 @@
 import type { CollectionConfig } from 'payload'
-import { COLLECTIONS } from '../../config'
+import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import productItemsField from '../../fields/product-items'
 
 const Carts: CollectionConfig = {
   slug: COLLECTIONS.CARTS,
   admin: {
+    group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'user',
     defaultColumns: ['user', 'total'],
   },

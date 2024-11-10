@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload'
-import { COLLECTIONS } from '../../config'
+import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import orderField from '../../fields/order'
 import slugField from '../../fields/slug'
 
 const Categories: CollectionConfig = {
   slug: COLLECTIONS.CATEGORIES,
   admin: {
+    group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'title',
     defaultColumns: ['title', 'order'],
   },

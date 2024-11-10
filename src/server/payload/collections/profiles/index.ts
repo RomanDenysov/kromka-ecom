@@ -1,9 +1,11 @@
 import type { CollectionConfig } from 'payload'
-import { COLLECTIONS } from '../../config'
+import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 
 const Profiles: CollectionConfig = {
   slug: COLLECTIONS.PROFILES,
-  admin: {},
+  admin: {
+    group: COLLECTIONS_GROUPS.ADMIN,
+  },
   access: {
     read: () => true,
   },

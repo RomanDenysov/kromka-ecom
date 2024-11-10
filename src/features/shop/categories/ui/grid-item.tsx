@@ -12,6 +12,9 @@ const GridItem = ({ title, image, total }: Props) => {
     <div className="group p-1 flex flex-col rounded-lg space-y-2">
       <div className="bg-accent aspect-video size-full rounded-lg relative overflow-hidden">
         <Image
+          loading="eager"
+          decoding="sync"
+          quality={65}
           src={image}
           alt={title}
           fill

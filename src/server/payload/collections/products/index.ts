@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { COLLECTIONS } from '../../config'
+import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import orderField from '../../fields/order'
 import slugField from '../../fields/slug'
 import { stripe } from '~/lib/stripe'
@@ -8,6 +8,7 @@ import { isAdmin, isAdminOrManager } from '../../access'
 const Products: CollectionConfig = {
   slug: COLLECTIONS.PRODUCTS,
   admin: {
+    group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'category', 'price'],
   },

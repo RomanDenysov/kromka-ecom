@@ -15,13 +15,13 @@ type Props = {
 }
 
 export default async function StorePage({ params, searchParams }: Props) {
-  const { store: storeSlug } = await params
+  const { store } = await params
   const categories = await api.categories.getAll()
 
   return (
     <Container className="py-5 md:py-10 space-y-5">
       <Suspense>
-        <CategoriesGrid storeSlug={storeSlug} categories={categories} />
+        <CategoriesGrid storeSlug={store} categories={categories} />
       </Suspense>
     </Container>
   )

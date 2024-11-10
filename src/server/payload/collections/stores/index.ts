@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload'
-import { COLLECTIONS } from '../../config'
+import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import productItemsField from '../../fields/product-items'
 import slugField from '../../fields/slug'
 
 const Stores: CollectionConfig = {
   slug: COLLECTIONS.STORES,
   admin: {
+    group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'title',
   },
   fields: [

@@ -17,11 +17,11 @@ const CartList = memo(() => {
           </h1>
         </div>
       ) : (
-        <ul>
+        <div>
           {items.map(({ product, quantity }) => (
             <CartItem key={`product-${product.id}`} product={product} quantity={quantity} />
           ))}
-        </ul>
+        </div>
       )}
     </>
   )

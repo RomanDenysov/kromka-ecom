@@ -34,6 +34,9 @@ const CartItem = ({ product, quantity }: Props) => {
     if (image && typeof image !== 'string' && image?.url) {
       return (
         <Image
+          loading="eager"
+          decoding="sync"
+          quality={65}
           src={image.url}
           alt={product.title}
           fill
@@ -51,7 +54,7 @@ const CartItem = ({ product, quantity }: Props) => {
   return (
     <>
       <ConfirmDialog />
-      <li className="flex border-t py-2 sm:py-4">
+      <div className="flex border-t py-2 sm:py-4">
         <div className="flex-shrink-0">
           <div className="relative size-36 shadow-md sm:size-48">
             <Link href={`/products/${product.slug}`}>{renderImage()}</Link>
@@ -84,7 +87,7 @@ const CartItem = ({ product, quantity }: Props) => {
             </div>
           </div>
         </div>
-      </li>
+      </div>
     </>
   )
 }

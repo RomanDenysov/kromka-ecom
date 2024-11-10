@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { ProductsReel } from '~/features/products-reel/ui'
 import { Container } from '~/lib/ui/container'
 import { api } from '~/trpc/server'
@@ -19,7 +20,9 @@ export default async function ShopCategoryPage({ params, searchParams }: Props) 
 
   return (
     <Container className="py-5 md:py-10">
-      <ProductsReel title={category.title} query={{ category: category.id }} />
+      <Suspense fallback={null}>
+        <ProductsReel className="py-0" title={category.title} query={{ category: category.id }} />
+      </Suspense>
     </Container>
   )
 }

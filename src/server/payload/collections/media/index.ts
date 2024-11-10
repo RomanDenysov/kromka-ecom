@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { CollectionConfig } from 'payload'
-import { COLLECTIONS } from '../../config'
+import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import { isAdmin, isAdminOrAuthor, isAdminOrManager, isStaff } from '../../access'
 
 const filename = fileURLToPath(import.meta.url)
@@ -9,6 +9,9 @@ const dirname = path.dirname(filename)
 
 const Media: CollectionConfig = {
   slug: COLLECTIONS.MEDIA,
+  admin: {
+    group: COLLECTIONS_GROUPS.OTHER,
+  },
   access: {
     read: () => true,
     update: isStaff,

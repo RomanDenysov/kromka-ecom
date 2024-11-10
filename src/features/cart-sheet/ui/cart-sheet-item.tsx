@@ -26,6 +26,9 @@ export const CartSheetItem = ({ product, quantity = 0 }: Props) => {
     if (image && typeof image !== 'string' && image?.url) {
       return (
         <Image
+          loading="eager"
+          decoding="sync"
+          quality={65}
           src={image.url}
           alt={product.title}
           fill
