@@ -1,9 +1,13 @@
-import { withPayload } from "@payloadcms/next/withPayload";
+import { withPayload } from '@payloadcms/next/withPayload'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	reactStrictMode: true,
-	output: "standalone",
-};
+  reactStrictMode: true,
+  output: 'standalone',
 
-export default withPayload(nextConfig);
+  images: {
+    minimumCacheTTL: 31536000,
+  },
+}
+
+export default withPayload(nextConfig)

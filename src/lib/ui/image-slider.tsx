@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import type SwiperType from 'swiper'
 import { Pagination } from 'swiper/modules'
 import { cn } from '~/lib/utils'
+import { useMountedState } from 'react-use'
 
 interface ImageSliderProps {
   urls: string[]
@@ -18,6 +19,7 @@ interface ImageSliderProps {
 export const ImageSlider = ({ urls, brightness = true }: ImageSliderProps) => {
   const [swiper, setSwiper] = useState<null | SwiperType>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const isMounted = useMountedState()
 
   const [slideConfig, setSlideConfig] = useState({
     isBeginning: true,
@@ -38,6 +40,7 @@ export const ImageSlider = ({ urls, brightness = true }: ImageSliderProps) => {
     'active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-50 place-items-center rounded-full border-2 bg-white border-zinc-300'
   const inactiveStyles = 'hidden text-gray-400'
 
+  if (!isMounted) return null
   return (
     <div className="group group relative aspect-square overflow-hidden rounded-md bg-zinc-100 shadow-md">
       <div className="absolute inset-0 z-10 opacity-0 transition group-hover:opacity-100">

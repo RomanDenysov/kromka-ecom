@@ -6,7 +6,7 @@ export default function ShopLayout({
 }: Readonly<{ children: React.ReactNode; breadcrumb: React.ReactNode }>) {
   return (
     <>
-      {/* <Container className="py-5">{breadcrumb}</Container> */}
+      <Container className="py-5">{breadcrumb}</Container>
       {children}
     </>
   )

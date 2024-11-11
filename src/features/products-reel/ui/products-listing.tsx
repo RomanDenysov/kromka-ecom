@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Skeleton } from '~/lib/ui/components/skeleton'
 import type { Product } from '~/server/payload/payload-types'
 import { cn, formatPrice } from '~/lib/utils'
@@ -14,13 +14,13 @@ type Props = {
   index: number
 }
 
-const ProductsListing = React.memo(({ product, index }: Props) => {
-  const [isVisible, setIsVisible] = React.useState<boolean>(false)
+const ProductsListing = ({ product, index }: Props) => {
+  const [isVisible, setIsVisible] = useState<boolean>(false)
   const params = useParams()
   const { store } = params
   const storeSlug = store ? store : 'all'
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true)
     }, index * 75)
@@ -32,8 +32,6 @@ const ProductsListing = React.memo(({ product, index }: Props) => {
   const validUrls = product.images
     .map(({ image }) => typeof image !== 'string' && image.url)
     .filter(Boolean) as string[]
-
-  console.log('VALID URLS', validUrls)
 
   const categorySlug =
     (typeof product.category !== 'string' && product.category.slug) || product.category
@@ -65,7 +63,7 @@ const ProductsListing = React.memo(({ product, index }: Props) => {
       </article>
     )
   }
-})
+}
 
 const ProductPlaceholder = () => {
   return (

@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import CategoriesGrid from '~/features/shop/categories/ui/categories-grid'
 import StoresGrid from '~/features/shop/stores/ui/stores-grid'
 import { Container } from '~/lib/ui/container'
 import { api } from '~/trpc/server'

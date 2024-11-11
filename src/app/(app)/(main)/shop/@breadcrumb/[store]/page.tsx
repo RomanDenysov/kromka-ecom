@@ -9,11 +9,11 @@ import {
 import { api } from '~/trpc/server'
 
 export default async function BreadcrumbSlot({ params }: { params: Promise<{ store: string }> }) {
-  const { store } = await params
-  if (!store) return null
+  const store = (await params).store
 
   const item = await api.stores.bySlug({ slug: store })
 
+  if (!store) return null
   return (
     <Breadcrumb>
       <BreadcrumbList>
