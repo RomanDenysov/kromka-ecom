@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,26 +10,26 @@ import {
 import { api } from '~/trpc/server'
 
 export default async function BreadcrumbSlot({ params }: { params: Promise<{ store: string }> }) {
-  const store = (await params).store
+  const item = await api.stores.bySlug({ slug: (await params).store })
 
-  const item = await api.stores.bySlug({ slug: store })
-
-  if (!store) return null
+  if (!item) return null
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Domov</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/shop">Shop</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{item.title}</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
+    <Suspense>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Domov</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/shop">Shop</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{item.title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    </Suspense>
   )
 }

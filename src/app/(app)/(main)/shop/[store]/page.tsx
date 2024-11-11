@@ -15,8 +15,10 @@ type Props = {
 }
 
 export default async function StorePage({ params, searchParams }: Props) {
-  const { store } = await params
+  const store = (await params).store
   const categories = await api.categories.getAll()
+
+  console.log('STORE', store)
 
   return (
     <Container className="py-5 md:py-10 space-y-5">

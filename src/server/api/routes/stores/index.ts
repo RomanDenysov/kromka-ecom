@@ -28,13 +28,6 @@ export const storesRouter = createTRPCRouter({
       limit: 1,
     })
 
-    if (!store) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'Store not found',
-      })
-    }
-
     return store.docs[0]
   }),
 })

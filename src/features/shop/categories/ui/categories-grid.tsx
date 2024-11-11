@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default async function CategoriesGrid({ categories, storeSlug }: Props) {
-  let storeSlugNavigation = storeSlug ? storeSlug : 'all'
+  const storeSlugNavigation = storeSlug ? storeSlug : 'all'
 
   if (!categories) return null
   return (

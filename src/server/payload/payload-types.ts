@@ -28,7 +28,12 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsSelect?: {
+  collectionsJoins: {
+    categories: {
+      products: 'products';
+    };
+  };
+  collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
@@ -50,7 +55,7 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {};
-  globalsSelect?: {};
+  globalsSelect: {};
   locale: null;
   user: User & {
     collection: 'users';

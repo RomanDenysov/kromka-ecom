@@ -32,7 +32,7 @@ const Info = () => {
         />
         <FormField
           control={control}
-          name="email"
+          name="mail"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>

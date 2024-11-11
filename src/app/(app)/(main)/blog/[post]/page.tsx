@@ -1,7 +1,5 @@
+import { Container } from '~/lib/ui/container'
+
 export default function PostPage() {
-  return (
-    <div className="grid place-content-center">
-      <h1>Blog</h1>
-    </div>
-  )
+  return <Container>Text</Container>
 }
