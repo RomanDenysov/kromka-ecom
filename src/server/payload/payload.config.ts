@@ -64,7 +64,7 @@ export default buildConfig({
     pool: {
       connectionString: env.DATABASE_URL,
     },
-    push: true,
+    // push: true,
     idType: 'uuid',
   }),
   graphQL: {
