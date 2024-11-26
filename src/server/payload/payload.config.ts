@@ -26,7 +26,7 @@ import { env } from '~/env'
 import authConfig from '~/lib/auth/auth.config'
 import { COLLECTIONS } from './config'
 import { getEmailAdapter } from './utils/email-adapter'
-import { lexicalEditorConfig } from './utils/editor'
+import { defaultLexical } from './utils/editor'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -54,7 +54,7 @@ export default buildConfig({
     Categories,
     Stores,
   ],
-  editor: lexicalEditorConfig,
+  editor: defaultLexical,
   secret: env.PAYLOAD_SECRET,
   cors: ['https://checkout.stripe.com', env.NEXT_PUBLIC_SERVER_URL],
   csrf: ['https://checkout.stripe.com', env.NEXT_PUBLIC_SERVER_URL],
