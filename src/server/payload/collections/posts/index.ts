@@ -1,12 +1,27 @@
 import type { CollectionConfig } from 'payload'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import slugField from '../../fields/slug'
+import {
+  BlocksFeature,
+  FixedToolbarFeature,
+  HeadingFeature,
+  HorizontalRuleFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
+import { Banner, CallToAction, MediaBlock, Product, SocialMediaEmbed } from '../../blocks'
+import { revalidatePost } from './hooks/revalidate-path'
+import { populateAuthors } from './hooks/popolate-authors'
 
 const Posts: CollectionConfig = {
   slug: COLLECTIONS.POSTS,
   admin: {
     group: COLLECTIONS_GROUPS.BLOG,
     useAsTitle: 'title',
+  },
+  hooks: {
+    afterChange: [revalidatePost],
+    afterRead: [populateAuthors],
   },
   fields: [
     {
@@ -19,49 +34,130 @@ const Posts: CollectionConfig = {
     },
     slugField('title'),
     // TODO: Add before validate author setter
+
     {
-      name: 'user',
+      type: 'tabs',
+      tabs: [
+        {
+          fields: [
+            {
+              name: 'content',
+              type: 'richText',
+              required: true,
+              editor: lexicalEditor({
+                features: ({ rootFeatures }) => {
+                  return [
+                    ...rootFeatures,
+                    HeadingFeature({
+                      enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'],
+                    }),
+                    BlocksFeature({
+                      blocks: [Product, Banner, SocialMediaEmbed, MediaBlock, CallToAction],
+                    }),
+                    FixedToolbarFeature(),
+                    InlineToolbarFeature(),
+                    HorizontalRuleFeature(),
+                  ]
+                },
+              }),
+              label: false,
+            },
+          ],
+          label: 'Content',
+        },
+        {
+          fields: [
+            {
+              name: 'status',
+              type: 'select',
+              label: 'Status',
+              options: [
+                {
+                  label: 'Published',
+                  value: 'published',
+                },
+                {
+                  label: 'Draft',
+                  value: 'draft',
+                },
+                {
+                  label: 'Archived',
+                  value: 'archived',
+                },
+              ],
+              defaultValue: 'published',
+              admin: {
+                position: 'sidebar',
+              },
+            },
+            {
+              name: 'tags',
+              type: 'relationship',
+              relationTo: COLLECTIONS.TAGS,
+              hasMany: true,
+              filterOptions: ({ id }) => {
+                return {
+                  id: {
+                    not_in: [id],
+                  },
+                }
+              },
+            },
+            {
+              name: 'relatedPosts',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              filterOptions: ({ id }) => {
+                return {
+                  id: {
+                    not_in: [id],
+                  },
+                }
+              },
+              hasMany: true,
+              relationTo: 'posts',
+            },
+          ],
+          label: 'Metadata',
+        },
+      ],
+    },
+    {
+      name: 'authors',
       type: 'relationship',
       label: 'Author',
+      hasMany: true,
       relationTo: COLLECTIONS.USERS,
       admin: {
         position: 'sidebar',
         readOnly: true,
       },
     },
+    // This field is only used to populate the user data via the `populateAuthors` hook
+    // This is because the `user` collection has access control locked to protect user privacy
+    // GraphQL will also not return mutated user data that differs from the underlying schema
     {
-      name: 'content',
-      type: 'richText',
-      required: true,
-    },
-    {
-      name: 'status',
-      type: 'select',
-      label: 'Status',
-      options: [
+      name: 'populatedAuthors',
+      type: 'array',
+      access: {
+        update: () => false,
+      },
+      admin: {
+        disabled: true,
+        readOnly: true,
+      },
+      fields: [
         {
-          label: 'Published',
-          value: 'published',
+          name: 'id',
+          type: 'text',
         },
         {
-          label: 'Draft',
-          value: 'draft',
-        },
-        {
-          label: 'Archived',
-          value: 'archived',
+          name: 'name',
+          type: 'text',
         },
       ],
-      defaultValue: 'published',
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'tags',
-      type: 'relationship',
-      relationTo: COLLECTIONS.TAGS,
-      hasMany: true,
     },
     {
       name: 'banner',
@@ -77,6 +173,26 @@ const Posts: CollectionConfig = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+        position: 'sidebar',
+      },
+      hooks: {
+        beforeChange: [
+          ({ siblingData, value }) => {
+            if (siblingData.status === 'published' && !value) {
+              return new Date()
+            }
+            return value
+          },
+        ],
       },
     },
   ],

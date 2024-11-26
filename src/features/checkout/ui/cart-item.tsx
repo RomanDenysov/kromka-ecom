@@ -1,11 +1,11 @@
 import { ImageIcon, X } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useConfirm } from '~/hooks/use-confirm'
 import { formatPrice } from '~/lib/utils'
 import type { Product } from '~/server/payload/payload-types'
 import { useCart } from '~/store/cart/use-cart'
 import { ItemQuantityButton } from '~/features/checkout/ui'
+import { Link } from '~/lib/ui/link'
 
 type Props = {
   product: Product
@@ -29,6 +29,8 @@ const CartItem = ({ product, quantity }: Props) => {
   if (!product) return null
 
   const { image } = product.images[0] ?? { image: null }
+  const categorySlug =
+    typeof product.category !== 'string' ? product.category.slug : product.category
 
   const renderImage = () => {
     if (image && typeof image !== 'string' && image?.url) {
@@ -57,7 +59,7 @@ const CartItem = ({ product, quantity }: Props) => {
       <div className="flex border-t py-2 sm:py-4">
         <div className="flex-shrink-0">
           <div className="relative size-36 shadow-md sm:size-48">
-            <Link href={`/products/${product.slug}`}>{renderImage()}</Link>
+            <Link href={`/shop/all/${categorySlug}/${product.slug}`}>{renderImage()}</Link>
           </div>
         </div>
 

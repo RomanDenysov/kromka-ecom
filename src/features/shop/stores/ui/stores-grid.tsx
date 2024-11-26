@@ -13,19 +13,14 @@ const StoresGrid = ({ stores }: Props) => {
     <>
       <Heading title="Naše Obchody" subtitle="Naše najlepšie Obchody" />
 
-      <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 md:gap-2 mx-auto">
+      <div className="sm:grid sm:grid-cols-2 gap-5 mx-auto">
         <AnimatedBackground
           className="rounded-lg bg-accent"
           transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
           enableHover
         >
           {stores?.map((store) => (
-            <Link
-              href={`/shop/${store.slug}`}
-              data-id={store.id}
-              className="flex flex-col size-auto rounded-lg"
-              key={store.id}
-            >
+            <Link href={`/shop/${store.slug}`} data-id={store.id} key={store.id}>
               <StoreItemWrapper store={store}>
                 <StoresItem store={store} />
               </StoreItemWrapper>

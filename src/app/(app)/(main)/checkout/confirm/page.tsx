@@ -1,7 +1,22 @@
-export default function CheckoutConfirmPage() {
-	return (
-		<div className='grid h-full w-full place-content-center'>
+import { Container } from '~/lib/ui/container'
 
-		</div>
-	)
+type Param = string | string[] | undefined
+
+type Props = {
+  params: Promise<{
+    category: string
+  }>
+  searchParams: Promise<{
+    [key: string]: Param
+  }>
+}
+export default async function CheckoutConfirmPage({ params, searchParams }: Props) {
+  const { order } = await searchParams
+  const decodedOrderId = decodeURIComponent(order as string)
+  console.log('ORDER', decodedOrderId)
+  return (
+    <Container>
+      <h1>Confirm</h1>
+    </Container>
+  )
 }

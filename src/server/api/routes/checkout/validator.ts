@@ -38,3 +38,5 @@ export const checkoutValidator = z.object({
   products: checkoutProducts,
   options: checkoutSchema,
 })
+
+export const orderIdValidator = z.object({ orderId: z.string() })

@@ -3,6 +3,11 @@ import { fileURLToPath } from 'node:url'
 import type { CollectionConfig } from 'payload'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import { isAdmin, isAdminOrAuthor, isAdminOrManager, isStaff } from '../../access'
+import {
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,35 +29,46 @@ const Media: CollectionConfig = {
       type: 'text',
       required: true,
     },
+    {
+      name: 'caption',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        },
+      }),
+    },
   ],
   upload: {
+    adminThumbnail: 'thumbnail',
     imageSizes: [
       {
-        name: 'sm',
-        width: 320,
-        height: 240,
-        position: 'centre',
-      },
-      {
         name: 'thumbnail',
-        width: 480,
-        height: 320,
-        position: 'centre',
+        width: 300,
       },
       {
-        name: 'md',
-        width: 640,
-        height: 480,
-        position: 'centre',
+        name: 'square',
+        width: 500,
+        height: 500,
       },
       {
-        name: 'lg',
-        width: 1024,
-        height: undefined,
-        position: 'centre',
+        name: 'small',
+        width: 600,
+      },
+      {
+        name: 'medium',
+        width: 900,
+      },
+      {
+        name: 'large',
+        width: 1400,
+      },
+      {
+        name: 'xlarge',
+        width: 1920,
       },
     ],
-    staticDir: path.resolve(dirname, '../../../../public/media'),
+    staticDir: path.resolve(dirname, '../../../../../public/media'),
     mimeTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/svg+xml', 'image/webp'],
   },
 }

@@ -27,7 +27,7 @@ export default async function ShopProductPage({ params, searchParams }: Props) {
   if (!product) return notFound()
 
   return (
-    <Container className="py-5 md:py-10">
+    <div className="space-y-5">
       <Suspense>
         <SingleProduct product={product} />
       </Suspense>
@@ -38,6 +38,6 @@ export default async function ShopProductPage({ params, searchParams }: Props) {
           excludeId={product.id}
         />
       </Suspense>
-    </Container>
+    </div>
   )
 }

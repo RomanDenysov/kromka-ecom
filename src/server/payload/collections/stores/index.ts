@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
-import productItemsField from '../../fields/product-items'
 import slugField from '../../fields/slug'
 
 const Stores: CollectionConfig = {
@@ -8,6 +7,12 @@ const Stores: CollectionConfig = {
   admin: {
     group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'title',
+  },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
   },
   fields: [
     {
@@ -20,7 +25,119 @@ const Stores: CollectionConfig = {
       maxLength: 100,
     },
     slugField('title'),
-    productItemsField,
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Content',
+          fields: [
+            {
+              name: 'contacts',
+              type: 'group',
+              fields: [
+                {
+                  name: 'phone',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    placeholder: 'Phone number',
+                  },
+                },
+                {
+                  name: 'email',
+                  type: 'email',
+                  admin: {
+                    placeholder: 'Email',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'workingHours',
+              type: 'group',
+              fields: [
+                {
+                  name: 'week',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    placeholder: '(Monday - Friday)',
+                  },
+                },
+                {
+                  name: 'saturday',
+                  type: 'text',
+                  admin: {
+                    placeholder: '(Saturday)',
+                  },
+                },
+                {
+                  name: 'sunday',
+                  type: 'text',
+                  admin: {
+                    placeholder: '(Sunday)',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Inventory',
+          fields: [
+            {
+              name: 'inventory',
+              label: 'Producty',
+              type: 'array',
+              admin: {
+                description: 'Manage product inventory specific to this store',
+              },
+              fields: [
+                {
+                  name: 'product',
+                  type: 'relationship',
+                  relationTo: COLLECTIONS.PRODUCTS,
+                  required: true,
+                  admin: {
+                    description: 'Select a product to add to store inventory',
+                  },
+                },
+                {
+                  name: 'quantity',
+                  type: 'number',
+                  required: true,
+                  min: 0,
+                  admin: {
+                    description: 'Available quantity in this store',
+                    step: 1,
+                  },
+                },
+                {
+                  name: 'isAvailable',
+                  type: 'checkbox',
+                  label: 'Available in this store',
+                  defaultValue: true,
+                  admin: {
+                    description:
+                      'Toggle to make product available/unavailable specifically in this store',
+                  },
+                },
+                {
+                  name: 'stockAlert',
+                  type: 'number',
+                  label: 'Low stock alert threshold',
+                  min: 0,
+                  admin: {
+                    description: 'Get alerted when quantity falls below this number',
+                    step: 1,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
     {
       name: 'image',
       type: 'upload',
@@ -44,55 +161,6 @@ const Stores: CollectionConfig = {
         position: 'sidebar',
         placeholder: 'URL from Google maps',
       },
-    },
-    {
-      name: 'contacts',
-      type: 'group',
-      fields: [
-        {
-          name: 'phone',
-          type: 'text',
-          required: true,
-          admin: {
-            placeholder: 'Phone number',
-          },
-        },
-        {
-          name: 'email',
-          type: 'email',
-          admin: {
-            placeholder: 'Email',
-          },
-        },
-      ],
-    },
-    {
-      name: 'workingHours',
-      type: 'group',
-      fields: [
-        {
-          name: 'week',
-          type: 'text',
-          required: true,
-          admin: {
-            placeholder: '(Monday - Friday)',
-          },
-        },
-        {
-          name: 'saturday',
-          type: 'text',
-          admin: {
-            placeholder: '(Saturday)',
-          },
-        },
-        {
-          name: 'sunday',
-          type: 'text',
-          admin: {
-            placeholder: '(Sunday)',
-          },
-        },
-      ],
     },
     {
       name: 'managers',

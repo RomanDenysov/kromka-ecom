@@ -1,12 +1,23 @@
 import { withPayload } from '@payloadcms/next/withPayload'
 
+const NEXT_PUBLIC_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-
   images: {
     minimumCacheTTL: 31536000,
+    remotePatterns: [
+      ...[NEXT_PUBLIC_SERVER_URL].map((item) => {
+        const url = new URL(item)
+
+        return {
+          hostname: url.hostname,
+          protocol: url.protocol.replace(':', ''),
+        }
+      }),
+    ],
   },
 }
 

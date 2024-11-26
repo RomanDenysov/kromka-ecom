@@ -12,7 +12,6 @@ export const categoriesRouter = createTRPCRouter({
       },
       joins: {
         products: {
-          limit: 1,
           where: {
             or: [{ status: { equals: 'active' } }, { status: { equals: 'sold' } }],
           },

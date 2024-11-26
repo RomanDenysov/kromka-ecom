@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { memo, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/lib/ui/components/card'
 import { Checkbox } from '~/lib/ui/components/checkbox'
@@ -11,61 +12,61 @@ import { Separator } from '~/lib/ui/components/separator'
 const Info = () => {
   const { control } = useFormContext()
 
+  const formFields = useMemo(
+    () => [
+      {
+        name: 'name',
+        label: 'Meno',
+        type: 'text',
+        placeholder: 'Zadajte svoe meno',
+        autoComplete: 'name',
+      },
+      {
+        name: 'email',
+        label: 'Email',
+        type: 'email',
+        placeholder: 'Zadajte svoj e-mail',
+        autoComplete: 'email',
+      },
+      {
+        name: 'phone',
+        label: 'Telefonne číslo',
+        type: 'text',
+        placeholder: 'Zadajte svoe telefonne číslo',
+        autoComplete: 'phone',
+      },
+    ],
+    [],
+  )
+
   return (
     <Card className="border-none bg-accent">
       <CardHeader>
         <CardTitle>Prehľad objednávky</CardTitle>
       </CardHeader>
       <CardContent className="mb-4 space-y-6">
-        <FormField
-          control={control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Meno</FormLabel>
-              <FormControl>
-                <Input type="text" autoComplete="name" {...field} placeholder="Zadajte svoe meno" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name="mail"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  autoComplete="email"
-                  {...field}
-                  placeholder="Zadajte svoj e-mail"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem className="mb-2">
-              <FormLabel>Telefonne číslo</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  autoComplete="phone"
-                  {...field}
-                  placeholder="Zadajte svoe telefonne číslo"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {formFields.map((field) => (
+          <FormField
+            key={field.name}
+            control={control}
+            name={field.name}
+            render={({ field: fieldProps }) => (
+              <FormItem>
+                <FormLabel>{field.label}</FormLabel>
+                <FormControl>
+                  <Input
+                    type={field.type}
+                    autoComplete={field.autoComplete}
+                    placeholder={field.placeholder}
+                    {...fieldProps}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
+
         <div className="pt-4">
           <FormField
             control={control}
@@ -106,4 +107,4 @@ const Info = () => {
   )
 }
 
-export default Info
+export default memo(Info)

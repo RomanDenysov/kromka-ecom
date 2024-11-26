@@ -1,15 +1,26 @@
 'use client'
 
+import { Alert, AlertDescription } from '~/lib/ui/components/alert'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/lib/ui/components/card'
 import { LoaderButton } from '~/lib/ui/loader-button'
 import { formatPrice } from '~/lib/utils'
 import { useCart } from '~/store/cart/use-cart'
+import {
+  useCanSubmit,
+  useCheckoutError,
+  useCheckoutLoading,
+} from '~/store/checkout/use-checkout-store'
 
 const Summary = () => {
-  const state = useCart()
-  const subtotal = formatPrice(10)
+  const isLoading = useCheckoutLoading()
+  const error = useCheckoutError()
+  const canSubmit = useCanSubmit()
+  const items = useCart((state) => state.items)
+  const totalPrice = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+
+  const subtotal = formatPrice(totalPrice)
   const sale = formatPrice(0)
-  const total = formatPrice(10)
+  const total = formatPrice(totalPrice)
 
   return (
     <Card className="border-none bg-accent">
@@ -33,12 +44,25 @@ const Summary = () => {
         </div>
       </CardContent>
       <CardFooter>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        {!canSubmit && items.length === 0 && (
+          <Alert>
+            <AlertDescription>
+              Váš košík je prázdny. Pridajte produkty pre pokračovanie.
+            </AlertDescription>
+          </Alert>
+        )}
         <LoaderButton
           type="submit"
           form="checkout-form"
           size={'lg'}
           className="w-full text-lg"
-          isLoading={false}
+          isLoading={isLoading}
+          disabled={!canSubmit}
         >
           Objednať
         </LoaderButton>

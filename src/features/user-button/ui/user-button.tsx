@@ -2,7 +2,7 @@
 
 import { BookLockIcon, LogInIcon, SettingsIcon, ShoppingBag, UserIcon } from 'lucide-react'
 import Link from 'next/link'
-import { Suspense } from 'react'
+import { Suspense, memo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '~/lib/ui/components/avatar'
 import {
   DropdownMenu,
@@ -13,8 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '~/lib/ui/components/dropdown-menu'
 import { cn, getNameInitials } from '~/lib/utils'
-import { LogoutButton } from './logout-button'
 import { api } from '~/trpc/react'
+import { LogoutButton } from './logout-button'
 
 // TODO: move options to config file
 const BUTTON_OPTIONS = [
@@ -23,7 +23,7 @@ const BUTTON_OPTIONS = [
   { label: 'Settings', href: '/settings', icon: SettingsIcon },
 ]
 
-const UserButton = () => {
+const UserButton = memo(() => {
   const { data: user } = api.users.getUser.useQuery()
   const isAdmin = user?.role === 'admin'
 
@@ -47,7 +47,7 @@ const UserButton = () => {
             <DropdownMenuGroup>
               {BUTTON_OPTIONS.map((option) => (
                 <DropdownMenuItem key={option.label} asChild>
-                  <Link href={{ pathname: `/profile/${user.id}/${option.href}` }}>
+                  <Link href={{ pathname: `/profile/${option.href}` }}>
                     <option.icon size={20} className="mr-2" />
                     {option.label}
                   </Link>
@@ -81,6 +81,6 @@ const UserButton = () => {
       )}
     </>
   )
-}
+})
 
 export default UserButton

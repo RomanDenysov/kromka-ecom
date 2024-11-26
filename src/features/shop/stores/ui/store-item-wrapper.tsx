@@ -17,7 +17,7 @@ const StoreItemWrapper = ({ store, children }: Props) => {
   }
 
   return (
-    <button type="button" onClick={handleClick}>
+    <button type="button" onClick={handleClick} className="select-none">
       {children}
     </button>
   )

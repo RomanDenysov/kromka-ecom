@@ -1,12 +1,11 @@
-import configPromise from '@payload-config'
 import { TRPCError, initTRPC } from '@trpc/server'
-import { getPayload } from '~/server/payload/utils/payload'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 import { auth } from '~/lib/auth'
+import { initPayload } from '~/server/payload/utils/payload'
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const payload = await getPayload()
+  const payload = await initPayload()
   const session = await auth()
 
   return {

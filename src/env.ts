@@ -1,5 +1,5 @@
 import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+import { z, ZodError } from 'zod'
 
 export const env = createEnv({
   server: {
@@ -18,8 +18,10 @@ export const env = createEnv({
     EMAIL_FROM: z.string().min(1),
     EMAIL_HOST: z.string().min(1),
     EMAIL_PASS: z.string().min(1),
+    EMAIL_FROM2: z.string().min(1),
 
     STRIPE_SECRET_KEY: z.string().min(1),
+    STRIPE_WEBHOOK_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().min(1),
@@ -45,10 +47,16 @@ export const env = createEnv({
     EMAIL_FROM: process.env.EMAIL_FROM,
     EMAIL_HOST: process.env.EMAIL_HOST,
     EMAIL_PASS: process.env.EMAIL_PASS,
+    EMAIL_FROM2: process.env.EMAIL_FROM2,
 
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,
+  onValidationError: (error: ZodError) => {
+    console.error('❌ Invalid environment variables:', error.flatten().fieldErrors)
+    process.exit(1)
+  },
 })

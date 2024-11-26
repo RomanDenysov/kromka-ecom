@@ -10,15 +10,15 @@ const StoresItem = ({ store }: Props) => {
   const image = typeof store.image !== 'string' ? store.image.url! : store.image
   return (
     <div className="p-1.5 group relative">
-      <div className="rounded-lg relative overflow-hidden">
+      <div className="rounded-lg relative overflow-hidden max-h-[320px] sm:max-h-fit">
         <Image
           loading="eager"
           decoding="sync"
           quality={65}
           src={image}
           alt={store.title}
-          width={300}
-          height={700}
+          width={600}
+          height={900}
           className="rounded-lg z-0 group-hover:blur-[1px] group-hover:scale-[1.02] transition brightness-90 object-cover object-center"
         />
         <div className="absolute inset-x-0 bottom-0 rounded-lg z-10 px-2 pb-2">

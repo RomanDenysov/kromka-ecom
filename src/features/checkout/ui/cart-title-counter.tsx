@@ -15,13 +15,13 @@ export const CartTitleCounter = () => {
       infoLabel = 'Váš košík je prázdny'
       break
     case items.length === 1:
-      infoLabel = `Jeden  produkt  v košíku, (${totalQuantity} ks)`
+      infoLabel = `Jeden  produkt  v košíku (${totalQuantity} ks)`
       break
     case items.length >= 2 && items.length <= 4:
-      infoLabel = `${items.length} produkty v košíku, (${totalQuantity} ks)`
+      infoLabel = `${items.length} produkty v košíku (${totalQuantity} ks)`
       break
     default:
-      infoLabel = `${items.length} produktov v košíku, (${totalQuantity} ks)`
+      infoLabel = `${items.length} produktov v košíku (${totalQuantity} ks)`
   }
 
   return <Heading title="Vaš košík" subtitle={infoLabel} />

@@ -33,7 +33,7 @@ const Options = () => {
               <FormControl>
                 <DatePicker onDateSelect={(date) => field.onChange(date)} />
               </FormControl>
-              <FormDescription>Vyberte si dátum a čas pre odber objednávky</FormDescription>
+              <FormDescription>Vyberte si mesto odberu objednávky</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -42,12 +42,12 @@ const Options = () => {
           control={control}
           name="store"
           render={({ field }) => (
-            <FormItem className="space-y-4">
+            <FormItem className="space-y-4 flex flex-col">
               <FormLabel className="text-lg leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Store
               </FormLabel>
               <FormControl>
-                <StoreSelector onStoreChange={(store) => field.onChange(store)} />
+                <StoreSelector width="w-full" onStoreChange={(store) => field.onChange(store.id)} />
               </FormControl>
               <FormDescription>Vyberte si dátum a čas pre odber objednávky</FormDescription>
               <FormMessage />

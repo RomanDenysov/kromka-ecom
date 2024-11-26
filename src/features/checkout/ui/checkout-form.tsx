@@ -5,8 +5,10 @@ import { api } from '~/trpc/react'
 import { Form } from '~/lib/ui/components/form'
 import { cn } from '~/lib/utils'
 import { useCart, CartItem } from '~/store/cart/use-cart'
-import { CheckoutOptions, CheckoutProduct } from '~/server/api/routes/checkout/validator'
+import { CheckoutOptions } from '~/server/api/routes/checkout/validator'
 import { useRouter } from 'next/navigation'
+import { useCallback, useMemo } from 'react'
+import { useCheckoutComplete, useCheckoutStore } from '~/store/checkout/use-checkout-store'
 
 type Props = {
   children: React.ReactNode
@@ -17,25 +19,48 @@ export default function CheckoutForm({ children, className }: Props) {
   const { data: user } = api.users.getUser.useQuery()
   const router = useRouter()
   const items = useCart((state) => state.items)
+  const { setLoading, setError, reset: resetCheckout } = useCheckoutStore()
+  const completeCheckout = useCheckoutComplete()
 
-  const products = items.map((item: CartItem) => ({
-    product: item.product.id,
-    quantity: item.quantity,
-  }))
+  const products = useMemo(
+    () =>
+      items.map((item: CartItem) => ({
+        product: item.product.id,
+        quantity: item.quantity,
+      })),
+    [items],
+  )
 
   const form = useCheckoutForm({ user })
+
   const checkoutMutation = api.checkout.checkout.useMutation({
+    onMutate: () => {
+      setLoading(true), setError(null)
+    },
     onSuccess: ({ url }) => {
       form.reset()
+      completeCheckout()
       if (url) {
         router.push(url)
-      } else router.refresh()
+      } else {
+        router.refresh()
+      }
+    },
+    onError: (error) => {
+      setError(error.message)
+      setLoading(false)
+    },
+    onSettled: () => {
+      setLoading(false)
     },
   })
 
-  const onSubmit = (data: CheckoutOptions) => {
-    checkoutMutation.mutateAsync({ products, options: data })
-  }
+  const onSubmit = useCallback(
+    (data: CheckoutOptions) => {
+      checkoutMutation.mutateAsync({ products, options: data })
+    },
+    [products, checkoutMutation],
+  )
 
   return (
     <Form {...form}>

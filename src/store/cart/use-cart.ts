@@ -62,7 +62,7 @@ export const useCart = create<CartState>()(
       syncCart: (items: CartItem[]) => set({ items }),
     }),
     {
-      name: 'krmk_cart',
+      name: 'krmk',
       storage: createJSONStorage(() => localStorage),
     },
   ),

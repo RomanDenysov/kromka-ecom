@@ -7,7 +7,7 @@ export default function ShopLayout({
   return (
     <>
       <Container className="py-5">{breadcrumb}</Container>
-      {children}
+      <Container className="py-5 md:py-10 space-y-5">{children}</Container>
     </>
   )
 }

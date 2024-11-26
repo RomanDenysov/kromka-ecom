@@ -14,7 +14,7 @@ export default async function CategoriesGrid({ categories, storeSlug }: Props) {
 
   if (!categories) return null
   return (
-    <>
+    <div className="space-y-5">
       <Heading title={`Categories (${categories?.length})`} />
       <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 md:gap-2 mx-auto">
         <AnimatedBackground
@@ -41,6 +41,6 @@ export default async function CategoriesGrid({ categories, storeSlug }: Props) {
           })}
         </AnimatedBackground>
       </div>
-    </>
+    </div>
   )
 }

@@ -4,6 +4,7 @@ import orderField from '../../fields/order'
 import slugField from '../../fields/slug'
 import { stripe } from '~/lib/stripe'
 import { isAdmin, isAdminOrManager } from '../../access'
+import { PriceFormatter } from '~/lib/utils'
 
 const Products: CollectionConfig = {
   slug: COLLECTIONS.PRODUCTS,
@@ -19,6 +20,16 @@ const Products: CollectionConfig = {
     delete: isAdmin,
   },
   hooks: {
+    beforeValidate: [
+      async ({ data }) => {
+        if (data && data.price) {
+          data.price = PriceFormatter.formatPriceNumber(data.price)
+        }
+        if (data && data.optsPrice) {
+          data.optsPrice = PriceFormatter.formatPriceNumber(data.optsPrice)
+        }
+      },
+    ],
     beforeChange: [
       async ({ req, operation, data }) => {
         if (req.user && operation === 'create') {
@@ -29,7 +40,7 @@ const Products: CollectionConfig = {
             name: data.title,
             default_price_data: {
               currency: 'eur',
-              unit_amount: Math.round(data.price * 100),
+              unit_amount: PriceFormatter.toStripeAmount(data.price),
             },
           })
           data.stripeId = stripeProduct.id
@@ -39,7 +50,7 @@ const Products: CollectionConfig = {
           const newPrice = await stripe.prices.create({
             product: data.stripeId,
             currency: 'eur',
-            unit_amount: Math.round(data.price * 100),
+            unit_amount: PriceFormatter.toStripeAmount(data.price),
           })
           await stripe.products.update(data.stripeId, {
             name: data.title,
@@ -111,6 +122,16 @@ const Products: CollectionConfig = {
         placeholder: 'Product price',
         position: 'sidebar',
       },
+      hooks: {
+        beforeValidate: [
+          ({ value }) => {
+            if (typeof value === 'number') {
+              return PriceFormatter.formatPriceNumber(value)
+            }
+            return value
+          },
+        ],
+      },
     },
     {
       name: 'optsPrice',
@@ -122,6 +143,16 @@ const Products: CollectionConfig = {
         placeholder: 'Product options price',
         position: 'sidebar',
         hidden: true,
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value }) => {
+            if (typeof value === 'number') {
+              return PriceFormatter.formatPriceNumber(value)
+            }
+            return value
+          },
+        ],
       },
     },
     {

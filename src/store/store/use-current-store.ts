@@ -14,7 +14,7 @@ export const useCurrentStore = create<State>()(
       setStore: (store: Store) => set({ store }),
     }),
     {
-      name: 'krmk_store',
+      name: 'krmk',
       storage: createJSONStorage(() => localStorage),
     },
   ),

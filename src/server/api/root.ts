@@ -4,6 +4,8 @@ import {
   productsRouter,
   storesRouter,
   usersRouter,
+  profilesRouter,
+  postsRouter,
 } from './routes'
 import { createCallerFactory, createTRPCRouter } from './trpc'
 
@@ -13,6 +15,8 @@ export const appRouter = createTRPCRouter({
   categories: categoriesRouter,
   checkout: checkoutRouter,
   stores: storesRouter,
+  profiles: profilesRouter,
+  posts: postsRouter,
 })
 
 export type AppRouter = typeof appRouter

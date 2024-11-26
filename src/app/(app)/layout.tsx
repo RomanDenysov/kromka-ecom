@@ -3,29 +3,32 @@ import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next/types'
 import { cn } from '~/lib/utils'
 import { Providers } from '~/providers'
-import './styles/globals.css'
+import '~/lib/styles/globals.css'
 
 export const metadata: Metadata = {
-	title: '',
-	description: ''
+  title: '',
+  description: '',
 }
 
 export default function RootLayout({
-	children
+  children,
 }: Readonly<{
-	children: React.ReactNode
+  children: React.ReactNode
 }>) {
-	return (
-		<html lang='sk'>
-			<head />
-			<body
-				className={cn(
-					'relative size-full bg-background font-sans tracking-tighti antialiased',
-					GeistMono.variable,
-					GeistSans.variable
-				)}>
-				<Providers>{children}</Providers>
-			</body>
-		</html>
-	)
+  return (
+    <html
+      className={cn(
+        'relative size-full bg-background font-sans tracking-tighti antialiased',
+        GeistMono.variable,
+        GeistSans.variable,
+      )}
+      lang="sk"
+      suppressHydrationWarning
+    >
+      <head />
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  )
 }
