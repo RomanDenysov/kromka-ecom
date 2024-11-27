@@ -1,4 +1,5 @@
 import { BlogCarousel } from '~/features/blog-carousel/ui'
+import { PostsGrid } from '~/features/posts-grid/ui'
 import { TagsFilter } from '~/features/tags-filter/ui'
 import { Link } from '~/lib/ui/link'
 import { api } from '~/trpc/server'
@@ -12,7 +13,10 @@ export default async function BlogPage() {
       <BlogCarousel />
       {/* Tags Filter */}
       <TagsFilter />
-      <h1>Blog</h1>
+      {/* Blog Posts Grid */}
+      <PostsGrid />
+
+      {/* <h1>Blog</h1>
       <div className="grid place-content-center">
         <div>
           {posts.map((post) => (
@@ -21,7 +25,7 @@ export default async function BlogPage() {
             </Link>
           ))}
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

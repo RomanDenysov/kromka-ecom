@@ -40,6 +40,8 @@ const PostsReel = ({ title, subtitle, href, className }: Props) => {
     }
   }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
+  if (!posts || posts.length === 0) return null
+
   if (isLoading) {
     return <div>Loading...</div>
   }

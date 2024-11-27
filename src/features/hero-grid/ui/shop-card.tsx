@@ -30,8 +30,9 @@ const ShopCard = ({ className }: Props) => {
         alt={'alt text'}
         fill
         priority
-        className="absolute z-0 object-cover object-center brightness-90 transition-all sm:group-hover:scale-[1.02] sm:group-hover:blur-[2px]"
+        className="absolute z-0 object-cover object-center brightness-90 transition-transform sm:group-hover:scale-[1.02]"
       />
+      <div className="absolute size-full inset-0 bg-black/10 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
       <div className="p-4 sm:p-6 z-10 space-y-1 sm:space-y-2.5">
         <TextMorph className="font-black uppercase text-3xl sm:text-4xl xl:text-5xl text-primary-foreground">
           {text}
