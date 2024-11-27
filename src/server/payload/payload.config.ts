@@ -27,7 +27,7 @@ import authConfig from '~/lib/auth/auth.config'
 import { COLLECTIONS } from './config'
 import { getEmailAdapter } from './utils/email-adapter'
 import { defaultLexical } from './utils/editor'
-import { migrations } from '~/migrations'
+// import { migrations } from '~/migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -69,7 +69,7 @@ export default buildConfig({
     },
     push: env.NODE_ENV === 'development',
     idType: 'uuid',
-    prodMigrations: env.NODE_ENV === 'production' ? migrations : undefined,
+    // prodMigrations: env.NODE_ENV === 'production' ? migrations : undefined,
   }),
   graphQL: {
     disable: true,
