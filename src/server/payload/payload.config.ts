@@ -67,9 +67,9 @@ export default buildConfig({
     pool: {
       connectionString: env.DATABASE_URL,
     },
-    push: true,
+    push: env.NODE_ENV === 'development',
     idType: 'uuid',
-    prodMigrations: migrations,
+    prodMigrations: env.NODE_ENV === 'production' ? migrations : undefined,
   }),
   graphQL: {
     disable: true,
