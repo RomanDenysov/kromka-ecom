@@ -1,19 +1,11 @@
 import { api, HydrateClient } from '~/trpc/server'
 
-export default function ShopLayout({
-  children,
-  breadcrumb,
-}: Readonly<{ children: React.ReactNode; breadcrumb: React.ReactNode }>) {
+export default function ShopLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   void Promise.all([
     api.stores.getStores.prefetch(),
     api.products.infiniteProducts.prefetchInfinite({ query: { limit: 12 } }),
     api.categories.getAll.prefetch(),
   ])
 
-  return (
-    <HydrateClient>
-      {/* {breadcrumb} */}
-      {children}
-    </HydrateClient>
-  )
+  return <HydrateClient>{children}</HydrateClient>
 }

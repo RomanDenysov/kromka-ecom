@@ -76,7 +76,6 @@ export const productsRouter = createTRPCRouter({
       }
 
       if (category) {
-        let categoryConditions: Where = {}
         if (Array.isArray(category)) {
           // Handle array of categories
           const categoryPromises = category.map(async (cat) => {
@@ -90,7 +89,9 @@ export const productsRouter = createTRPCRouter({
             return foundCategory.docs[0]?.id
           })
           const categoryIds = (await Promise.all(categoryPromises)).filter(Boolean)
-          categoryConditions = { in: categoryIds }
+          if (categoryIds.length > 0) {
+            conditions.category = { in: categoryIds }
+          }
         } else {
           // Handle single category
           const foundCategory = await ctx.payload.find({
@@ -101,10 +102,9 @@ export const productsRouter = createTRPCRouter({
             limit: 1,
           })
           if (foundCategory.docs.length > 0) {
-            categoryConditions = { equals: foundCategory.docs[0].id }
+            conditions.category = { equals: foundCategory.docs[0].id }
           }
         }
-        conditions.category = categoryConditions
       }
 
       if (search) {

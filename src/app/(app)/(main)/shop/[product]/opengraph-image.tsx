@@ -4,7 +4,7 @@ import { formatPrice } from '~/lib/utils'
 import { api } from '~/trpc/server'
 
 // Route segment config
-export const runtime = 'edge'
+// export const runtime = 'edge'
 // Image metadata
 export const alt = 'About the product'
 export const size = {
