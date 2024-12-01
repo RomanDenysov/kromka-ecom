@@ -22,10 +22,10 @@ export default {
         kromka_vyklad: 'url(/images/KROMKA_VYKLAD.webp)',
         kromka_b2b: 'url(/kromka_bunner_bg_b2b.webp)',
       },
-      fontFamily: {
-        sans: ['var(--font-geist-sans)', ...fontFamily.sans],
-        mono: ['var(--font-geist-mono)', ...fontFamily.mono],
-      },
+      // fontFamily: {
+      //   sans: ['var(--font-geist-sans)', ...fontFamily.sans],
+      //   mono: ['var(--font-geist-mono)', ...fontFamily.mono],
+      // },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

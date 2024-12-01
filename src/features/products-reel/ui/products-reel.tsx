@@ -2,93 +2,77 @@
 
 import { ChevronRightIcon } from 'lucide-react'
 import Link from 'next/link'
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { ProductsListing } from '~/features/products-reel/ui'
 import { Heading } from '~/lib/ui/heading'
 import { cn, generateProductQuantityStr } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import { ProductsQueryType } from '../types'
-import { useMountedState } from 'react-use'
+import { useIntersection } from 'react-use'
+import { Product } from '~/server/payload/payload-types'
 
 type Props = {
   className?: string
   href?: string
   title?: string
   subtitle?: string
-  limit?: number
   total?: boolean
   filteredOptions?: string
   query: ProductsQueryType
-  excludeId?: string
+  infiniteScroll?: boolean
 }
-
-const FALLBACK_LIMIT = 8
 
 const ProductsReel = ({
   className,
   href,
   title,
   subtitle,
-  limit = FALLBACK_LIMIT,
   query,
   total = false,
-  excludeId,
+  infiniteScroll = false,
 }: Props) => {
-  const isMounted = useMountedState()
-  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+  const [products, setProducts] = useState<Product[] | null>(null)
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+
+  const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
     api.products.infiniteProducts.useInfiniteQuery(
       {
-        limit,
         query: { ...query },
-        excludeId,
+        limit: infiniteScroll ? query.limit : (query.limit ?? 12),
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
+        // initialData: {
+        //   pages: [{ data: [], nextCursor: 2 }],
+        //   pageParams: [undefined],
+        // },
+        enabled: true,
+        refetchOnWindowFocus: false,
       },
     )
 
-  const totalPages = data?.pages[0].total
+  const intersection = useIntersection(loadMoreRef as React.RefObject<HTMLElement>, {
+    root: null,
+    rootMargin: '200px',
+    threshold: 0,
+  })
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
-        hasNextPage &&
-        !isFetchingNextPage
-      ) {
-        fetchNextPage()
-      }
+    if (infiniteScroll && intersection?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
     }
+  }, [intersection?.isIntersecting, fetchNextPage, hasNextPage, isFetchingNextPage, infiniteScroll])
 
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
+  useEffect(() => {
+    if (data?.pages) {
+      const allProducts = data.pages.flatMap((page) => page.data as Product[])
+      setProducts(allProducts)
     }
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage])
-
-  const products = data?.pages.flatMap((page) => page.data)
+  }, [data])
 
   if (!products || products.length === 0) return null
-  const renderProducts = () => {
-    if (isLoading) {
-      return (
-        // Если данные загружаются, отображаем плейсхолдеры
-        Array.from({ length: limit }).map((_, index) => (
-          <ProductsListing key={`placeholder-${index.toFixed()}`} product={null} index={index} />
-        ))
-      )
-    }
 
-    return products.map((product, index) => (
-      <ProductsListing
-        key={`product-${product?.id || index.toFixed()}`}
-        index={index}
-        product={product}
-      />
-    ))
-  }
-
-  if (!isMounted) return null
+  const totalPages = data?.pages[0]?.total
 
   return (
     <article className={cn('py-10', className)} aria-label="Product showcase">
@@ -120,12 +104,28 @@ const ProductsReel = ({
       <div className="relative">
         <div className="mt-6 flex w-full items-center">
           <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
-            {renderProducts()}
+            {products.map((product, index) => (
+              <ProductsListing
+                key={`product-${product?.id || index.toFixed()}`}
+                index={index}
+                product={product}
+              />
+            ))}
           </div>
         </div>
       </div>
+
+      {infiniteScroll && hasNextPage && (
+        <div ref={loadMoreRef} className="h-10 w-full">
+          {isFetchingNextPage && (
+            <div className="w-full text-center py-4">
+              <div className="animate-pulse">Loading more...</div>
+            </div>
+          )}
+        </div>
+      )}
     </article>
   )
 }
 
-export default ProductsReel
+export default memo(ProductsReel)

@@ -45,26 +45,26 @@ export default function Footer() {
       <div className="flex size-full flex-col-reverse items-center justify-between gap-y-2 px-4 pt-10 pb-4 md:flex-row md:px-10">
         <div className="w-full self-center">
           <span className="text-center text-muted-foreground text-xs md:text-sm">
-            &copy; {new Date().getFullYear()} Všetky práva vyhradené pre Kavejo s.r.o.
+            &copy; {new Date().getFullYear()} Všetky práva vyhradené pre Kromka s.r.o.
           </span>
         </div>
 
         <div className="w-full self-center">
           <div className="flex flex-col items-center justify-end gap-y-1 space-x-4 md:flex-row">
             <Link
-              href="/obchodne-podmienky"
+              href="/terms"
               className="text-center text-muted-foreground text-xs tracking-tight hover:text-gray-600 hover:underline md:text-sm"
             >
               Obchodné podmienky
             </Link>
             <Link
-              href="/ochrana-osobnych-udajov"
+              href="/privacy"
               className="text-center text-muted-foreground text-xs tracking-tight hover:text-gray-600 hover:underline md:text-sm"
             >
               Ochrana osobných údajov
             </Link>
             <Link
-              href="/cookie-policy"
+              href="/cookies"
               className="text-center text-muted-foreground text-xs tracking-tight hover:text-gray-600 hover:underline md:text-sm"
             >
               Cookie Policy

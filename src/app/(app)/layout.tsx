@@ -1,12 +1,16 @@
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next/types'
 import { cn } from '~/lib/utils'
+import localFont from 'next/font/local'
 import { Providers } from '~/providers'
 import '~/lib/styles/globals.css'
 
+const GreedCondensed = localFont({
+  src: '../fonts/GreedCondensedBold.woff2',
+  variable: '--font-greed-condensed',
+})
+
 export const metadata: Metadata = {
-  title: '',
+  title: 'Pekaren Kromka',
   description: '',
 }
 
@@ -18,9 +22,8 @@ export default function RootLayout({
   return (
     <html
       className={cn(
-        'relative size-full bg-background font-sans tracking-tighti antialiased',
-        GeistMono.variable,
-        GeistSans.variable,
+        'relative size-full bg-background tracking-tight antialiased',
+        GreedCondensed.variable,
       )}
       lang="sk"
       suppressHydrationWarning

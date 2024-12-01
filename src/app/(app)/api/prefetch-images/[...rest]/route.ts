@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseHTML } from 'linkedom'
+import { env } from '~/env'
 
 export const dynamic = 'force-dynamic'
 
 function getHostname() {
-  if (process.env.NODE_ENV === 'development') {
-    return 'http://localhost:3000'
+  if (env.NODE_ENV === 'development') {
+    return 'localhost:3000'
   }
-  return process.env.NEXT_PUBLIC_SERVER_URL
+  return env.NEXT_PUBLIC_SERVER_URL
 }
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ rest: string[] }> }) {
-  const schema = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+  const schema = env.NODE_ENV === 'development' ? 'http' : 'https'
   const host = getHostname()
   if (!host) throw new NextResponse('Host not found', { status: 500 })
 

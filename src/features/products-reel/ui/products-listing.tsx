@@ -1,24 +1,20 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { Skeleton } from '~/lib/ui/components/skeleton'
 import type { Product } from '~/server/payload/payload-types'
 import { cn, formatPrice } from '~/lib/utils'
 import { FastAddButton } from '~/features/products-reel/ui'
 import { ImageSlider } from '~/lib/ui/image-slider'
-import { useParams } from 'next/navigation'
 
 type Props = {
   product: Product | null
   index: number
 }
 
-const ProductsListing = ({ product, index }: Props) => {
+const ProductsListing = memo(({ product, index }: Props) => {
   const [isVisible, setIsVisible] = useState<boolean>(false)
-  const params = useParams()
-  const { store } = params
-  const storeSlug = store ? store : 'all'
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -33,9 +29,6 @@ const ProductsListing = ({ product, index }: Props) => {
     .map(({ image }) => typeof image !== 'string' && image.url)
     .filter(Boolean) as string[]
 
-  const categorySlug =
-    (typeof product.category !== 'string' && product.category.slug) || product.category
-
   if (isVisible || product) {
     return (
       <article
@@ -46,7 +39,7 @@ const ProductsListing = ({ product, index }: Props) => {
         <div className="flex w-full flex-col">
           <Link
             href={{
-              pathname: `/shop/${storeSlug}/${categorySlug}/${product.slug}`,
+              pathname: `/shop/${product.slug}`,
             }}
           >
             <ImageSlider urls={validUrls} />
@@ -63,7 +56,7 @@ const ProductsListing = ({ product, index }: Props) => {
       </article>
     )
   }
-}
+})
 
 const ProductPlaceholder = () => {
   return (

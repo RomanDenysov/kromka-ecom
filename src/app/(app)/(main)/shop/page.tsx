@@ -1,12 +1,71 @@
+import { Metadata } from 'next'
 import { Suspense } from 'react'
-import StoresGrid from '~/features/shop/stores/ui/stores-grid'
-import { api } from '~/trpc/server'
+import { ProductsReel } from '~/features/products-reel/ui'
+import { CategoriesCarousel } from '~/features/shop/categories/ui'
+import { StoresGridDrawer } from '~/features/shop/stores-drawer/ui'
+import { Container } from '~/lib/ui/container'
 
-export default async function ShopPage() {
-  const stores = await api.stores.getStores()
+type Props = {
+  searchParams: Promise<{
+    [key: string]: string | string[]
+  }>
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { searchParams } = props
+  const categorySlug = (await searchParams).category as string | undefined
+
+  const selectedCategories = categorySlug
+    ? categorySlug
+        .split(',')
+        .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
+    : []
+
+  return {
+    openGraph: {
+      title: 'Naše Produkty',
+      description: 'Naše najlepšie Obchody',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Naše Produkty',
+      description: 'Naše najlepšie Obchody',
+      images: [
+        {
+          url: '/images/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: 'Naše Produkty',
+        },
+      ],
+    },
+  }
+}
+
+export default async function ShopPage({ searchParams }: Props) {
+  const categorySlug = (await searchParams).category as string | undefined
+
+  console.log('CATEGORY', categorySlug)
+
+  const selectedCategories = categorySlug
+    ? categorySlug
+        .split(',')
+        .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
+    : []
+
   return (
-    <Suspense>
-      <StoresGrid stores={stores} />
-    </Suspense>
+    <Container className="py-5 md:py-8 space-y-5">
+      <StoresGridDrawer />
+      <CategoriesCarousel />
+      <Suspense>
+        <ProductsReel
+          title={'Naše Produkty'}
+          subtitle={'Naše najlepšie Obchody'}
+          query={{ category: selectedCategories }}
+          total={true}
+          className="py-0"
+        />
+      </Suspense>
+    </Container>
   )
 }
