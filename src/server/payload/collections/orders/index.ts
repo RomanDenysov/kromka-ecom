@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import productItemsField from '../../fields/product-items'
+import { handleStatusChange } from './hooks'
 
 const Orders: CollectionConfig = {
   slug: COLLECTIONS.ORDERS,
@@ -8,6 +9,16 @@ const Orders: CollectionConfig = {
     group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'user',
     defaultColumns: ['user', 'status', 'total'],
+  },
+  hooks: {
+    beforeChange: [
+      async ({ req, operation, originalDoc, data }) => {
+        if (operation === 'update') {
+          return handleStatusChange({ req, originalDoc, data })
+        }
+        return data
+      },
+    ],
   },
   fields: [
     {

@@ -2,6 +2,9 @@ import nodemailer from 'nodemailer'
 import { Product } from '@payload-types'
 import { env } from '~/env'
 import { ReceiptEmail } from './templates/receipt-email'
+import { OrderConfirmationEmail } from './templates/order-confirmation-email'
+import { OrderReadyEmail } from './templates/order-ready-email'
+import { OutOfStockEmail } from './templates/out-of-stock-email'
 import { render } from '@react-email/components'
 
 interface EmailConfig {
@@ -28,7 +31,26 @@ type ReceiptEmailData = {
   total: number
 }
 
-type EmailTemplate = 'receipt' | 'order-confirmation'
+type OrderConfirmationData = {
+  email: string
+  orderId: string
+  pickupPlace: string
+  pickupPlaceUrl: string
+}
+
+type OrderReadyData = {
+  email: string
+  orderId: string
+  pickupPlace: string
+}
+
+type OutOfStockData = {
+  email: string
+  orderId: string
+  productName: string
+}
+
+type EmailTemplate = 'receipt' | 'order-confirmation' | 'order-ready' | 'out-of-stock'
 
 export class EmailService {
   private static transporter: nodemailer.Transporter | null = null
@@ -56,12 +78,22 @@ export class EmailService {
     return this.transporter
   }
 
+  private static orderIdFormatter(orderId: string) {
+    return orderId.split('-')[0]
+  }
+
   private static async renderTemplate(template: EmailTemplate, data: any) {
     switch (template) {
       case 'receipt':
         return render(ReceiptEmail(data as ReceiptEmailData))
+      case 'order-confirmation':
+        return render(OrderConfirmationEmail(data as OrderConfirmationData))
+      case 'order-ready':
+        return render(OrderReadyEmail(data as OrderReadyData))
+      case 'out-of-stock':
+        return render(OutOfStockEmail(data as OutOfStockData))
       default:
-        throw new Error(`Unknown email template: $${template}`)
+        throw new Error(`Unknown email template: ${template}`)
     }
   }
 
@@ -75,7 +107,6 @@ export class EmailService {
     html: string
   }) {
     const transporter = await this.getTransporter()
-
     return transporter.sendMail({
       from: `"${this.config.fromName}" < ${this.config.from} >`,
       to,
@@ -88,7 +119,34 @@ export class EmailService {
     const html = await this.renderTemplate('receipt', data)
     return this.sendEmail({
       to: data.email,
-      subject: `Objednávka #${data.orderId} - Pekaren Kromka`,
+      subject: `Objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
+      html,
+    })
+  }
+
+  static async sendOrderConfirmationEmail(data: OrderConfirmationData) {
+    const html = await this.renderTemplate('order-confirmation', data)
+    return this.sendEmail({
+      to: data.email,
+      subject: `Už sa to pečie! Objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
+      html,
+    })
+  }
+
+  static async sendOrderReadyEmail(data: OrderReadyData) {
+    const html = await this.renderTemplate('order-ready', data)
+    return this.sendEmail({
+      to: data.email,
+      subject: `Vaša objednávka #${this.orderIdFormatter(data.orderId)} je pripravená - Pekaren Kromka`,
+      html,
+    })
+  }
+
+  static async sendOutOfStockEmail(data: OutOfStockData) {
+    const html = await this.renderTemplate('out-of-stock', data)
+    return this.sendEmail({
+      to: data.email,
+      subject: `Produkt nie je k dispozícii - Objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
       html,
     })
   }

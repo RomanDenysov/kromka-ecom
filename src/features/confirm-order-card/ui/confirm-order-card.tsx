@@ -78,7 +78,7 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
           </div>
           <Button variant="outline" className="gap-2">
             <ClockIcon size={16} />
-            {orderData.status}
+            {orderStatus}
           </Button>
         </div>
 

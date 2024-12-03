@@ -15,7 +15,9 @@ import {
 } from '@react-email/components'
 import { formatDate } from 'date-fns'
 import { env } from '~/env'
-import { formatPrice, getBaseUrl } from '~/lib/utils'
+import { formatPrice } from '~/lib/utils'
+import { getEmailAssetUrl, getProductImageUrl } from '../utils'
+import { orderIdFormatter } from '~/lib/utils'
 
 type ReceiptProduct = {
   product: Product
@@ -45,6 +47,8 @@ export const ReceiptEmail = ({
   pickupPlace,
   total,
 }: ReceiptEmailProps) => {
+  const receiptOrderId = orderIdFormatter(orderId)
+
   return (
     <Html>
       <Head />
@@ -57,7 +61,7 @@ export const ReceiptEmail = ({
               <Column>
                 {/* TODO: Add kromka logo */}
                 <Img
-                  src={`${env.NEXT_PUBLIC_SERVER_URL}/logos/logo_kromka.png`}
+                  src={getEmailAssetUrl('/public/logo/logo_kromka.svg')}
                   width="42"
                   height="42"
                   alt="Kromka Logo"
@@ -104,7 +108,7 @@ export const ReceiptEmail = ({
                           textDecoration: 'underline',
                         }}
                       >
-                        {orderId}
+                        {receiptOrderId}
                       </Link>
                     </Column>
                   </Row>
@@ -132,8 +136,8 @@ export const ReceiptEmail = ({
             {products.map(({ product, quantity }) => {
               const productImageUrl =
                 typeof product.images[0].image !== 'string'
-                  ? product.images[0].image.url
-                  : product.images[0].image
+                  ? getProductImageUrl(product.images[0].image.url as string)
+                  : getProductImageUrl(product.images[0].image)
 
               const productCategory =
                 typeof product.category !== 'string' ? product.category.title : product.category
@@ -192,7 +196,7 @@ export const ReceiptEmail = ({
             <Row>
               <Column align="center" style={footerIcon}>
                 <Img
-                  src={`${env.NEXT_PUBLIC_SERVER_URL}/logos/kromka_logo.png`}
+                  src={getEmailAssetUrl('/public/logo/kromka_logo.svg')}
                   width="26"
                   height="26"
                   alt="Kromka Logo"
@@ -201,13 +205,11 @@ export const ReceiptEmail = ({
             </Row>
           </Section>
           <Text style={footerLinksWrapper}>
-            <Link href="https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/accountSummary?mt=8">
-              Account Settings
-            </Link>{' '}
-            • <Link href="https://www.apple.com/legal/itunes/us/sales.html">Terms of Sale</Link> •{' '}
-            <Link href="https://www.apple.com/legal/privacy/">Privacy Policy </Link>
+            • <Link href={`${env.NEXT_PUBLIC_SERVER_URL}/profile`}>Nastavenia účtu</Link> •{' '}
+            <Link href={`${env.NEXT_PUBLIC_SERVER_URL}/terms`}>Obchodné podmienky</Link>•{' '}
+            <Link href={`${env.NEXT_PUBLIC_SERVER_URL}/privacy`}>Ochrana osobných údajov</Link>
           </Text>
-          <Text style={footerCopyright}>© 2024 Všetky práva vyhradené pre Kavejo s.r.o.</Text>
+          <Text style={footerCopyright}>© 2024 Všetky práva vyhradené pre Kromka s.r.o.</Text>
         </Container>
       </Body>
     </Html>
