@@ -80,7 +80,7 @@ const Info = () => {
                   <FormLabel className="font-medium text-sm leading-none">
                     Suhlasim z{' '}
                     <Link
-                      href="/privacy-policy"
+                      href="/terms"
                       className="text-primary underline hover:text-muted-foreground"
                     >
                       obchodnymi podmienkami

@@ -51,6 +51,7 @@ const Media: CollectionConfig = {
         height: undefined,
         position: 'centre',
         fit: 'cover',
+        withoutEnlargement: true,
       },
       {
         name: 'square',
@@ -88,7 +89,7 @@ const Media: CollectionConfig = {
         fit: 'cover',
       },
     ],
-    staticDir: path.resolve(dirname, '../../../../../public/media'),
+    staticDir: '/app/public/media', // путь в контейнере
   },
 }
 
