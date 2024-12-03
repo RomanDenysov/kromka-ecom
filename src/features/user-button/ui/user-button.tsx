@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from '~/lib/ui/components/dropdown-menu'
 import { cn, getNameInitials } from '~/lib/utils'
-import { api } from '~/trpc/react'
 import { LogoutButton } from './logout-button'
 import { useUser } from '~/store/user/use-user'
 
@@ -61,7 +60,7 @@ const UserButton = () => {
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href={{ pathname: '/admin', query: { user: user.id } }}>
+                      <Link href={'/admin'}>
                         <BookLockIcon size={20} className="mr-2" />
                         Admin Panel
                       </Link>
@@ -76,7 +75,8 @@ const UserButton = () => {
         </DropdownMenu>
       ) : (
         <Link
-          href={{ pathname: '/sign-in' }}
+          prefetch={true}
+          href={'/sign-in'}
           className={cn('grid size-10 place-content-center rounded-full p-0 md:hover:bg-accent ')}
         >
           <LogInIcon size={24} />
