@@ -15,43 +15,43 @@ import {
 const dummyProducts = [
   {
     title: 'Product 1',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 2',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 3',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 4',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 5',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 6',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 7',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 8',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 9',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
   {
     title: 'Product 10',
-    image: '/images/asset-1.jpg',
+    image: '/images/asset-1.webp',
   },
 ]
 

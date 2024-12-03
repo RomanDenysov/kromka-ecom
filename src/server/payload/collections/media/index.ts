@@ -19,9 +19,6 @@ const Media: CollectionConfig = {
   },
   access: {
     read: () => true,
-    update: isStaff,
-    create: isStaff,
-    delete: isAdmin,
   },
   fields: [
     {
@@ -41,35 +38,57 @@ const Media: CollectionConfig = {
   ],
   upload: {
     adminThumbnail: 'thumbnail',
+    formatOptions: {
+      format: 'webp',
+      options: {
+        quality: 70,
+      },
+    },
     imageSizes: [
       {
         name: 'thumbnail',
         width: 300,
+        height: undefined,
+        position: 'centre',
+        fit: 'cover',
       },
       {
         name: 'square',
         width: 500,
         height: 500,
+        position: 'centre',
+        fit: 'cover',
       },
       {
         name: 'small',
         width: 600,
+        height: undefined,
+        position: 'centre',
+        fit: 'cover',
       },
       {
         name: 'medium',
         width: 900,
+        height: undefined,
+        position: 'centre',
+        fit: 'cover',
       },
       {
         name: 'large',
         width: 1400,
+        height: undefined,
+        position: 'centre',
+        fit: 'cover',
       },
       {
         name: 'xlarge',
         width: 1920,
+        height: undefined,
+        position: 'centre',
+        fit: 'cover',
       },
     ],
     staticDir: path.resolve(dirname, '../../../../../public/media'),
-    mimeTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/svg+xml', 'image/webp'],
   },
 }
 

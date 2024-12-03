@@ -15,7 +15,7 @@ const PostsGrid = () => {
             <Link href={'#'} className="flex-grow">
               <div className="relative aspect-video overflow-hidden ">
                 <Image
-                  src={'/images/asset-1.jpg'}
+                  src={'/images/asset-1.webp'}
                   alt={'Blog post'}
                   fill
                   className="absolute inset-0 z-0 object-cover transition-transform hover:scale-105 object-center"

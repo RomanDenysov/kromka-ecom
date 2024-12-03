@@ -74,6 +74,7 @@ export const Link: typeof NextLink = (({ children, ...props }) => {
       observer.disconnect()
       if (prefetchTimeout) {
         clearTimeout(prefetchTimeout)
+        prefetchTimeout = null
       }
     }
   }, [props.href, props.prefetch])

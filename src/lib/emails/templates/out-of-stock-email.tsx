@@ -28,7 +28,7 @@ export const OutOfStockEmail = ({ productName }: OutOfStockEmailProps) => {
             <Row>
               <Column align="center">
                 <Img
-                  src={getEmailAssetUrl(`/logo/logo_kromka.svg`)}
+                  src={getEmailAssetUrl(`/logo/logo-black-rounded.png`)}
                   width="100"
                   height="100"
                   alt="Kromka Logo"

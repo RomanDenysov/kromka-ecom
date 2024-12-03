@@ -6,7 +6,7 @@ import { useCurrentStore } from '~/store/store/use-current-store'
 import { Separator } from '~/lib/ui/components/separator'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { MailIcon, MapPinIcon, PhoneIcon } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import { cn } from '~/lib/utils'
 
 const StoreCard = () => {

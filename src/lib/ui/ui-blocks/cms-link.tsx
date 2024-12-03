@@ -1,6 +1,6 @@
 import { Button, type ButtonProps } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import React from 'react'
 
 import type { Post } from '@payload-types'

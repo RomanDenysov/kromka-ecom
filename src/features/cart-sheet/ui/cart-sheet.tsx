@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronRight } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { ScrollArea } from '~/lib/ui/components/scroll-area'
 import { Separator } from '~/lib/ui/components/separator'

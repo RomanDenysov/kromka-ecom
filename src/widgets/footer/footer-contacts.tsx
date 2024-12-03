@@ -1,5 +1,5 @@
 import { MailIcon, PhoneIcon } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'
 
@@ -18,7 +18,7 @@ const FOOTER_CONTACTS = [
 
 export const FooterContacts = () => {
   return (
-    <div className='flex flex-col items-start justify-start space-y-1'>
+    <div className="flex flex-col items-start justify-start space-y-1">
       {FOOTER_CONTACTS.map((link) => (
         <Link
           key={link.href}
@@ -26,8 +26,9 @@ export const FooterContacts = () => {
           className={cn(
             buttonVariants({ variant: 'ghost' }),
             'text-muted-foreground hover:text-accent-foreground',
-          )}>
-          <link.icon className='mr-2 size-5' />
+          )}
+        >
+          <link.icon className="mr-2 size-5" />
           {link.label}
         </Link>
       ))}

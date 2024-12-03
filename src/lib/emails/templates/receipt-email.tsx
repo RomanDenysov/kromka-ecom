@@ -61,7 +61,7 @@ export const ReceiptEmail = ({
               <Column>
                 {/* TODO: Add kromka logo */}
                 <Img
-                  src={getEmailAssetUrl('/public/logo/logo_kromka.svg')}
+                  src={getEmailAssetUrl('/public/logo/logo-black-rounded.png')}
                   width="42"
                   height="42"
                   alt="Kromka Logo"
@@ -196,7 +196,7 @@ export const ReceiptEmail = ({
             <Row>
               <Column align="center" style={footerIcon}>
                 <Img
-                  src={getEmailAssetUrl('/public/logo/kromka_logo.svg')}
+                  src={getEmailAssetUrl('/public/logo/logo-black-rounded.png')}
                   width="26"
                   height="26"
                   alt="Kromka Logo"

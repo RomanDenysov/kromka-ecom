@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import React, { memo, useEffect, useState } from 'react'
 import { Skeleton } from '~/lib/ui/components/skeleton'
 import type { Product } from '~/server/payload/payload-types'

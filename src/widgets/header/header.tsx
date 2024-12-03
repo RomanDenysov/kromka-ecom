@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import CartButton from '~/features/cart-sheet/ui/cart-button'
 import { UserButton } from '~/features/user-button/ui'
 import { Separator } from '~/lib/ui/components/separator'

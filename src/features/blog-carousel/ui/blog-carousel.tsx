@@ -8,9 +8,9 @@ import { Button } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'
 
 const carouselItems = [
-  { title: 'Nové sezónne pečivo', image: '/images/asset-2.jpg' },
-  { title: 'Tajomstvo našej kávy', image: '/images/asset-2.jpg' },
-  { title: 'Workshopy pečenia', image: '/images/asset-2.jpg' },
+  { title: 'Nové sezónne pečivo', image: '/images/asset-2.webp' },
+  { title: 'Tajomstvo našej kávy', image: '/images/asset-2.webp' },
+  { title: 'Workshopy pečenia', image: '/images/asset-2.webp' },
 ]
 
 const BlogCarousel = () => {

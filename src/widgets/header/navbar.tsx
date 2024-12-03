@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import { usePathname } from 'next/navigation'
 import { useWindowScroll } from 'react-use'
 import { NAV_LINKS } from '~/lib/config/navigation'

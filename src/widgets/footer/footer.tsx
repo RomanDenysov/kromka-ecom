@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import { Separator } from '~/lib/ui/components/separator'
 import { Container } from '~/lib/ui/container'
 import { Icons } from '~/lib/ui/icons'

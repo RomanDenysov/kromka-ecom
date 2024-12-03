@@ -10,7 +10,7 @@ const B2BCard = ({ className }: Props) => {
   return (
     <div className={cn('relative aspect-auto rounded-lg overflow-hidden', className)}>
       <Image
-        src={'/images/asset-1.jpg'}
+        src={'/images/asset-1.webp'}
         alt={'alt text'}
         fill
         className="rounded-lg object-cover object-center"

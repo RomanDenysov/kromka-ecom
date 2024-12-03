@@ -26,7 +26,7 @@ const ShopCard = ({ className }: Props) => {
         loading="eager"
         decoding="sync"
         quality={70}
-        src={'/images/shop-pic.jpg'}
+        src={'/images/shop-pic.webp'}
         alt={'alt text'}
         fill
         priority

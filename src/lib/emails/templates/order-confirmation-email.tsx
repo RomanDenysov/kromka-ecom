@@ -35,7 +35,7 @@ export const OrderConfirmationEmail = ({
             <Row>
               <Column align="center">
                 <Img
-                  src={getEmailAssetUrl('/logo/logo_kromka.svg')}
+                  src={getEmailAssetUrl('/logo/logo-black-rounded.png')}
                   width="100"
                   height="100"
                   alt="Kromka Logo"
@@ -73,7 +73,7 @@ export const OrderConfirmationEmail = ({
             <Row>
               <Column align="center" style={footerIcon}>
                 <Img
-                  src={getEmailAssetUrl('/logo/logo_kromka.svg')}
+                  src={getEmailAssetUrl('/logo/logo-black-rounded.png')}
                   width="26"
                   height="26"
                   alt="Kromka Logo"

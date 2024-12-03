@@ -12,7 +12,7 @@ const PostCard = ({ className }: Props) => {
     <Link href={'#'} className={cn('overflow-hidden aspect-auto relative rounded-lg', className)}>
       <Image
         fill
-        src={'/images/asset-1.jpg'}
+        src={'/images/asset-1.webp'}
         alt={'alt text'}
         className="rounded-lg object-cover object-center"
       />

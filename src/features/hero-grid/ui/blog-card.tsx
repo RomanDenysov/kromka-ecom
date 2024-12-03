@@ -27,7 +27,7 @@ const BlogCard = ({ className }: Props) => {
         loading="eager"
         decoding="sync"
         quality={70}
-        src={'/images/blog-pic.jpg'}
+        src={'/images/blog-pic.webp'}
         alt={'pekaren kromka blog banner'}
         fill
         priority

@@ -24,7 +24,7 @@ import Image from 'next/image'
 import { cn, formatPrice } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import { Order } from '~/server/payload/payload-types'
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import { useUser } from '~/store/user/use-user'
 
 type Props = {
@@ -154,7 +154,7 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
                         <Fragment key={index}>
                           <div className="flex items-center gap-4 py-4">
                             <Image
-                              src={productImageUrl || '/images/asset-1.jpg'}
+                              src={productImageUrl || '/images/asset-1.webp'}
                               width={64}
                               height={64}
                               alt={productData.title}

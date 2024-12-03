@@ -18,7 +18,7 @@ export default function SubscribeSection() {
     <section className="group relative overflow-hidden rounded-lg">
       <AspectRatio ratio={21 / 9} className="relative">
         <Image
-          src={'/images/asset-1.jpg'}
+          src={'/images/asset-1.webp'}
           alt={'alt text'}
           fill
           className="object-cover object-center"

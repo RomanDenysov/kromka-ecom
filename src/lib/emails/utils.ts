@@ -3,7 +3,7 @@ import { env } from '~/env'
 
 /**
  * Converts a relative path to an absolute URL for email assets
- * @param path The relative path to the asset (e.g., '/logos/logo_kromka.svg')
+ * @param path The relative path to the asset (e.g., '/logos/logo-black-rounded.png')
  * @returns The complete URL for the asset
  */
 export const getEmailAssetUrl = (path: string): string => {

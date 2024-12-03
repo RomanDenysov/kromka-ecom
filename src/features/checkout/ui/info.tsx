@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '~/lib/ui/link'
 import { memo, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/lib/ui/components/card'
