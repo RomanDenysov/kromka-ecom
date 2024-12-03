@@ -3,7 +3,7 @@ import { ActionCard, B2BCard, PostCard } from '~/features/home-actions-section/u
 const actionCards = [
   {
     className: 'sm:col-span-1 h-40 sm:h-80',
-    href: '/blog',
+    href: '/',
     title: 'SPOLUPRÁCA',
     alternativeTitle: 'Zistiť viac',
     image: '/images/asset-4.jpg',

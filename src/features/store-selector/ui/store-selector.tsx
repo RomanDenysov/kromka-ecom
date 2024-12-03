@@ -1,7 +1,7 @@
 'use client'
 
 import { CheckIcon, ChevronsUpDown, StoreIcon } from 'lucide-react'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback } from 'react'
 import { cn } from '~/lib/utils'
 import { Button } from '~/lib/ui/components/button'
 import {
@@ -28,15 +28,6 @@ const StoreSelector = memo(({ width, onStoreChange, className }: Props) => {
   const { data: stores, isLoading } = api.stores.getStores.useQuery()
   const store = useCurrentStore((state) => state.store)
   const setStore = useCurrentStore((state) => state.setStore)
-  // const [open, setOpen] = useState<boolean>(false)
-  // const [value, setValue] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (store) {
-      setStore(store)
-      onStoreChange?.(store)
-    }
-  }, [store, setStore])
 
   const handleSelect = useCallback(
     (selectedValue: string) => {

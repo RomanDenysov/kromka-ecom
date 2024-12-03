@@ -38,16 +38,21 @@ const StoresItem = ({ store }: Props) => {
         </AspectRatio>
       </div>
       <div className="absolute z-10 inset-0 bg-black/20 backdrop-blur-[2px] opacity-0 transition-opacity group-hover:opacity-100 "></div>
-      <div className="bg-white z-20 transition border border-border rounded-b-lg size-full p-4 space-y-4">
+      <div className="bg-white group-hover:bg-gradient-to-t from-white to-accent z-20 transition border border-border rounded-b-lg size-full p-4 space-y-4">
         <h4 className="text-lg lg:text-xl font-bold line-clamp-2 text-center text-primary">
           {store.title}
         </h4>
-        <div className="flex items-center justify-center gap-x-0.5 text-muted-foreground">
+        <a
+          href={store.addressUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex hover:underline hover:text-primary transition items-center justify-center gap-x-1 text-muted-foreground"
+        >
           <MapPinIcon size={16} />
           <span className="text-base text-center text-muted-foreground">{store.address}</span>
-        </div>
+        </a>
         <Button onClick={handleClick} className="w-full">
-          Vybrat si obchod
+          Vybrať obchod
         </Button>
       </div>
     </div>

@@ -44,7 +44,7 @@ const AddToCartButton = ({ product, disabled = false }: Props) => {
         <Button
           onClick={handleRemoveFromCart}
           disabled={currentQuantity === 0}
-          className="w-fit px-6 md:px-8 xl:px-10"
+          className="w-fit px-8 md:px-10 xl:px-12"
           size={'lg'}
           aria-label="decrease button"
         >
@@ -70,7 +70,7 @@ const AddToCartButton = ({ product, disabled = false }: Props) => {
         <Button
           onClick={handleAddToCart}
           disabled={currentQuantity === 0}
-          className="w-fit px-6 md:px-8 xl:px-10"
+          className="w-fit px-8 md:px-10 xl:px-12"
           size={'lg'}
           aria-label="increase button"
         >

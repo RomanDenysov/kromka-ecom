@@ -34,7 +34,10 @@ const StoresGridDrawer = () => {
         <div className="mx-auto w-full max-w-5xl text-center">
           <DrawerHeader>
             <DrawerTitle>Naše Obchody</DrawerTitle>
-            <DrawerDescription>Naše najlepšie Obchody</DrawerDescription>
+            <DrawerDescription>
+              Vyberte si obchod, v ktorom chcete nakupovať. Môžete ho kedykoľvek zmeniť v dolnej
+              časti stránky.
+            </DrawerDescription>
           </DrawerHeader>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 px-4 pb-2 h-full">
             {stores?.map((store) => <StoresItem store={store} key={store.id} />)}

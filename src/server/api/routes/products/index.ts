@@ -60,8 +60,6 @@ export const productsRouter = createTRPCRouter({
     const { query, cursor } = input
     const { sort, limit, search, excludeId, category, ...queryOpts } = query
 
-    const page = cursor ?? 1
-
     const buildWhereClause = async (): Promise<Where> => {
       const conditions: Where = {}
 
@@ -73,6 +71,12 @@ export const productsRouter = createTRPCRouter({
 
       if (excludeId) {
         conditions.id = { not_equals: excludeId }
+      }
+
+      if (cursor?.createdAt) {
+        conditions.createdAt = {
+          [sort?.[0]?.direction === 'asc' ? 'greater_than' : 'less_than']: cursor.createdAt,
+        }
       }
 
       if (category) {
@@ -119,22 +123,24 @@ export const productsRouter = createTRPCRouter({
 
     const buildSortOptions = (): Sort => {
       if (!sort || sort.length === 0) return ['-createdAt']
-
       return sort.map(({ field, direction }) => (direction === 'desc' ? `-${field}` : field))
     }
 
     const result = await ctx.payload.find({
       collection: 'products',
-      limit: limit || 10,
-      page,
+      limit: limit + 1,
       sort: buildSortOptions(),
       where: await buildWhereClause(),
       depth: 2,
     })
 
-    console.log('RESULT QUERY', result)
+    const hasMore = result.docs.length > limit
+    const docs = result.docs.slice(0, limit)
 
-    const processedDocs = result.docs.map((doc) => ({
+    const lastDoc = docs[docs.length - 1]
+    const nextCursor = hasMore ? { createdAt: lastDoc.createdAt, id: lastDoc.id } : undefined
+
+    const processedDocs = docs.map((doc) => ({
       ...doc,
       priceId: undefined,
       stripeId: undefined,
@@ -142,16 +148,9 @@ export const productsRouter = createTRPCRouter({
 
     return {
       data: processedDocs,
+      nextCursor,
       total: result.totalDocs,
-      nextCursor: result.hasNextPage ? page + 1 : undefined,
-      prevCursor: result.hasPrevPage ? page - 1 : undefined,
-      hasMore: result.hasNextPage,
-      pageInfo: {
-        totalPages: result.totalPages,
-        currentPage: result.page,
-        hasPrevPage: result.hasPrevPage,
-        hasNextPage: result.hasNextPage,
-      },
+      hasMore,
     }
   }),
 

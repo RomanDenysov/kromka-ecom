@@ -19,8 +19,7 @@ export const checkoutSchema = z.object({
     .min(10, {
       message: 'Vaše telefónne číslo musí obsahovať aspoň 10 znakov.',
     })
-    .regex(phoneRegex, 'Zadajte svoje telefónne číslo vo formáte +421912345678 alebo 0912345678')
-    .optional(),
+    .regex(phoneRegex, 'Zadajte svoje telefónne číslo vo formáte +421912345678 alebo 0912345678'),
   store: z.string().min(1),
   terms: z
     .boolean()

@@ -6,6 +6,7 @@ import { Container } from '~/lib/ui/container'
 import { Icons } from '~/lib/ui/icons'
 import { MobileNav } from './mobile-nav'
 import { Navbar } from './navbar'
+import { Suspense } from 'react'
 
 export default function Header() {
   return (
@@ -23,7 +24,9 @@ export default function Header() {
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <UserButton />
+          <Suspense>
+            <UserButton />
+          </Suspense>
           <Separator orientation="vertical" className="h-6 w-px" />
           <CartButton />
         </div>

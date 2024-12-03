@@ -2,7 +2,7 @@
 
 import { BookLockIcon, LogInIcon, SettingsIcon, ShoppingBag, UserIcon } from 'lucide-react'
 import Link from 'next/link'
-import { Suspense, memo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '~/lib/ui/components/avatar'
 import {
   DropdownMenu,
@@ -15,6 +15,7 @@ import {
 import { cn, getNameInitials } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import { LogoutButton } from './logout-button'
+import { useUser } from '~/store/user/use-user'
 
 // TODO: move options to config file
 const BUTTON_OPTIONS = [
@@ -23,11 +24,13 @@ const BUTTON_OPTIONS = [
   { label: 'Settings', href: '/settings', icon: SettingsIcon },
 ]
 
-const UserButton = memo(() => {
-  const { data: user } = api.users.getUser.useQuery()
-  const isAdmin = user?.role === 'admin'
+const UserButton = () => {
+  const user = useUser((state) => state.user)
+  const isAdmin = useMemo(() => user?.role === 'admin', [user])
 
   console.log('USER', user)
+
+  const userImage = useMemo(() => user?.image || '', [user])
 
   return (
     <>
@@ -36,7 +39,7 @@ const UserButton = memo(() => {
           <DropdownMenuTrigger className="rounded-full">
             <Avatar>
               <Suspense fallback={null}>
-                <AvatarImage className="rounded-full" src={user?.image || ''} />
+                <AvatarImage className="rounded-full" src={userImage} />
                 <AvatarFallback delayMs={600} className="rounded-full bg-accent">
                   {user.name ? getNameInitials(user.name) : <UserIcon size={24} />}
                 </AvatarFallback>
@@ -81,6 +84,6 @@ const UserButton = memo(() => {
       )}
     </>
   )
-})
+}
 
 export default UserButton

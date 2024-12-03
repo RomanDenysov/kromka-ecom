@@ -1,23 +1,23 @@
 import { getCookie, setCookie } from 'cookies-next'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { Profile } from '@payload-types'
 
 type CookiePreferences = {
   necessary: boolean
   functional: boolean
-  performance: boolean
 }
 
 type CookieConsentState = {
   preferences: CookiePreferences
   isVisible: boolean
-  profileId: string | null
+  profile: Profile | null
   setIsVisible: (isVisible: boolean) => void
   setPreference: (key: keyof CookiePreferences, value: boolean) => void
   savePreferences: () => void
   hasConsented: () => boolean
   resetBanner: () => void
-  setProfile: (profileId: string | null) => void
+  setProfile: (profile: Profile | null) => void
 }
 
 const COOKIE_NAME = 'krmk_cookie'
@@ -29,10 +29,9 @@ export const useCookieConsentStore = create<CookieConsentState>()(
       preferences: {
         necessary: true,
         functional: false,
-        performance: false,
       },
       isVisible: true,
-      profileId: null,
+      profile: null,
       setPreference: (key, value) => {
         set((state) => ({
           preferences: {
@@ -54,12 +53,14 @@ export const useCookieConsentStore = create<CookieConsentState>()(
       },
       setIsVisible: (isVisible) => set({ isVisible }),
       resetBanner: () => set({ isVisible: true }),
-      setProfile: (profileId) => {
-        set({ profileId })
-        setCookie(PROFILE_COOKIE_NAME, profileId, {
-          maxAge: 60 * 60 * 24 * 365, // 1 year
-          path: '/',
-        })
+      setProfile: (profile) => {
+        set({ profile })
+        if (profile) {
+          setCookie(PROFILE_COOKIE_NAME, profile.id, {
+            maxAge: 60 * 60 * 24 * 365, // 1 year
+            path: '/',
+          })
+        }
       },
     }),
     {
@@ -77,10 +78,6 @@ const initializeBannerVisibility = async () => {
       isVisible: false,
       preferences: JSON.parse(cookieConsent),
     })
-  }
-
-  if (profileId) {
-    useCookieConsentStore.setState({ profileId: profileId as string })
   }
 
   if (cookieConsent && profileId) {

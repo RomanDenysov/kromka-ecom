@@ -6,6 +6,7 @@ import { FooterContacts } from './footer-contacts'
 import { FooterNav } from './footer-nav'
 import { SocialLinks } from './social-links'
 import { StoreCard } from '~/features/store-selector/ui'
+import { Suspense } from 'react'
 
 export default function Footer() {
   return (
@@ -37,7 +38,9 @@ export default function Footer() {
             <FooterContacts />
           </div>
           <div className="col-span-2 md:col-span-1">
-            <StoreCard />
+            <Suspense>
+              <StoreCard />
+            </Suspense>
           </div>
         </div>
         <Separator />

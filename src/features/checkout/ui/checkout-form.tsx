@@ -9,6 +9,8 @@ import { CheckoutOptions } from '~/server/api/routes/checkout/validator'
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import { useCheckoutComplete, useCheckoutStore } from '~/store/checkout/use-checkout-store'
+import { useUser } from '~/store/user/use-user'
+import { useCookieConsentStore } from '~/store/cookie/use-cookie-consent-store'
 
 type Props = {
   children: React.ReactNode
@@ -16,10 +18,11 @@ type Props = {
 }
 
 export default function CheckoutForm({ children, className }: Props) {
-  const { data: user } = api.users.getUser.useQuery()
+  const user = useUser((state) => state.user)
+  const profile = useCookieConsentStore((state) => state.profile)
   const router = useRouter()
   const items = useCart((state) => state.items)
-  const { setLoading, setError, reset: resetCheckout } = useCheckoutStore()
+  const { setLoading, setError } = useCheckoutStore()
   const completeCheckout = useCheckoutComplete()
 
   const products = useMemo(
@@ -31,7 +34,7 @@ export default function CheckoutForm({ children, className }: Props) {
     [items],
   )
 
-  const form = useCheckoutForm({ user })
+  const form = useCheckoutForm({ user, profile })
 
   const checkoutMutation = api.checkout.checkout.useMutation({
     onMutate: () => {
@@ -57,7 +60,8 @@ export default function CheckoutForm({ children, className }: Props) {
 
   const onSubmit = useCallback(
     (data: CheckoutOptions) => {
-      checkoutMutation.mutateAsync({ products, options: data })
+      setLoading(true)
+      checkoutMutation.mutate({ products, options: data })
     },
     [products, checkoutMutation],
   )

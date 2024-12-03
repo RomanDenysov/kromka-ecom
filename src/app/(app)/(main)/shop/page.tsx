@@ -61,9 +61,10 @@ export default async function ShopPage({ searchParams }: Props) {
         <ProductsReel
           title={'Naše Produkty'}
           subtitle={'Naše najlepšie Obchody'}
-          query={{ category: selectedCategories }}
+          query={{ limit: 12, category: selectedCategories }}
           total={true}
           className="py-0"
+          showLoadMore
         />
       </Suspense>
     </Container>

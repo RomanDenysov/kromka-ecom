@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { SubscribeSection } from '~/features/subscribe-section/ui'
 import { Alert, AlertDescription } from '~/lib/ui/components/alert'
 import { Button } from '~/lib/ui/components/button'
-import { Card, CardContent } from '~/lib/ui/components/card'
+import { Card } from '~/lib/ui/components/card'
 import { Container } from '~/lib/ui/container'
 
 const locations = [
@@ -25,7 +25,7 @@ export default function Page() {
     <Container className="py-8 md:py-16 max-w-5xl mx-auto space-y-12">
       {/* Hero Section */}
       <div className="space-y-6">
-        <h1 className="text-4xl md:text-6xl font-black tracking-tight">Kusik o nas</h1>
+        <h1 className="text-4xl md:text-6xl font-black tracking-tight">Náš príbeh</h1>
         <p className="text-xl text-muted-foreground">
           Chleba, lakocinky a káva. Tri základné piliére remeselnej pekárne Kromka.
         </p>

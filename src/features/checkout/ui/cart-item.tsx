@@ -6,11 +6,40 @@ import type { Product } from '~/server/payload/payload-types'
 import { useCart } from '~/store/cart/use-cart'
 import { ItemQuantityButton } from '~/features/checkout/ui'
 import { Link } from '~/lib/ui/link'
+import { memo } from 'react'
 
 type Props = {
   product: Product
   quantity: number
 }
+
+const CartItemImage = memo(
+  ({ image, title, slug }: { image: any; title: string; slug: string }) => {
+    if (image && typeof image !== 'string' && image?.url) {
+      return (
+        <Link href={`/shop/${slug}`}>
+          <Image
+            loading="eager"
+            decoding="sync"
+            quality={65}
+            src={image.url}
+            alt={title}
+            fill
+            className="size-full rounded-md object-cover object-center shadow-md"
+          />
+        </Link>
+      )
+    }
+
+    return (
+      <div className="flex h-full items-center justify-center bg-secondary">
+        <ImageIcon size={40} aria-hidden="true" className="text-muted-foreground" />
+      </div>
+    )
+  },
+)
+
+CartItemImage.displayName = 'CartItemImage'
 
 const CartItem = ({ product, quantity }: Props) => {
   const [ConfirmDialog, confirm] = useConfirm(
@@ -20,8 +49,8 @@ const CartItem = ({ product, quantity }: Props) => {
   const removeItem = useCart((state) => state.removeItem)
 
   const handleRemoveItem = async () => {
-    const ok = await confirm()
-    if (ok) {
+    const confirmed = await confirm()
+    if (confirmed) {
       removeItem(product.id)
     }
   }
@@ -29,29 +58,6 @@ const CartItem = ({ product, quantity }: Props) => {
   if (!product) return null
 
   const { image } = product.images[0] ?? { image: null }
-  const categorySlug =
-    typeof product.category !== 'string' ? product.category.slug : product.category
-
-  const renderImage = () => {
-    if (image && typeof image !== 'string' && image?.url) {
-      return (
-        <Image
-          loading="eager"
-          decoding="sync"
-          quality={65}
-          src={image.url}
-          alt={product.title}
-          fill
-          className="size-full rounded-md object-cover object-center shadow-md"
-        />
-      )
-    }
-    return (
-      <div className="flex h-full items-center justify-center bg-secondary">
-        <ImageIcon size={40} aria-hidden="true" className="text-muted-foreground" />
-      </div>
-    )
-  }
 
   return (
     <>
@@ -59,7 +65,7 @@ const CartItem = ({ product, quantity }: Props) => {
       <div className="flex border-t py-2 sm:py-4">
         <div className="flex-shrink-0">
           <div className="relative size-36 shadow-md sm:size-48">
-            <Link href={`/shop/all/${categorySlug}/${product.slug}`}>{renderImage()}</Link>
+            <CartItemImage image={image} title={product.title} slug={product.slug ?? ''} />
           </div>
         </div>
 
@@ -94,4 +100,4 @@ const CartItem = ({ product, quantity }: Props) => {
   )
 }
 
-export default CartItem
+export default memo(CartItem)

@@ -13,7 +13,7 @@ const PROFILE_NAVIGATION = [
 ]
 
 export default async function ProfileLayout({ children }: { children: React.ReactNode }) {
-  const user = await api.users.getUser()
+  const user = await api.users.me()
 
   if (!user) redirect('/')
 

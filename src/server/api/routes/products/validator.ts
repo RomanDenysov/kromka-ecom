@@ -15,8 +15,7 @@ export const queryValidator = z.object({
   categorySlug: z.union([z.string(), z.array(z.string())]).optional(),
   search: z.string().max(100).optional(),
   sort: z.array(sortConfig).optional(),
-  limit: z.number().default(10).optional(),
-
+  limit: z.number().min(1).max(100).default(12),
   status: statusValidator,
   isFeatured: z.boolean().optional(),
 
@@ -24,8 +23,13 @@ export const queryValidator = z.object({
 })
 
 export const infiniteQueryValidator = z.object({
-  limit: z.number().min(1).max(100).optional(),
-  cursor: z.number().optional(),
+  // limit: z.number().min(1).max(100).optional(),
+  cursor: z
+    .object({
+      createdAt: z.string().optional(),
+      id: z.string().optional(),
+    })
+    .optional(),
   query: queryValidator,
 })
 

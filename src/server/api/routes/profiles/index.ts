@@ -1,25 +1,20 @@
-import { TRPCError } from '@trpc/server'
+import { COLLECTIONS } from '~/server/payload/config'
 import { createTRPCRouter, publicProcedure } from '../../trpc'
+import { updateProfileSchema } from './validator'
+import { getProfileById } from './service'
 
 export const profilesRouter = createTRPCRouter({
-  getProfile: publicProcedure.query(async ({ ctx }) => {
+  me: publicProcedure.query(async ({ ctx }) => {
     const userId = ctx.session?.user?.id
 
     if (!userId) {
-      throw new TRPCError({ code: 'NOT_FOUND' })
+      return null
     }
 
-    const result = await ctx.payload.find({
-      collection: 'profiles',
-      where: {
-        userId: { equals: userId },
-      },
-    })
-
-    return result.docs.length > 0 ? result.docs[0] : null
+    return getProfileById(userId)
   }),
 
-  createProfile: publicProcedure.mutation(async ({ ctx }) => {
+  create: publicProcedure.mutation(async ({ ctx }) => {
     const userId = ctx.session?.user?.id ?? null
 
     const profile = await ctx.payload.create({
@@ -31,6 +26,33 @@ export const profilesRouter = createTRPCRouter({
           privacy: false,
           cookie: true,
         },
+      },
+    })
+
+    return profile
+  }),
+
+  update: publicProcedure.input(updateProfileSchema).mutation(async ({ ctx, input }) => {
+    const userId = ctx.session?.user?.id
+    if (!userId) throw new Error('Unauthorized')
+
+    const existingProfile = await ctx.payload.find({
+      collection: COLLECTIONS.PROFILES,
+      where: {
+        userId: { equals: userId },
+      },
+    })
+
+    if (!existingProfile.docs.length) {
+      throw new Error('Profile not found')
+    }
+
+    const profile = await ctx.payload.update({
+      collection: COLLECTIONS.PROFILES,
+      id: existingProfile.docs[0].id,
+      data: {
+        ...input,
+        user: userId,
       },
     })
 

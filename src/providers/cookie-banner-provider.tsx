@@ -1,8 +1,10 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useInitializeUser } from '~/hooks/use-initialize-user'
 import { useCookieConsentStore } from '~/store/cookie/use-cookie-consent-store'
+import { api } from '~/trpc/react'
 
 const CookieConsentBanner = dynamic(
   () => import('~/widgets/cookie-consent/cookie-consent-banner'),
@@ -17,18 +19,28 @@ const CookieConsentBanner = dynamic(
 )
 
 const CookieBannerProvider = () => {
-  const [showBanner, setShowBanner] = useState(true)
+  // Remove useState since we can derive this from other state
   const isVisible = useCookieConsentStore((state) => state.isVisible)
+  const setProfile = useCookieConsentStore((state) => state.setProfile)
+  const { data: profile, isLoading } = api.profiles.me.useQuery()
+
+  useInitializeUser()
+
+  // Memoize the profile initialization
+  const handleProfile = useCallback(() => {
+    if (profile) {
+      setProfile(profile)
+    }
+  }, [profile, setProfile])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowBanner(true)
-    }, 10000)
+    handleProfile()
+  }, [handleProfile])
 
-    return () => clearTimeout(timer)
-  }, [])
-
-  if (!showBanner || !isVisible) return null
+  // Combine conditions for early return
+  if (!profile || !isVisible || isLoading) {
+    return null
+  }
 
   return <CookieConsentBanner />
 }

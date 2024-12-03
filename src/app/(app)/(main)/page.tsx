@@ -11,7 +11,7 @@ export default function HomePage() {
       <HeroGrid />
 
       {/* PRODUCTS REEL */}
-      <ProductsReel href={'/shop'} title={'Nase chlieba a lakocinky'} query={{ limit: 8 }} />
+      <ProductsReel href={'/shop'} title={'Náš chlieb a lakocinky'} query={{ limit: 8 }} />
 
       {/* NEWEST POST & B2B */}
       <HomeActionsSection />

@@ -21,9 +21,9 @@ const CookieConsentBanner = () => {
   const isVisible = useCookieConsentStore((state) => state.isVisible)
   const setProfile = useCookieConsentStore((state) => state.setProfile)
 
-  const createProfileMutation = api.profiles.createProfile.useMutation({
+  const createProfileMutation = api.profiles.create.useMutation({
     onSuccess: (result) => {
-      setProfile(result.id)
+      setProfile(result)
     },
     onError: () => {
       setProfile(null)
@@ -32,7 +32,7 @@ const CookieConsentBanner = () => {
 
   const handleSavePreferences = () => {
     savePreferences()
-    if (preferences.functional) {
+    if (preferences.necessary) {
       createProfileMutation.mutate()
     }
   }
@@ -61,13 +61,6 @@ const CookieConsentBanner = () => {
             description="These cookies allow the website to provide personalized functionality."
             checked={preferences.functional}
             onChange={(checked) => setPreference('functional', checked)}
-          />
-          <CookieOption
-            id="performance"
-            title="Performance Cookies"
-            description="These cookies help to improve the performance of the website."
-            checked={preferences.performance}
-            onChange={(checked) => setPreference('performance', checked)}
           />
         </div>
       </CardContent>

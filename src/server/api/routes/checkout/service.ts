@@ -8,6 +8,7 @@ import { Profile } from '~/server/payload/payload-types'
 import Stripe from 'stripe'
 import { PriceFormatter } from '~/lib/utils'
 import { EmailService } from '~/lib/emails'
+import { UpdateProfileSchema } from '../profiles/validator'
 
 interface OrderProduct {
   productId: string
@@ -91,6 +92,32 @@ export class CheckoutService {
     })
 
     return profiles.length > 0 ? profiles[0] : null
+  }
+
+  static async updateProfile(data: UpdateProfileSchema, userId: string) {
+    const payload = await this.getPayloadInstance()
+    await payload.update({
+      collection: 'profiles',
+      data: {
+        contacts: {
+          name: data.contacts?.name,
+          phone: data.contacts?.phone,
+          email: data.contacts?.email,
+        },
+        customerOptions: {
+          store: data.customerOptions?.store,
+          method: data.customerOptions?.method,
+        },
+        options: {
+          terms: data.options?.terms ?? true,
+          privacy: data.options?.privacy ?? true,
+          cookie: data.options?.cookie ?? true,
+        },
+      },
+      where: {
+        user: { equals: userId },
+      },
+    })
   }
 
   static async createOrder(
@@ -178,6 +205,27 @@ export class CheckoutService {
     const items = await this.getProducts(products.map(({ product }) => product))
     const { totalPrice, orderProducts } = this.calculateOrderDetails(items, products)
     const profile = await this.getUserProfile(user)
+    if (user?.id) {
+      await this.updateProfile(
+        {
+          contacts: {
+            name: options.name,
+            phone: options.phone || '',
+            email: options.email,
+          },
+          customerOptions: {
+            store: options.store,
+            method: options.method,
+          },
+          options: {
+            terms: options.terms,
+            privacy: true,
+            cookie: true,
+          },
+        },
+        user.id,
+      )
+    }
     const order = await this.createOrder(options, totalPrice, products, profile, user)
 
     const userEmail = options.email ?? user?.email ?? profile?.contacts?.email

@@ -1,15 +1,15 @@
 'use client'
 
-import { ChevronRightIcon } from 'lucide-react'
+import { ChevronRightIcon, Loader2Icon } from 'lucide-react'
 import Link from 'next/link'
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ProductsListing } from '~/features/products-reel/ui'
 import { Heading } from '~/lib/ui/heading'
 import { cn, generateProductQuantityStr } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import { ProductsQueryType } from '../types'
-import { useIntersection } from 'react-use'
 import { Product } from '~/server/payload/payload-types'
+import { LoaderButton } from '~/lib/ui/loader-button'
 
 type Props = {
   className?: string
@@ -19,7 +19,7 @@ type Props = {
   total?: boolean
   filteredOptions?: string
   query: ProductsQueryType
-  infiniteScroll?: boolean
+  showLoadMore?: boolean
 }
 
 const ProductsReel = ({
@@ -29,48 +29,40 @@ const ProductsReel = ({
   subtitle,
   query,
   total = false,
-  infiniteScroll = false,
+  showLoadMore = false,
 }: Props) => {
   const [products, setProducts] = useState<Product[] | null>(null)
-  const loadMoreRef = useRef<HTMLDivElement>(null)
 
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
     api.products.infiniteProducts.useInfiniteQuery(
       {
-        query: { ...query },
-        limit: infiniteScroll ? query.limit : (query.limit ?? 12),
+        query: { ...query, limit: query.limit ?? 12 },
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
-        // initialData: {
-        //   pages: [{ data: [], nextCursor: 2 }],
-        //   pageParams: [undefined],
-        // },
         enabled: true,
         refetchOnWindowFocus: false,
       },
     )
 
-  const intersection = useIntersection(loadMoreRef as React.RefObject<HTMLElement>, {
-    root: null,
-    rootMargin: '200px',
-    threshold: 0,
-  })
-
-  useEffect(() => {
-    if (infiniteScroll && intersection?.isIntersecting && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage()
-    }
-  }, [intersection?.isIntersecting, fetchNextPage, hasNextPage, isFetchingNextPage, infiniteScroll])
-
   useEffect(() => {
     if (data?.pages) {
-      const allProducts = data.pages.flatMap((page) => page.data as Product[])
+      const allProducts = data.pages.flatMap((page) => page.data)
       setProducts(allProducts)
     }
   }, [data])
 
-  if (!products || products.length === 0) return null
+  // if (!products && isLoading) {
+  //   return (
+  //     <div className="size-full grid place-content-center py-40">
+  //       <Loader2Icon className="animate-spin size-10 text-muted-foreground" />
+  //     </div>
+  //   )
+  // }
+
+  if (!products || products.length === 0) {
+    return null
+  }
 
   const totalPages = data?.pages[0]?.total
 
@@ -85,7 +77,6 @@ const ProductsReel = ({
             className="w-full"
           />
         )}
-
         {href ? (
           <Link
             href={href}
@@ -100,7 +91,7 @@ const ProductsReel = ({
         ) : null}
       </div>
 
-      {/* PRODUCT LINKS PART */}
+      {/* PRODUCT GRID */}
       <div className="relative">
         <div className="mt-6 flex w-full items-center">
           <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
@@ -115,17 +106,23 @@ const ProductsReel = ({
         </div>
       </div>
 
-      {infiniteScroll && hasNextPage && (
-        <div ref={loadMoreRef} className="h-10 w-full">
-          {isFetchingNextPage && (
-            <div className="w-full text-center py-4">
-              <div className="animate-pulse">Loading more...</div>
-            </div>
-          )}
+      {/* LOAD MORE BUTTON */}
+      {showLoadMore && hasNextPage && (
+        <div className="mt-8 flex justify-center">
+          <LoaderButton
+            variant="outline"
+            size="lg"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            isLoading={isFetchingNextPage}
+            className="w-full sm:w-auto"
+          >
+            Ukázať viac
+          </LoaderButton>
         </div>
       )}
     </article>
   )
 }
 
-export default memo(ProductsReel)
+export default ProductsReel

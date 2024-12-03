@@ -6,6 +6,7 @@ import { ScrollArea, ScrollBar } from '~/lib/ui/components/scroll-area'
 import { cn } from '~/lib/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { api } from '~/trpc/react'
+import { TagIcon } from 'lucide-react'
 
 const CategoriesCarousel = () => {
   const [categories] = api.categories.getAll.useSuspenseQuery()
@@ -42,25 +43,28 @@ const CategoriesCarousel = () => {
   return (
     <section className="sticky top-16 z-40">
       <div className="bg-background size-full">
-        <div className="flex rounded-lg px-1 items-center justify-start border">
+        <div className="flex rounded-lg px-1 gap-3 items-center justify-start">
+          <TagIcon size={20} className="text-muted-foreground hidden sm:block" />
           <Button
             type="button"
             variant={'outline'}
+            size={'sm'}
             onClick={() => setActiveCategory([])}
-            className="mr-2 px-2.5 text-primary font-semibold"
+            className="px-2.5 text-primary font-semibold"
           >
-            {activeCategory.length > 0 ? 'Reset' : 'All'}
+            {activeCategory.length > 0 ? 'Resetovať' : 'Všetky'}
           </Button>
           <ScrollArea className="w-full whitespace-nowrap flex-grow py-1">
-            <div className="flex flex-nowrap">
+            <div className="flex flex-nowrap gap-3">
               {categories.map((category, index) => (
                 <Button
+                  size={'sm'}
                   type="button"
                   variant={'outline'}
                   key={category.title + index.toString()}
                   onClick={() => toggleCategory(category.slug!)}
                   className={cn(
-                    'px-2.5 mr-2 last:mr-0 text-primary font-semibold',
+                    'px-2.5 text-primary font-semibold',
                     activeCategory.includes(category.slug!) && 'bg-accent',
                   )}
                 >

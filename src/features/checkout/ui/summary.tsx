@@ -44,28 +44,30 @@ const Summary = () => {
         </div>
       </CardContent>
       <CardFooter>
-        {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-        {!canSubmit && items.length === 0 && (
-          <Alert>
-            <AlertDescription>
-              Váš košík je prázdny. Pridajte produkty pre pokračovanie.
-            </AlertDescription>
-          </Alert>
-        )}
-        <LoaderButton
-          type="submit"
-          form="checkout-form"
-          size={'lg'}
-          className="w-full text-lg"
-          isLoading={isLoading}
-          disabled={!canSubmit}
-        >
-          Objednať
-        </LoaderButton>
+        <div className="size-full flex flex-col item-center justify-center gap-4">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          {!canSubmit && items.length === 0 && (
+            <Alert>
+              <AlertDescription>
+                Váš košík je prázdny. Pridajte produkty pre pokračovanie.
+              </AlertDescription>
+            </Alert>
+          )}
+          <LoaderButton
+            type="submit"
+            form="checkout-form"
+            size={'lg'}
+            className="w-full text-lg"
+            isLoading={isLoading}
+            disabled={!!canSubmit}
+          >
+            Objednať
+          </LoaderButton>
+        </div>
       </CardFooter>
     </Card>
   )

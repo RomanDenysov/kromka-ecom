@@ -43,15 +43,14 @@ export default async function Page({ params }: Props) {
   if (!product) return notFound()
 
   return (
-    <Container className="py-5 md:py-8 space-y-5">
+    <Container className="py-8 md:py-16 space-y-12">
       <Suspense>
         <SingleProduct product={product} />
       </Suspense>
       <Suspense>
         <ProductsReel
-          className="py-0"
           title={categoryTitle}
-          query={{ category: categoryId, excludeId: product.id }}
+          query={{ limit: 8, category: categoryId, excludeId: product.id }}
         />
       </Suspense>
     </Container>

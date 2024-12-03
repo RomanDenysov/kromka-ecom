@@ -1,4 +1,6 @@
+import { ConfirmOrderCard } from '~/features/confirm-order-card/ui'
 import { Container } from '~/lib/ui/container'
+import { api } from '~/trpc/server'
 
 type Param = string | string[] | undefined
 
@@ -13,10 +15,11 @@ type Props = {
 export default async function CheckoutConfirmPage({ params, searchParams }: Props) {
   const { order } = await searchParams
   const decodedOrderId = decodeURIComponent(order as string)
-  console.log('ORDER', decodedOrderId)
+  const orderData = await api.orders.byId({ id: decodedOrderId })
+
   return (
-    <Container>
-      <h1>Confirm</h1>
+    <Container className="py-8 md:py-16 space-y-12">
+      <ConfirmOrderCard orderId={decodedOrderId} />
     </Container>
   )
 }
