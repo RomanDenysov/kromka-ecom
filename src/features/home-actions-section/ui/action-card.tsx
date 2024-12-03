@@ -5,7 +5,6 @@ import { cn } from '~/lib/utils'
 import Image from 'next/image'
 import { TextMorph } from '~/lib/ui/motion/text-morph'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 type Props = {
   className?: string

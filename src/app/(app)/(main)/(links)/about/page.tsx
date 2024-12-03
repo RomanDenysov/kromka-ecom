@@ -43,7 +43,12 @@ export default function Page() {
             </p>
           </div>
           <div className="relative h-64 md:h-full min-h-[300px]">
-            <Image src="/images/asset-1.jpg" fill alt="Kromka 'O nas'" className="object-cover" />
+            <Image
+              src="/images/about-3.webp"
+              fill
+              alt="Kromka 'O nas'"
+              className="object-cover object-center"
+            />
           </div>
         </div>
       </Card>
@@ -52,7 +57,12 @@ export default function Page() {
       <Card className="overflow-hidden">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="relative h-64 md:h-full min-h-[300px]">
-            <Image src="/images/asset-1.jpg" fill alt="Kromka cafes" className="object-cover" />
+            <Image
+              src="/images/spolupraca-banner-alt.webp"
+              fill
+              alt="Kromka cafes"
+              className="object-cover object-center"
+            />
           </div>
           <div className="p-6 md:p-8 flex flex-col justify-center">
             <p className="text-lg leading-relaxed text-muted-foreground">
@@ -103,7 +113,12 @@ export default function Page() {
             </p>
           </div>
           <div className="relative h-64 md:h-full min-h-[300px]">
-            <Image src="/images/asset-1.jpg" fill alt="Kromka products" className="object-cover" />
+            <Image
+              src="/images/about-2.webp"
+              fill
+              alt="Kromka products"
+              className="object-cover object-center"
+            />
           </div>
         </div>
       </Card>

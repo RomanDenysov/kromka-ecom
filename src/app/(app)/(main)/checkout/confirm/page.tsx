@@ -19,7 +19,7 @@ export default async function CheckoutConfirmPage({ params, searchParams }: Prop
 
   return (
     <Container className="py-8 md:py-16 space-y-12">
-      <ConfirmOrderCard orderId={decodedOrderId} />
+      <ConfirmOrderCard orderId={decodedOrderId} initialData={orderData} />
     </Container>
   )
 }

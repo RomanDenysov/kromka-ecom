@@ -4,6 +4,7 @@ import { ProductsReel } from '~/features/products-reel/ui'
 import { CategoriesCarousel } from '~/features/shop/categories/ui'
 import { StoresGridDrawer } from '~/features/shop/stores-drawer/ui'
 import { Container } from '~/lib/ui/container'
+import { api, HydrateClient } from '~/trpc/server'
 
 type Props = {
   searchParams: Promise<{
@@ -12,19 +13,10 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { searchParams } = props
-  const categorySlug = (await searchParams).category as string | undefined
-
-  const selectedCategories = categorySlug
-    ? categorySlug
-        .split(',')
-        .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
-    : []
-
   return {
     openGraph: {
       title: 'Naše Produkty',
-      description: 'Naše najlepšie Obchody',
+      description: 'Naše vybrate produkty',
     },
     twitter: {
       card: 'summary_large_image',
@@ -56,7 +48,9 @@ export default async function ShopPage({ searchParams }: Props) {
   return (
     <Container className="py-5 md:py-8 space-y-5">
       <StoresGridDrawer />
-      <CategoriesCarousel />
+      <Suspense>
+        <CategoriesCarousel />
+      </Suspense>
       <Suspense>
         <ProductsReel
           title={'Naše Produkty'}

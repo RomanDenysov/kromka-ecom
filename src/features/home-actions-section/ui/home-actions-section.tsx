@@ -6,14 +6,14 @@ const actionCards = [
     href: '/',
     title: 'SPOLUPRÁCA',
     alternativeTitle: 'Zistiť viac',
-    image: '/images/asset-4.jpg',
+    image: '/images/spolupraca-banner.webp',
   },
   {
     className: 'sm:col-span-2 h-40 sm:h-80',
     href: '/b2b',
     title: 'B2B Riešenia',
     alternativeTitle: 'Zistiť viac',
-    image: '/images/asset-1.jpg',
+    image: '/images/B2B-Banner.webp',
   },
 ]
 

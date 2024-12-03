@@ -14,7 +14,7 @@ const HeroGrid = () => {
         title="SPOLUPRÁCA"
         alternativeTitle="Zistiť viac"
         href="/"
-        image="/images/asset-4.jpg"
+        image="/images/spolupraca-banner.webp"
       />
 
       <HeroCard
@@ -22,7 +22,7 @@ const HeroGrid = () => {
         title="O KROMKE"
         alternativeTitle="Náš príbeh"
         href="/about"
-        image="/images/asset-1.jpg"
+        image="/images/about-2.webp"
       />
     </section>
   )
