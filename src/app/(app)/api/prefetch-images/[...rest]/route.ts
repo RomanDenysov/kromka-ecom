@@ -11,7 +11,7 @@ function getHostname() {
   return env.NEXT_PUBLIC_SERVER_URL
 }
 
-export default async function GET(_: NextRequest, { params }: { params: { rest: string[] } }) {
+export async function GET(_: NextRequest, { params }: { params: { rest: string[] } }) {
   const schema = env.NODE_ENV === 'development' ? 'http' : 'https'
   const host = getHostname()
 

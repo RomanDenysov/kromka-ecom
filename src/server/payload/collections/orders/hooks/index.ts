@@ -9,7 +9,11 @@ interface Store {
 interface User {
   email: string
 }
-
+interface Profile {
+  contacts?: {
+    email?: string
+  }
+}
 interface Product {
   title: string
   inStock: boolean
@@ -38,6 +42,36 @@ async function getPickupStoreDetails(payload: any, storeId: string) {
   }
 }
 
+async function getEmailAddress(payload: any, data: any): Promise<string> {
+  // Если есть user, пробуем получить email оттуда
+  if (data.user) {
+    try {
+      const user = (await payload.findByID({
+        collection: COLLECTIONS.USERS,
+        id: data.user,
+      })) as User
+      if (user?.email) return user.email
+    } catch (error) {
+      console.log('Failed to get user email:', error)
+    }
+  }
+
+  // Если нет email у user или user не найден, пробуем получить из профиля
+  if (data.profile) {
+    try {
+      const profile = (await payload.findByID({
+        collection: COLLECTIONS.PROFILES,
+        id: data.profile,
+      })) as Profile
+      if (profile?.contacts?.email) return profile.contacts.email
+    } catch (error) {
+      console.log('Failed to get profile email:', error)
+    }
+  }
+
+  throw new Error('No email found for order notification')
+}
+
 export const handleStatusChange = async ({
   req,
   originalDoc,
@@ -52,11 +86,7 @@ export const handleStatusChange = async ({
       return data
     }
 
-    const user = (await req.payload.findByID({
-      collection: COLLECTIONS.USERS,
-      id: data.user,
-    })) as User
-
+    const email = await getEmailAddress(req.payload, data)
     const { pickupPlace, pickupPlaceUrl } = await getPickupStoreDetails(
       req.payload,
       data.pickupStore,
@@ -65,7 +95,7 @@ export const handleStatusChange = async ({
     switch (data.status) {
       case 'processing':
         await EmailService.sendOrderConfirmationEmail({
-          email: user.email,
+          email: email,
           orderId: originalDoc.id,
           pickupPlace,
           pickupPlaceUrl,
@@ -74,7 +104,7 @@ export const handleStatusChange = async ({
 
       case 'ready':
         await EmailService.sendOrderReadyEmail({
-          email: user.email,
+          email: email,
           orderId: originalDoc.id,
           pickupPlace,
         })
@@ -87,7 +117,7 @@ export const handleStatusChange = async ({
 
         if (outOfStockProducts.length > 0) {
           await EmailService.sendOutOfStockEmail({
-            email: user.email,
+            email: email,
             orderId: originalDoc.id,
             productName: outOfStockProducts.join(', '),
           })

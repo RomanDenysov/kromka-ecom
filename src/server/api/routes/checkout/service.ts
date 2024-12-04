@@ -80,42 +80,43 @@ export class CheckoutService {
     }
   }
 
-  static async getUserProfile(user?: CheckoutUser) {
-    if (!user) return null
-
+  static async getProfile(profileId: string) {
     const payload = await this.getPayloadInstance()
-    const { docs: profiles } = await payload.find({
+    const profile = await payload.findByID({
       collection: 'profiles',
-      where: {
-        user: { equals: user.id },
-      },
+      id: profileId,
     })
 
-    return profiles.length > 0 ? profiles[0] : null
+    if (!profile) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Profile not found',
+      })
+    }
+
+    return profile
   }
 
-  static async updateProfile(data: UpdateProfileSchema, userId: string) {
+  static async updateProfile(profileId: string, options: CheckoutOptions) {
     const payload = await this.getPayloadInstance()
     await payload.update({
       collection: 'profiles',
+      id: profileId,
       data: {
         contacts: {
-          name: data.contacts?.name,
-          phone: data.contacts?.phone,
-          email: data.contacts?.email,
+          name: options.name,
+          phone: options.phone,
+          email: options.email,
         },
         customerOptions: {
-          store: data.customerOptions?.store,
-          method: data.customerOptions?.method,
+          store: options.store,
+          method: options.method,
         },
         options: {
-          terms: data.options?.terms ?? true,
-          privacy: data.options?.privacy ?? true,
-          cookie: data.options?.cookie ?? true,
+          terms: options.terms,
+          privacy: true,
+          cookie: true,
         },
-      },
-      where: {
-        user: { equals: userId },
       },
     })
   }
@@ -202,30 +203,12 @@ export class CheckoutService {
     options: CheckoutOptions,
     user?: CheckoutUser,
   ) {
+    const profile = await this.getProfile(options.profileId)
     const items = await this.getProducts(products.map(({ product }) => product))
     const { totalPrice, orderProducts } = this.calculateOrderDetails(items, products)
-    const profile = await this.getUserProfile(user)
-    if (user?.id) {
-      await this.updateProfile(
-        {
-          contacts: {
-            name: options.name,
-            phone: options.phone || '',
-            email: options.email,
-          },
-          customerOptions: {
-            store: options.store,
-            method: options.method,
-          },
-          options: {
-            terms: options.terms,
-            privacy: true,
-            cookie: true,
-          },
-        },
-        user.id,
-      )
-    }
+
+    await this.updateProfile(profile.id, options)
+
     const order = await this.createOrder(options, totalPrice, products, profile, user)
 
     const userEmail = options.email ?? user?.email ?? profile?.contacts?.email
@@ -234,7 +217,7 @@ export class CheckoutService {
       await EmailService.sendReceiptEmail({
         email: userEmail,
         date: new Date(order.createdAt),
-        status: 'Platba v obchode',
+        status: 'Nová objednávka',
         orderId: order.id,
         method: order.method,
         pickupPlace: typeof order.pickupStore !== 'string' ? order.pickupStore.title : '',

@@ -22,7 +22,7 @@ const CookieBannerProvider = () => {
   // Remove useState since we can derive this from other state
   const isVisible = useCookieConsentStore((state) => state.isVisible)
   const setProfile = useCookieConsentStore((state) => state.setProfile)
-  const { data: profile, isLoading } = api.profiles.me.useQuery()
+  const { data: profile } = api.profiles.me.useQuery()
 
   useInitializeUser()
 
@@ -38,7 +38,7 @@ const CookieBannerProvider = () => {
   }, [handleProfile])
 
   // Combine conditions for early return
-  if (!profile || !isVisible || isLoading) {
+  if (profile || !isVisible) {
     return null
   }
 

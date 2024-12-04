@@ -71,7 +71,7 @@ export default function CheckoutForm({ children, className }: Props) {
       <form
         id="checkout-form"
         className={cn('space-y-5', className)}
-        onSubmit={form.handleSubmit((data) => onSubmit(data))}
+        onSubmit={form.handleSubmit((data) => onSubmit({ ...data, profileId: profile?.id || '' }))}
       >
         {children}
       </form>

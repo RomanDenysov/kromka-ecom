@@ -12,6 +12,11 @@ import {
   FormLabel,
   FormMessage,
 } from '~/lib/ui/components/form'
+import DateSelector from './date-selector'
+
+const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = true
+
+const availableDates = ['2024-12-13', '2024-12-14', '2024-12-22', '2024-12-23']
 
 const Options = () => {
   const { control } = useFormContext()
@@ -31,9 +36,17 @@ const Options = () => {
                 Dátum
               </FormLabel>
               <FormControl>
-                <DatePicker onDateSelect={(date) => field.onChange(date)} />
+                {DUMMY_CHRISTMAS_DATES_FEATURE_FLAG ? (
+                  <DateSelector
+                    onDateSelect={(date) => field.onChange(date)}
+                    defaultValue={field.value}
+                    availableDates={availableDates}
+                  />
+                ) : (
+                  <DatePicker onDateSelect={(date) => field.onChange(date)} />
+                )}
               </FormControl>
-              <FormDescription>Vyberte si mesto odberu objednávky</FormDescription>
+              <FormDescription>Vyberte si dátum a čas pre odber objednávky</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -49,7 +62,7 @@ const Options = () => {
               <FormControl>
                 <StoreSelector width="w-full" onStoreChange={(store) => field.onChange(store.id)} />
               </FormControl>
-              <FormDescription>Vyberte si dátum a čas pre odber objednávky</FormDescription>
+              <FormDescription>Vyberte si mesto odberu objednávky</FormDescription>
               <FormMessage />
             </FormItem>
           )}

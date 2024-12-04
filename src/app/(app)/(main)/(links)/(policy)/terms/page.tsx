@@ -27,7 +27,7 @@ export default function Page() {
           <ul className="list-disc space-y-1">
             <li>
               <span className="text-muted-foreground italic font-semibold">Email:</span>{' '}
-              eshop@pekarenkromka.sk
+              kromka@kavejo.sk
             </li>
             <li>
               <span className="text-muted-foreground italic font-semibold">Adresa:</span> ul. 17.
@@ -58,7 +58,7 @@ export default function Page() {
         </p>
         <p className="text-base font-normal">
           2.3. Kupujúci môže požiadať o zrušenie svojho používateľského účtu emailom na
-          eshop@pekarenkromka.sk. Predávajúci sa zaväzuje spracovať túto žiadosť v súlade s platnými
+          kromka@kavejo.sk. Predávajúci sa zaväzuje spracovať túto žiadosť v súlade s platnými
           právnymi predpismi o ochrane osobných údajov.
         </p>
         <p className="text-base font-normal">

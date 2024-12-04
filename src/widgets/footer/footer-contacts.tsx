@@ -5,7 +5,7 @@ import { cn } from '~/lib/utils'
 
 const FOOTER_CONTACTS = [
   {
-    href: 'mailto:info@pekarenkromka.sk',
+    href: 'mailto:kromka@kavejo.sk',
     icon: MailIcon,
     label: 'Email',
   },

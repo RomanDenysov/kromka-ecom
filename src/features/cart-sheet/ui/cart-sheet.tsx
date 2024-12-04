@@ -62,7 +62,7 @@ export const CartSheet = () => {
               <SheetFooter>
                 <SheetTrigger asChild>
                   <Link
-                    href={{ pathname: '/checkout' }}
+                    href={'/checkout'}
                     className={buttonVariants({
                       className: 'w-full',
                       size: 'lg',
@@ -85,7 +85,7 @@ export const CartSheet = () => {
                 <div className="px-6">
                   <SheetTrigger asChild>
                     <Link
-                      href={{ pathname: '/shop' }}
+                      href={'/shop'}
                       className={buttonVariants({
                         variant: 'link',
                         size: 'lg',

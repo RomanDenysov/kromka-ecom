@@ -62,11 +62,35 @@ export const OrderConfirmationEmail = ({
               Ak máte nejaké otázky, pokojne nás kontaktujte na našich telefónnych číslach:
             </Text>
             <Text style={contactDetails}>
-              Prešov: 0908 889 550
+              Prešov:{' '}
+              <Link
+                href={'tel:+421908889550'}
+                style={{
+                  textDecoration: 'underline',
+                }}
+              >
+                0908 889 550
+              </Link>
               <br />
-              Košice: Kuzmányho 0907 993 881
+              Košice: Kuzmányho{' '}
+              <Link
+                href={'tel:+421907993881'}
+                style={{
+                  textDecoration: 'underline',
+                }}
+              >
+                0907 993 881
+              </Link>
               <br />
-              Košice: Masarykova 0919 085 558
+              Košice: Masarykova{' '}
+              <Link
+                href={'tel:+421919085558'}
+                style={{
+                  textDecoration: 'underline',
+                }}
+              >
+                0919 085 558
+              </Link>
             </Text>
           </Section>
           <Section>
@@ -81,7 +105,7 @@ export const OrderConfirmationEmail = ({
               </Column>
             </Row>
           </Section>
-          <Text style={footerCopyright}>© 2024 Všetky práva vyhradené pre Kavejo s.r.o.</Text>
+          <Text style={footerCopyright}>© 2024 Všetky práva vyhradené pre Kromka s.r.o.</Text>
         </Container>
       </Body>
     </Html>

@@ -29,7 +29,7 @@ export default function Page() {
           <ul className="list-disc space-y-1">
             <li>
               <span className="text-muted-foreground italic font-semibold">Email:</span>{' '}
-              eshop@pekarenkromka.sk
+              kromka@kavejo.sk
             </li>
             <li>
               <span className="text-muted-foreground italic font-semibold">Adresa:</span> ul. 17.

@@ -8,9 +8,12 @@ import { Checkbox } from '~/lib/ui/components/checkbox'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/lib/ui/components/form'
 import { Input } from '~/lib/ui/components/input'
 import { Separator } from '~/lib/ui/components/separator'
+import { useUser } from '~/store/user/use-user'
 
 const Info = () => {
   const { control } = useFormContext()
+
+  const user = useUser((state) => state.user)
 
   const formFields = useMemo(
     () => [
@@ -93,16 +96,18 @@ const Info = () => {
           />
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col justify-between gap-4 ">
-        <Separator />
-        <p className="text-base text-muted-foreground tracking-tight">
-          alebo{' '}
-          <Link className="underline" href={{ pathname: '/sign-in' }}>
-            prihlaste sa
-          </Link>{' '}
-          do svojho účtu
-        </p>
-      </CardFooter>
+      {!user && (
+        <CardFooter className="flex flex-col justify-between gap-4 ">
+          <Separator />
+          <p className="text-base text-muted-foreground tracking-tight">
+            alebo{' '}
+            <Link className="underline" href={{ pathname: '/sign-in' }}>
+              prihlaste sa
+            </Link>{' '}
+            do svojho účtu
+          </p>
+        </CardFooter>
+      )}
     </Card>
   )
 }

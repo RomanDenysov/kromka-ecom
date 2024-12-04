@@ -59,7 +59,7 @@ export const OrderReadyEmail = ({ orderId, pickupPlace }: OrderReadyProps) => {
               </Column>
             </Row>
           </Section>
-          <Text style={footerCopyright}>© 2024 Všetky práva vyhradené pre Kavejo s.r.o.</Text>
+          <Text style={footerCopyright}>© 2024 Všetky práva vyhradené pre Kromka s.r.o.</Text>
         </Container>
       </Body>
     </Html>

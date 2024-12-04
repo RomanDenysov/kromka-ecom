@@ -5,11 +5,31 @@ const Profiles: CollectionConfig = {
   slug: COLLECTIONS.PROFILES,
   admin: {
     group: COLLECTIONS_GROUPS.ADMIN,
+    useAsTitle: 'contactDisplay',
   },
   access: {
     read: () => true,
   },
   fields: [
+    {
+      label: 'Profile',
+      name: 'contactDisplay',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'Contact Information',
+        readOnly: true,
+      },
+      hooks: {
+        beforeChange: [
+          ({ data }) => {
+            const contacts = data?.contacts || {}
+            const { email = '', name = '', phone = '' } = contacts
+            return `${email} - ${name} - ${phone}`
+          },
+        ],
+      },
+    },
     {
       name: 'user',
       type: 'relationship',
@@ -17,7 +37,7 @@ const Profiles: CollectionConfig = {
       hasMany: false,
       admin: {
         position: 'sidebar',
-        description: 'User who liked this',
+        description: 'User who associated with this profile',
       },
       index: true,
     },
