@@ -6,15 +6,16 @@ import { api } from '~/trpc/server'
 
 export default async function BlogPage() {
   const posts = await api.posts.getPosts()
+  const tags = await api.posts.getTags()
 
   return (
     <>
       {/* Carousel section */}
-      <BlogCarousel />
+      <BlogCarousel posts={posts.slice(0, 4)} />
       {/* Tags Filter */}
-      <TagsFilter />
+      <TagsFilter tags={tags} />
       {/* Blog Posts Grid */}
-      <PostsGrid />
+      <PostsGrid posts={posts} />
 
       {/* <h1>Blog</h1>
       <div className="grid place-content-center">

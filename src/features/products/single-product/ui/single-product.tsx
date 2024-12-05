@@ -22,6 +22,8 @@ type Props = {
   product: Product
 }
 
+const SHOW_INVENTORY_FEATURE_FLAG = false
+
 const SingleProduct = ({ product }: Props) => {
   const isMobile = useMedia('(max-width: 768px)', false)
   const isMounted = useMountedState()
@@ -103,40 +105,42 @@ const SingleProduct = ({ product }: Props) => {
         </div>
 
         {/* Store Availability */}
-        <div className="space-y-2">
-          <h4 className="font-medium">Dostupnosť v predajniach</h4>
-          <div className="flex flex-wrap gap-x-2 gap-y-1">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge className="flex items-center py-1 md:py-2">
-                    <StoreIcon size={16} className="mr-1" />
-                    Kromka Prešov: (8)
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Hlavná 123, Prešov</p>
-                  <p>Otvorené: 8:00 - 18:00</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+        {SHOW_INVENTORY_FEATURE_FLAG && (
+          <div className="space-y-2">
+            <h4 className="font-medium">Dostupnosť v predajniach</h4>
+            <div className="flex flex-wrap gap-x-2 gap-y-1">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge className="flex items-center py-1 md:py-2">
+                      <StoreIcon size={16} className="mr-1" />
+                      Kromka Prešov: (8)
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Hlavná 123, Prešov</p>
+                    <p>Otvorené: 8:00 - 18:00</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge className="flex items-center py-1 md:py-2" variant="destructive">
-                    <StoreIcon size={16} className="mr-1" />
-                    Kromka Košice: (0)
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Hlavná 456, Košice</p>
-                  <p>Otvorené: 9:00 - 19:00</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge className="flex items-center py-1 md:py-2" variant="destructive">
+                      <StoreIcon size={16} className="mr-1" />
+                      Kromka Košice: (0)
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Hlavná 456, Košice</p>
+                    <p>Otvorené: 9:00 - 19:00</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Product Details Tabs */}
         <Tabs defaultValue="description" className="w-full">
@@ -164,7 +168,7 @@ const SingleProduct = ({ product }: Props) => {
       </div>
 
       {/* Основная кнопка с ref */}
-      <div ref={buttonRef} className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-end">
+      <div ref={buttonRef} className="mt-10 lg:col-start-1 lg:row-start-2 lg:self-end">
         <AddToCartButton product={product} />
       </div>
 

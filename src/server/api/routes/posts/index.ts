@@ -108,4 +108,20 @@ export const postsRouter = createTRPCRouter({
     }
     return result.docs
   }),
+
+  getTags: publicProcedure.query(async ({ ctx }) => {
+    const result = await ctx.payload.find({
+      collection: 'tags',
+      // where: {
+      //   posts: { equals: 'published' },
+      // },
+      sort: '-createdAt',
+    })
+
+    if (!result.docs.length) {
+      return []
+    }
+
+    return result.docs
+  }),
 })

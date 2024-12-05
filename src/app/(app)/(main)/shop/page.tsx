@@ -14,6 +14,8 @@ type Props = {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
+    title: 'Naše Produkty',
+    description: 'Naše najlepšie Obchody',
     openGraph: {
       title: 'Naše Produkty',
       description: 'Naše vybrate produkty',
@@ -45,22 +47,29 @@ export default async function ShopPage({ searchParams }: Props) {
         .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
     : []
 
+  void api.categories.getAll.prefetch()
+  void api.products.infiniteProducts.prefetchInfinite({
+    query: { limit: 12, category: selectedCategories },
+  })
+
   return (
     <Container className="py-5 md:py-8 space-y-5">
       <StoresGridDrawer />
-      <Suspense>
-        <CategoriesCarousel />
-      </Suspense>
-      <Suspense>
-        <ProductsReel
-          title={'Naše Produkty'}
-          subtitle={'Naše najlepšie Obchody'}
-          query={{ limit: 12, category: selectedCategories }}
-          total={true}
-          className="py-0"
-          showLoadMore
-        />
-      </Suspense>
+      <HydrateClient>
+        <Suspense>
+          <CategoriesCarousel />
+        </Suspense>
+        <Suspense>
+          <ProductsReel
+            title={'Naše Produkty'}
+            subtitle={'Naše najlepšie Obchody'}
+            query={{ limit: 12, category: selectedCategories }}
+            total={true}
+            className="py-0"
+            showLoadMore
+          />
+        </Suspense>
+      </HydrateClient>
     </Container>
   )
 }

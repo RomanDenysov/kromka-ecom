@@ -1,9 +1,12 @@
 import { createEnv } from '@t3-oss/env-nextjs'
+import { vercel } from '@t3-oss/env-nextjs/presets'
 import { z, ZodError } from 'zod'
 
 export const env = createEnv({
+  // extends: [vercel()],
   server: {
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    PORT: z.coerce.number().default(3000),
 
     DATABASE_URL: z.string().min(1),
 
@@ -29,6 +32,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MAPS_API_KEY: z.string().min(1),
   },
   runtimeEnv: {
+    PORT: process.env.PORT,
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
 
@@ -41,7 +45,7 @@ export const env = createEnv({
 
     PAYLOAD_SECRET: process.env.PAYLOAD_SECRET,
 
-    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
+    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
 
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     EMAIL_FROM: process.env.EMAIL_FROM,
