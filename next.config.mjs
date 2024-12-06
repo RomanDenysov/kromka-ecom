@@ -8,6 +8,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  poweredByHeader: false,
+  httpAgentOptions: {
+    keepAlive: true,
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

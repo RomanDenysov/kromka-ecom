@@ -24,7 +24,7 @@ const Options = () => {
   return (
     <Card className="border-none bg-accent">
       <CardHeader>
-        <CardTitle>Vyberte si dátum a podnik pre odber objednávky</CardTitle>
+        <CardTitle>Zvoľte si dátum a predajňu na vyzdvihnutie objednávky</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <FormField
@@ -46,7 +46,7 @@ const Options = () => {
                   <DatePicker onDateSelect={(date) => field.onChange(date)} />
                 )}
               </FormControl>
-              <FormDescription>Vyberte si dátum a čas pre odber objednávky</FormDescription>
+              <FormDescription>Zvoľte si dátum a čas vyzdvihnutia objednávky</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -57,12 +57,12 @@ const Options = () => {
           render={({ field }) => (
             <FormItem className="space-y-4 flex flex-col">
               <FormLabel className="text-lg leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Store
+                Predajňa
               </FormLabel>
               <FormControl>
                 <StoreSelector width="w-full" onStoreChange={(store) => field.onChange(store.id)} />
               </FormControl>
-              <FormDescription>Vyberte si mesto odberu objednávky</FormDescription>
+              <FormDescription>Zvoľte si predajňu na vyzdvihnutie objednávky</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -79,7 +79,7 @@ const Options = () => {
                 <PaymentMethod defaultValue={field.value} onMethodSelect={field.onChange} />
               </FormControl>
               <FormDescription>
-                Pri osobnom odbere na predajne da sa platit aj v hotovosti aj kartou
+                Pri osobnom odbere v predajni môžete platiť v <b>hotovosti</b> alebo <b>kartou</b>.
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -10,3 +10,15 @@ export const getBaseUrl = cache(() => {
   }
   return env.NEXT_PUBLIC_SERVER_URL
 })()
+
+export function getHostname(): string {
+  if (env.NODE_ENV === 'development') {
+    return 'localhost:3000'
+  }
+
+  return env.NEXT_PUBLIC_SERVER_URL || ''
+}
+
+export function getSchema(): string {
+  return env.NODE_ENV === 'development' ? 'http' : 'https'
+}

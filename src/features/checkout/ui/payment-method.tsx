@@ -16,7 +16,7 @@ const PaymentMethod = ({ onMethodSelect, defaultValue }: Props) => {
   const onDisabledCardClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (DISABLED_CARD_PAYMENT_METHOD_FEATURE_FLAG) {
-      toast.warning('Táto funkcia je dočasne vypnutá')
+      toast.warning('Platba kartou ONLINE je dočasne nedostupná.')
     }
   }
 
@@ -33,7 +33,7 @@ const PaymentMethod = ({ onMethodSelect, defaultValue }: Props) => {
           className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-2 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
         >
           <StoreIcon size={28} className="mb-3 text-muted-foreground" />
-          Pri odbere
+          Pri vyzdvihnutí
         </Label>
       </div>
       <div>

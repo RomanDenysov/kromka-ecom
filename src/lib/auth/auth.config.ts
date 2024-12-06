@@ -31,7 +31,7 @@ const providers: Provider[] = [
     profile(profile) {
       return {
         id: profile.sub,
-        role: profile.role,
+        role: profile.role || 'user',
         name: profile.name,
         email: profile.email,
         image: profile.picture,
@@ -44,8 +44,61 @@ const providers: Provider[] = [
   }),
 ]
 
+const csrfOptions =
+  env.NODE_ENV === 'production'
+    ? {
+        name: `__Host-next-auth.csrf-token`,
+        options: {
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+          secure: true,
+        },
+      }
+    : undefined
+
 export default {
   providers,
+  useSecureCookies: env.NODE_ENV === 'production',
+  // cookies:
+  //   env.NODE_ENV === 'production'
+  //     ? {
+  //         sessionToken: {
+  //           name: `__Secure-next-auth.session-token`,
+  //           options: {
+  //             httpOnly: true,
+  //             sameSite: 'lax',
+  //             path: '/',
+  //             secure: true,
+  //           },
+  //         },
+  //         callbackUrl: {
+  //           name: `__Secure-next-auth.callback-url`,
+  //           options: {
+  //             sameSite: 'lax',
+  //             path: '/',
+  //             secure: true,
+  //           },
+  //         },
+  //         csrfToken: {
+  //           name: `__Host-next-auth.csrf-token`,
+  //           options: {
+  //             httpOnly: true,
+  //             sameSite: 'lax',
+  //             path: '/',
+  //             secure: true,
+  //           },
+  //         },
+  //       }
+  //     : undefined,
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+  },
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   pages: {
     signIn: '/sign-in',
   },
@@ -53,24 +106,33 @@ export default {
     jwt: async ({ token, user, profile }) => {
       if (user) {
         token.id = user.id
-      }
-      if (profile && 'role' in profile) {
-        token.role = profile.role
+        // Убедимся, что роль всегда присутствует
+        token.role = user.role || profile?.role || 'user'
       }
       return token
     },
-    session: async ({ session, user, token }) => {
+    session: async ({ session, token }) => {
       if (token) {
-        if (token.id) {
-          session.user.id = token.id
+        session.user.id = token.id as string
+        session.user.role = token.role as TUser['role']
+        // Убедимся, что email всегда присутствует
+        if (token.email) {
+          session.user.email = token.email
         }
-        session.user.role = token.role
       }
-      if (user) {
-        session.user.id = user.id
-      }
-
       return session
+    },
+    authorized: ({ auth, request: { nextUrl } }) => {
+      // Добавляем проверку для админ-роутов
+      if (nextUrl.pathname.startsWith('/admin')) {
+        return auth?.user?.role === 'admin'
+      }
+      return !!auth
+    },
+  },
+  events: {
+    async signIn({ user, account, profile }) {
+      console.log('Signing in', { user, account, profile })
     },
   },
 } satisfies NextAuthConfig

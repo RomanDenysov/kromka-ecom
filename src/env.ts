@@ -25,6 +25,8 @@ export const env = createEnv({
 
     STRIPE_SECRET_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
+
+    AUTH_URL: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string().min(1),
@@ -42,6 +44,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MAPS_API_KEY: process.env.NEXT_PUBLIC_MAPS_API_KEY,
 
     AUTH_SECRET: process.env.AUTH_SECRET,
+    AUTH_URL: process.env.AUTH_URL || 'http://localhost:3000',
 
     PAYLOAD_SECRET: process.env.PAYLOAD_SECRET,
 

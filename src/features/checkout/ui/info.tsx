@@ -21,21 +21,21 @@ const Info = () => {
         name: 'name',
         label: 'Meno',
         type: 'text',
-        placeholder: 'Zadajte svoe meno',
+        placeholder: 'Zadajte vaše meno',
         autoComplete: 'name',
       },
       {
         name: 'email',
         label: 'Email',
         type: 'email',
-        placeholder: 'Zadajte svoj e-mail',
+        placeholder: 'Zadajte váš e-mail',
         autoComplete: 'email',
       },
       {
         name: 'phone',
-        label: 'Telefonne číslo',
+        label: 'Telefónne číslo',
         type: 'text',
-        placeholder: 'Zadajte svoe telefonne číslo',
+        placeholder: 'Zadajte vaše telefónne číslo',
         autoComplete: 'phone',
       },
     ],
@@ -81,12 +81,12 @@ const Info = () => {
                     <Checkbox id="terms" checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <FormLabel className="font-medium text-sm leading-none">
-                    Suhlasim z{' '}
+                    Súhlasím s{' '}
                     <Link
                       href="/terms"
                       className="text-primary underline hover:text-muted-foreground"
                     >
-                      obchodnymi podmienkami
+                      obchodnými podmienkami
                     </Link>
                   </FormLabel>
                 </div>
@@ -102,9 +102,9 @@ const Info = () => {
           <p className="text-base text-muted-foreground tracking-tight">
             alebo{' '}
             <Link className="underline" href={{ pathname: '/sign-in' }}>
-              prihlaste sa
+              prihláste sa
             </Link>{' '}
-            do svojho účtu
+            do vášho účtu
           </p>
         </CardFooter>
       )}

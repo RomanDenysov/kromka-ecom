@@ -13,7 +13,11 @@ export default async function HomePage() {
 
       {/* PRODUCTS REEL */}
       <Suspense>
-        <ProductsReel href={'/shop'} title={'Náš chlieb a lakocinky'} query={{ limit: 8 }} />
+        <ProductsReel
+          href={'/shop'}
+          title={'Náš chlieb a lakocinky'}
+          query={{ limit: 8, category: ['Naše pečivo', 'Z našej produkcie'] }}
+        />
       </Suspense>
 
       {/* NEWEST POST & B2B */}

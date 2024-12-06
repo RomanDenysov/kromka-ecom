@@ -4,15 +4,16 @@ import { cn } from '~/lib/utils'
 import { Button, ButtonProps } from './components/button'
 
 export const LoaderButton = ({
-	children,
-	isLoading,
-	className,
-	...props
-}: ButtonProps & {isLoading: boolean}) => {
-	return (
-		<Button {...props} disabled={isLoading} className={cn(className)}>
-			{isLoading && <Loader2 size={20} className='mr-2 animate-spin' />}
-			{children}
-		</Button>
-	)
+  children,
+  isLoading,
+  className,
+  disabled,
+  ...props
+}: ButtonProps & { isLoading: boolean }) => {
+  return (
+    <Button {...props} disabled={isLoading || disabled} className={cn(className)}>
+      {isLoading && <Loader2 size={20} className="mr-2 animate-spin" />}
+      {children}
+    </Button>
+  )
 }

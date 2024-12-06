@@ -51,7 +51,7 @@ export const OrderConfirmationEmail = ({
             </Text>
             <Text style={pickupText}>
               Svoju objednávku si môžete vyzdvihnúť na vami zvolenej predajni podľa aktuálnej
-              otváracej doby:
+              otváracej doby.
             </Text>
             <Link href={pickupPlaceUrl} style={pickupLink}>
               {pickupPlace}

@@ -1,7 +1,9 @@
 'use client'
+
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef } from 'react'
+import { fetchImages } from '../actions/images'
 
 interface PrefetchImage {
   srcset: string
@@ -15,24 +17,21 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+const seen = new Set<string>()
+const imageCache = new Map<string, PrefetchImage[]>()
+
 async function prefetchImages(href: string) {
   if (!href.startsWith('/') || href.startsWith('/order') || href === '/') {
     return []
   }
-  const url = new URL(href, window.location.href)
-  const imageResponse = await fetch(`/api/prefetch-images${url.pathname}`, {
-    priority: 'low',
-  })
-  // only throw in dev
-  if (!imageResponse.ok && process.env.NODE_ENV === 'development') {
-    throw new Error('Failed to prefetch images')
+  try {
+    const { images } = await fetchImages(href)
+    return images as PrefetchImage[]
+  } catch (error) {
+    console.error('Failed to prefetch images:', error)
+    return []
   }
-  const { images } = await imageResponse.json()
-  return images as PrefetchImage[]
 }
-
-const seen = new Set<string>()
-const imageCache = new Map<string, PrefetchImage[]>()
 
 export const Link: typeof NextLink = (({ children, ...props }) => {
   const linkRef = useRef<HTMLAnchorElement>(null)
@@ -77,7 +76,7 @@ export const Link: typeof NextLink = (({ children, ...props }) => {
         clearTimeout(prefetchTimeout)
       }
     }
-  }, [props.href, props.prefetch])
+  }, [props.href, props.prefetch, router])
 
   return (
     <NextLink

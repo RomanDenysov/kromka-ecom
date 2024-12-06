@@ -41,7 +41,7 @@ export default async function ShopPage({ searchParams }: Props) {
 
   console.log('CATEGORY', categorySlug)
 
-  const selectedCategories = categorySlug
+  const selectedCategoriesSlug = categorySlug
     ? categorySlug
         .split(',')
         .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
@@ -49,7 +49,7 @@ export default async function ShopPage({ searchParams }: Props) {
 
   void api.categories.getAll.prefetch()
   void api.products.infiniteProducts.prefetchInfinite({
-    query: { limit: 12, category: selectedCategories },
+    query: { limit: 12, category: selectedCategoriesSlug },
   })
 
   return (
@@ -63,7 +63,11 @@ export default async function ShopPage({ searchParams }: Props) {
           <ProductsReel
             title={'Naše Produkty'}
             subtitle={'Naše najlepšie Obchody'}
-            query={{ limit: 12, category: selectedCategories }}
+            query={{
+              limit: 12,
+              sort: ['-order'],
+              category: selectedCategoriesSlug,
+            }}
             total={true}
             className="py-0"
             showLoadMore

@@ -73,15 +73,15 @@ export const productsRouter = createTRPCRouter({
         conditions.id = { not_equals: excludeId }
       }
 
-      if (cursor?.createdAt) {
+      if (cursor?.createdAt && sort?.[0]) {
+        const isDescending = sort[0].startsWith('-')
         conditions.createdAt = {
-          [sort?.[0]?.direction === 'asc' ? 'greater_than' : 'less_than']: cursor.createdAt,
+          [isDescending ? 'less_than' : 'greater_than']: cursor.createdAt,
         }
       }
 
       if (category) {
         if (Array.isArray(category)) {
-          // Handle array of categories
           const categoryPromises = category.map(async (cat) => {
             const foundCategory = await ctx.payload.find({
               collection: 'categories',
@@ -97,7 +97,6 @@ export const productsRouter = createTRPCRouter({
             conditions.category = { in: categoryIds }
           }
         } else {
-          // Handle single category
           const foundCategory = await ctx.payload.find({
             collection: 'categories',
             where: {
@@ -123,7 +122,7 @@ export const productsRouter = createTRPCRouter({
 
     const buildSortOptions = (): Sort => {
       if (!sort || sort.length === 0) return ['-createdAt']
-      return sort.map(({ field, direction }) => (direction === 'desc' ? `-${field}` : field))
+      return sort
     }
 
     const result = await ctx.payload.find({
@@ -136,18 +135,15 @@ export const productsRouter = createTRPCRouter({
 
     const hasMore = result.docs.length > limit
     const docs = result.docs.slice(0, limit)
-
     const lastDoc = docs[docs.length - 1]
     const nextCursor = hasMore ? { createdAt: lastDoc.createdAt, id: lastDoc.id } : undefined
 
-    const processedDocs = docs.map((doc) => ({
-      ...doc,
-      priceId: undefined,
-      stripeId: undefined,
-    }))
-
     return {
-      data: processedDocs,
+      data: docs.map((doc) => ({
+        ...doc,
+        priceId: undefined,
+        stripeId: undefined,
+      })),
       nextCursor,
       total: result.totalDocs,
       hasMore,

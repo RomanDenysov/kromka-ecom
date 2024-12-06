@@ -5,15 +5,10 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/lib/ui/c
 import { LoaderButton } from '~/lib/ui/loader-button'
 import { formatPrice } from '~/lib/utils'
 import { useCart } from '~/store/cart/use-cart'
-import {
-  useCanSubmit,
-  useCheckoutError,
-  useCheckoutLoading,
-} from '~/store/checkout/use-checkout-store'
+import { useCanSubmit, useCheckoutLoading } from '~/store/checkout/use-checkout-store'
 
 const Summary = () => {
   const isLoading = useCheckoutLoading()
-  const error = useCheckoutError()
   const canSubmit = useCanSubmit()
   const items = useCart((state) => state.items)
   const totalPrice = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
@@ -45,11 +40,6 @@ const Summary = () => {
       </CardContent>
       <CardFooter>
         <div className="size-full flex flex-col item-center justify-center gap-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
           {!canSubmit && items.length === 0 && (
             <Alert>
               <AlertDescription>
