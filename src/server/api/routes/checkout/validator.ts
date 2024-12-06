@@ -12,7 +12,7 @@ export type CheckoutProduct = z.infer<typeof products>
 const checkoutProducts = z.array(products)
 
 export const checkoutSchema = z.object({
-  profileId: z.string().min(1),
+  profileId: z.string().optional(),
   email: z.string().email(),
   name: z.string().min(1),
   phone: z

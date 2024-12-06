@@ -11,8 +11,8 @@ const GreedCondensed = localFont({
   variable: '--font-greed-condensed',
 })
 
-// export const revalidate = 86400 // 24 hours
-// export const experimental_ppr = true
+export const revalidate = 86400 // 24 hours
+export const experimental_ppr = true
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),

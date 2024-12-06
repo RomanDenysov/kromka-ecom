@@ -25,7 +25,6 @@ export default async function PostPage({ params }: Props) {
         <RichText
           className="lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[1fr]"
           content={post.content}
-          enableGutter={false}
         />
       </Suspense>
     </article>

@@ -1,13 +1,6 @@
-import { CallToActionBlock, MediaBlock, BannerBlock, CMSLink } from '~/lib/ui/ui-blocks'
-import React, { Fragment, JSX } from 'react'
-import { DefaultNodeTypes, SerializedBlockNode } from '@payloadcms/richtext-lexical'
-import type {
-  BannerBlock as BannerBlockProps,
-  CallToActionBlock as CTABlockProps,
-  MediaBlock as MediaBlockProps,
-} from '@payload-types'
+import { DefaultNodeTypes } from '@payloadcms/richtext-lexical'
+import { Fragment, JSX } from 'react'
 
-// Битовые маски для форматирования текста
 import {
   IS_BOLD,
   IS_CODE,
@@ -16,35 +9,24 @@ import {
   IS_SUBSCRIPT,
   IS_SUPERSCRIPT,
   IS_UNDERLINE,
-} from './node-format'
+} from './nodeFormat'
 
-export type NodeTypes =
-  | DefaultNodeTypes
-  | SerializedBlockNode<CTABlockProps | MediaBlockProps | BannerBlockProps>
+export type NodeTypes = DefaultNodeTypes
 
 type Props = {
   nodes: NodeTypes[]
 }
 
-const hasFormat = (format: number | undefined, mask: number): boolean => {
-  if (typeof format !== 'number') return false
-  return (format & mask) === mask
-}
-
 export function serializeLexical({ nodes }: Props): JSX.Element {
-  if (!nodes || !Array.isArray(nodes)) {
-    return <Fragment />
-  }
-
   return (
     <Fragment>
-      {nodes.map((node, index): JSX.Element | null => {
-        if (!node || typeof node !== 'object') {
+      {nodes?.map((node, index): JSX.Element | null => {
+        if (node == null) {
           return null
         }
 
         if (node.type === 'text') {
-          let text = <React.Fragment key={index}>{node.text}</React.Fragment>
+          let text = <Fragment key={index}>{node.text}</Fragment>
           if (node.format & IS_BOLD) {
             text = <strong key={index}>{text}</strong>
           }
@@ -77,7 +59,6 @@ export function serializeLexical({ nodes }: Props): JSX.Element {
 
           return text
         }
-
         // NOTE: Hacky fix for
         // https://github.com/facebook/lexical/blob/d10c4e6e55261b2fdd7d1845aed46151d0f06a8c/packages/lexical-list/src/LexicalListItemNode.ts#L133
         // which does not return checked: false (only true - i.e. there is no prop for false)
@@ -100,73 +81,41 @@ export function serializeLexical({ nodes }: Props): JSX.Element {
 
         const serializedChildren = 'children' in node ? serializedChildrenFn(node) : ''
 
-        if (node.type === 'block') {
-          const block = node.fields
-
-          const blockType = block?.blockType
-
-          if (!block || !blockType) {
-            return null
-          }
-
-          switch (blockType) {
-            case 'cta':
-              return <CallToActionBlock key={index} {...block} />
-            case 'mediaBlock':
-              return (
-                <MediaBlock
-                  className="col-start-1 col-span-3"
-                  imgClassName="m-0"
-                  key={index}
-                  {...block}
-                  captionClassName="mx-auto max-w-[48rem]"
-                  enableGutter={false}
-                  disableInnerContainer={true}
-                />
-              )
-            case 'banner':
-              return <BannerBlock className="col-start-2 mb-4" key={index} {...block} />
-            default:
-              console.warn(`Unknown block type: ${blockType}`)
-              return null
-          }
-        }
-
-        // Обработка остальных типов узлов
         switch (node.type) {
-          case 'linebreak':
+          case 'linebreak': {
             return <br className="col-start-2" key={index} />
-
-          case 'paragraph':
+          }
+          case 'paragraph': {
             return (
               <p className="col-start-2" key={index}>
                 {serializedChildren}
               </p>
             )
-
-          case 'heading':
-            const HeadingTag = node?.tag || 'h1'
+          }
+          case 'heading': {
+            const Tag = node?.tag
             return (
-              <HeadingTag className="col-start-2" key={index}>
+              <Tag className="col-start-2" key={index}>
                 {serializedChildren}
-              </HeadingTag>
+              </Tag>
             )
-
-          case 'list':
-            const ListTag = node?.tag || 'ul'
+          }
+          case 'list': {
+            const Tag = node?.tag
             return (
-              <ListTag className="list col-start-2" key={index}>
+              <Tag className="list col-start-2" key={index}>
                 {serializedChildren}
-              </ListTag>
+              </Tag>
             )
-
-          case 'listitem':
+          }
+          case 'listitem': {
             if (node?.checked != null) {
               return (
                 <li
                   aria-checked={node.checked ? 'true' : 'false'}
-                  className={node.checked ? 'checked' : ''}
+                  className={` ${node.checked ? '' : ''}`}
                   key={index}
+                  // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
                   role="checkbox"
                   tabIndex={-1}
                   value={node?.value}
@@ -174,35 +123,23 @@ export function serializeLexical({ nodes }: Props): JSX.Element {
                   {serializedChildren}
                 </li>
               )
+            } else {
+              return (
+                <li key={index} value={node?.value}>
+                  {serializedChildren}
+                </li>
+              )
             }
-            return (
-              <li key={index} value={node?.value}>
-                {serializedChildren}
-              </li>
-            )
-
-          case 'quote':
+          }
+          case 'quote': {
             return (
               <blockquote className="col-start-2" key={index}>
                 {serializedChildren}
               </blockquote>
             )
-
-          case 'link':
-            const fields = node.fields
-            return (
-              <CMSLink
-                key={index}
-                newTab={Boolean(fields?.newTab)}
-                type={fields?.linkType === 'internal' ? 'reference' : 'custom'}
-                url={fields?.url}
-              >
-                {serializedChildren}
-              </CMSLink>
-            )
+          }
 
           default:
-            console.warn(`Unknown node type: ${node.type}`)
             return null
         }
       })}

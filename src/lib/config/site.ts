@@ -5,7 +5,7 @@ const links = {
 }
 
 export const siteConfig = {
-  name: 'Pekaren Kromka',
+  name: 'Pekáren Kromka',
   description:
     'Pekaren Kromka je online obchod pre pekarení a červených koňať. Naša cieľom je poskytnúť najviac informácií o pekarení a červených koňať pre každého z nás.',
   url: 'https://pekarenkromka.sk',
@@ -13,11 +13,15 @@ export const siteConfig = {
   links,
   mainNav: [
     {
-      title: 'Obchod',
+      title: 'Úvodná stránka',
       links: [
         {
-          title: 'Obchod',
+          title: 'Úvodná stránka',
           href: links.home,
+        },
+        {
+          title: 'Obchod',
+          href: links.home + '/obchod',
         },
         {
           title: 'Aktuálne',

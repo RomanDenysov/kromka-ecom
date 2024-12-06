@@ -1,12 +1,6 @@
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "~/lib/ui/components/card";
-import { AuthProviders } from "./auth-providers";
-import { EmailForm } from "./email-form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/lib/ui/components/card'
+import { AuthProviders } from './auth-providers'
+import { EmailForm } from './email-form'
 
 export default function AuthCard() {
   return (
@@ -20,14 +14,12 @@ export default function AuthCard() {
           <EmailForm />
           <div className="inline-flex w-full items-center justify-center gap-x-2">
             <div className="h-px w-full bg-border" />
-            <span className="text-sm text-muted-foreground tracking-tight">
-              nebo
-            </span>
+            <span className="text-sm text-muted-foreground tracking-tight">alebo</span>
             <div className="h-px w-full bg-border" />
           </div>
           <AuthProviders />
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
