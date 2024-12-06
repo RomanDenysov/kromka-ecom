@@ -6,7 +6,7 @@ export const categoriesRouter = createTRPCRouter({
     const categories = await ctx.payload.find({
       collection: 'categories',
       limit: 100,
-      sort: '-createdAt',
+      sort: '-order',
       where: {
         isVisible: { equals: true },
       },

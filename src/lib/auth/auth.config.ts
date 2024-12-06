@@ -59,7 +59,8 @@ const csrfOptions =
 
 export default {
   providers,
-  useSecureCookies: env.NODE_ENV === 'production',
+  trustHost: true,
+  // useSecureCookies: env.NODE_ENV === 'production',
   // cookies:
   //   env.NODE_ENV === 'production'
   //     ? {
