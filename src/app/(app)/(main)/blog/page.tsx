@@ -1,7 +1,7 @@
 import { BlogCarousel } from '~/features/blog-carousel/ui'
 import { PostsGrid } from '~/features/posts-grid/ui'
 import { TagsFilter } from '~/features/tags-filter/ui'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { api } from '~/trpc/server'
 
 export default async function BlogPage() {

@@ -1,4 +1,4 @@
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import CartButton from '~/features/cart-sheet/ui/cart-button'
 import { UserButton } from '~/features/user-button/ui'
 import { Separator } from '~/lib/ui/components/separator'
@@ -17,9 +17,9 @@ export default function Header() {
           <Navbar />
         </div>
 
-        <div className="grid flex-1 place-content-center">
+        <div className="grid flex-1 place-content-center text-primary">
           <Link href="/">
-            <Icons.kromka className="h-5 w-auto fill-accent-foreground md:h-7" />
+            <Icons.kromka className="h-5 w-auto stroke-primary fill-primary md:h-7 " />
           </Link>
         </div>
 

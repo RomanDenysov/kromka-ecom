@@ -4,6 +4,8 @@ import { initPayload } from '~/server/payload/utils/payload'
 export const getProfileById = cache(async (userId: string) => {
   const payload = await initPayload()
 
+  console.log('getProfileById function', userId)
+
   const res = await payload.find({
     collection: 'profiles',
     where: {

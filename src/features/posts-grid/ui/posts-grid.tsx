@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Badge } from '~/lib/ui/components/badge'
 import { Card, CardContent } from '~/lib/ui/components/card'
 import { Heading } from '~/lib/ui/heading'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { Post, Tag } from '@payload-types'
 
 type Props = {

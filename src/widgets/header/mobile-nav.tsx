@@ -1,34 +1,34 @@
-"use client";
+'use client'
 
-import { AlignJustifyIcon } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { useMountedState } from "react-use";
-import { NAV_LINKS } from "~/lib/config/navigation";
-import { Button } from "~/lib/ui/components/button";
+import { AlignJustifyIcon } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useMountedState } from 'react-use'
+import { NAV_LINKS } from '~/lib/config/navigation'
+import { Button } from '~/lib/ui/components/button'
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "~/lib/ui/components/sheet";
-import { Icons } from "~/lib/ui/icons";
-import { cn } from "~/lib/utils";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '~/lib/ui/components/sheet'
+import { Icons } from '~/lib/ui/icons'
+import { cn } from '~/lib/utils'
 
 export const MobileNav = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const isMounted = useMountedState();
-  const pathname = usePathname();
-  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false)
+  const isMounted = useMountedState()
+  const pathname = usePathname()
+  const router = useRouter()
 
   const handleClick = (href: string) => {
-    router.push(href);
-    setIsOpen(false);
-  };
+    router.push(href)
+    setIsOpen(false)
+  }
 
-  if (!isMounted) return null;
+  if (!isMounted) return null
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -37,10 +37,10 @@ export const MobileNav = () => {
           <AlignJustifyIcon size={32} />
         </button>
       </SheetTrigger>
-      <SheetContent side={"left"} className="px-4">
+      <SheetContent side={'left'} className="px-4">
         <SheetHeader className="grid w-full place-content-center">
           <SheetTitle>
-            <Icons.kromka className="h-4 w-auto fill-accent-foreground" />
+            <Icons.kromka className="h-4 w-auto fill-primary text-primary" />
             <span className="sr-only">Kromka Logo</span>
           </SheetTitle>
           <SheetDescription>
@@ -52,10 +52,10 @@ export const MobileNav = () => {
             <Button
               onClick={() => handleClick(link.href)}
               key={link.href}
-              variant={"ghost"}
+              variant={'ghost'}
               className={cn(
-                "w-full justify-start text-lg tracking-tight",
-                link.href === pathname && "bg-accent text-accent-foreground",
+                'w-full justify-start text-lg tracking-tight',
+                link.href === pathname && 'bg-accent text-accent-foreground',
               )}
             >
               <link.icon size={20} className="mr-2 text-muted-foreground" />
@@ -65,5 +65,5 @@ export const MobileNav = () => {
         </nav>
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}

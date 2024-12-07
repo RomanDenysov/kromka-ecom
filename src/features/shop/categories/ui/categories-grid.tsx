@@ -2,7 +2,7 @@ import GridItem from './grid-item'
 import { Heading } from '~/lib/ui/heading'
 import AnimatedBackground from '~/lib/ui/motion/animated-background'
 import { Category } from '@payload-types'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 
 type Props = {
   categories: Category[]

@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '~/lib/utils'
 import { useState } from 'react'
@@ -38,7 +38,7 @@ const HeroCard = ({ className, title, alternativeTitle, href, image }: Props) =>
         className="absolute z-0 object-cover object-center brightness-90 transition-transform sm:group-hover:scale-[1.02]"
       />
       <div className="absolute inset-0 size-full grid place-content-center p-4 transition-all group-hover:bg-black/10 group-hover:backdrop-blur-[2px]">
-        <TextMorph className="font-black truncate uppercase text-lg sm:text-2xl text-primary-foreground">
+        <TextMorph className="font-black truncate uppercase text-lg sm:text-2xl text-primary-foreground dark:text-primary">
           {text}
         </TextMorph>
       </div>

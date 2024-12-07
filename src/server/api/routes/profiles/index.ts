@@ -39,7 +39,7 @@ export const profilesRouter = createTRPCRouter({
     const existingProfile = await ctx.payload.find({
       collection: COLLECTIONS.PROFILES,
       where: {
-        userId: { equals: userId },
+        user: { equals: userId },
       },
     })
 
@@ -52,7 +52,6 @@ export const profilesRouter = createTRPCRouter({
       id: existingProfile.docs[0].id,
       data: {
         ...input,
-        user: userId,
       },
     })
 

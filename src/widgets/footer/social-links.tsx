@@ -1,5 +1,5 @@
 import { FacebookIcon, InstagramIcon } from 'lucide-react'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { Icons } from '~/lib/ui/icons'
 import { cn } from '~/lib/utils'
@@ -35,7 +35,7 @@ export const SocialLinks = () => {
             'text-muted-foreground hover:text-accent-foreground',
           )}
         >
-          <link.icon className="mr-2 size-5" />
+          <link.icon className="mr-2 size-5 stroke-primary" />
           {link.label}
         </Link>
       ))}

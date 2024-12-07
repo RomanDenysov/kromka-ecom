@@ -5,7 +5,7 @@ export const updateProfileSchema = z.object({
     .object({
       name: z.string().min(1),
       phone: z.string().min(10),
-      email: z.string().email(),
+      email: z.string().email().optional(),
     })
     .optional(),
   customerOptions: z

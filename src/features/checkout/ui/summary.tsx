@@ -53,7 +53,7 @@ const Summary = () => {
             size={'lg'}
             className="w-full text-lg"
             isLoading={isLoading}
-            disabled={!!canSubmit}
+            disabled={!canSubmit}
           >
             Objednať
           </LoaderButton>

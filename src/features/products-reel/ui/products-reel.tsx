@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronRightIcon, Loader2Icon } from 'lucide-react'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { ProductsListing } from '~/features/products-reel/ui'
 import { Heading } from '~/lib/ui/heading'

@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from 'lucide-react'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { NAV_LINKS } from '~/lib/config/navigation'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'

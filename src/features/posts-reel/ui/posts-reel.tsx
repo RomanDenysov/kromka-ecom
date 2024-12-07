@@ -3,7 +3,7 @@
 import { ChevronRightIcon } from 'lucide-react'
 import { useCallback } from 'react'
 import { Heading } from '~/lib/ui/heading'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import PostsListing from './posts-listing'

@@ -3,7 +3,7 @@
 import { ChevronRightIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { buttonVariants } from '~/lib/ui/components/button'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { cn } from '~/lib/utils'
 
 const policyNav = [

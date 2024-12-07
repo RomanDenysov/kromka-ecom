@@ -1,15 +1,13 @@
 'use client'
 
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useWindowScroll } from 'react-use'
 import { NAV_LINKS } from '~/lib/config/navigation'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'
 
 export const Navbar = () => {
   const pathname = usePathname()
-  const { y } = useWindowScroll()
   const isHome = pathname === '/'
 
   const isActive = (href: string) => {
@@ -22,6 +20,7 @@ export const Navbar = () => {
       {NAV_LINKS.map(({ href, label }) => (
         <Link
           key={href}
+          prefetch={true}
           className={cn(
             buttonVariants({ variant: 'ghost' }),
             'px-2 text-primary text-sm',

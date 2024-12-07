@@ -1,7 +1,7 @@
 'use client'
 
 import { BookLockIcon, LogInIcon, SettingsIcon, ShoppingBag, UserIcon } from 'lucide-react'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { Suspense, useMemo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '~/lib/ui/components/avatar'
 import {

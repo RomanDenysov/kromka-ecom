@@ -1,3 +1,3 @@
 export default function SupportPage() {
-  return <div>Support Page</div>
+  return <div>Teraz nedostupné</div>
 }

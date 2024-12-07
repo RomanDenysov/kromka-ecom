@@ -123,6 +123,13 @@ export const handleStatusChange = async ({
           })
         }
         break
+
+      case 'complete':
+        await EmailService.sendThankYouEmail({
+          email: email,
+          orderId: originalDoc.id,
+        })
+        break
     }
 
     return data

@@ -5,7 +5,7 @@ import { formatPrice } from '~/lib/utils'
 import type { Product } from '~/server/payload/payload-types'
 import { useCart } from '~/store/cart/use-cart'
 import { ItemQuantityButton } from '~/features/checkout/ui'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { memo } from 'react'
 
 type Props = {

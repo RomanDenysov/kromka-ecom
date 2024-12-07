@@ -24,7 +24,7 @@ import Image from 'next/image'
 import { cn, formatPrice } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import { Order } from '~/server/payload/payload-types'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { useUser } from '~/store/user/use-user'
 
 type Props = {
@@ -72,7 +72,7 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
         {/* HEADER */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-2 sm:gap-x-4">
-            <Icons.kromka className="h-3 w-auto fill-accent-foreground md:h-5" />
+            <Icons.kromka className="h-3 w-auto fill-primary md:h-5 text-primary" />
             <Separator orientation="vertical" className="h-6" />
             <h1 className="text-lg sm:text-2xl font-semibold">Vaša objednávka</h1>
           </div>
@@ -103,11 +103,16 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
               </div>
               <div>
                 <div className="text-sm font-medium text-gray-500">ČÍSLO OBJEDNÁVKY</div>
-                <div className="text-blue-600">{preparedOrderId}</div>
+                <div className="text-blue-600">{preparedOrderId.toUpperCase()}</div>
               </div>
               <div className="sm:col-span-2">
                 <div className="text-sm font-medium text-gray-500">MIESTO VYZDVIHNUTIA</div>
-                <a href={pickupStoreUrl} className="text-blue-600 hover:underline">
+                <a
+                  href={pickupStoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
                   {pickupStoreAddress}
                 </a>
               </div>

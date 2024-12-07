@@ -6,6 +6,7 @@ import { OrderConfirmationEmail } from './templates/order-confirmation-email'
 import { OrderReadyEmail } from './templates/order-ready-email'
 import { OutOfStockEmail } from './templates/out-of-stock-email'
 import { render } from '@react-email/components'
+import { ThankYouEmail } from './templates/thank-you-email'
 
 interface EmailConfig {
   from: string
@@ -50,7 +51,12 @@ type OutOfStockData = {
   productName: string
 }
 
-type EmailTemplate = 'receipt' | 'order-confirmation' | 'order-ready' | 'out-of-stock'
+type ThankYouData = {
+  email: string
+  orderId: string
+}
+
+type EmailTemplate = 'receipt' | 'order-confirmation' | 'order-ready' | 'out-of-stock' | 'thank-you'
 
 export class EmailService {
   private static transporter: nodemailer.Transporter | null = null
@@ -92,6 +98,8 @@ export class EmailService {
         return render(OrderReadyEmail(data as OrderReadyData))
       case 'out-of-stock':
         return render(OutOfStockEmail(data as OutOfStockData))
+      case 'thank-you':
+        return render(ThankYouEmail(data as OrderConfirmationData))
       default:
         throw new Error(`Unknown email template: ${template}`)
     }
@@ -147,6 +155,15 @@ export class EmailService {
     return this.sendEmail({
       to: data.email,
       subject: `Produkt nie je k dispozícii - Objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
+      html,
+    })
+  }
+
+  static async sendThankYouEmail(data: ThankYouData) {
+    const html = await this.renderTemplate('thank-you', data)
+    return this.sendEmail({
+      to: data.email,
+      subject: `Ďakujeme za vašu objednávku - Pekaren Kromka`,
       html,
     })
   }

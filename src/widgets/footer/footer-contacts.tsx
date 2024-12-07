@@ -1,5 +1,5 @@
 import { MailIcon, PhoneIcon } from 'lucide-react'
-import { Link } from '~/lib/ui/link'
+import Link from 'next/link'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'
 
