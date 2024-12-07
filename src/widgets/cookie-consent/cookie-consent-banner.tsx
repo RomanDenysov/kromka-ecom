@@ -42,23 +42,23 @@ const CookieConsentBanner = () => {
   return (
     <Card className="fixed inset-x-4 bottom-4 z-50 w-full max-w-fit animate-out shadow-md md:right-4 md:left-auto md:max-w-[400px]">
       <CardHeader>
-        <CardTitle>Cookie Settings</CardTitle>
-        <CardDescription>Manage your cookie settings here.</CardDescription>
+        <CardTitle>Nastavenia cookies</CardTitle>
+        <CardDescription>Tu môžete spravovať svoje nastavenia cookies.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
           <CookieOption
             id="necessary"
-            title="Strictly Necessary"
-            description="These cookies are essential in order to use the website and use its features."
+            title="Nevyhnutné cookies"
+            description="Tieto cookies sú potrebné pre základné fungovanie stránky a jej funkcií."
             checked={preferences.necessary}
             onChange={(checked) => setPreference('necessary', checked)}
             disabled={true}
           />
           <CookieOption
             id="functional"
-            title="Functional Cookies"
-            description="These cookies allow the website to provide personalized functionality."
+            title="Funkčné cookies"
+            description="Tieto cookies umožňujú webstránke poskytovať personalizované funkcie."
             checked={preferences.functional}
             onChange={(checked) => setPreference('functional', checked)}
           />
@@ -66,7 +66,7 @@ const CookieConsentBanner = () => {
       </CardContent>
       <CardFooter>
         <Button variant="outline" className="w-full" onClick={handleSavePreferences}>
-          Save preferences
+          Uložiť nastavenia
         </Button>
       </CardFooter>
     </Card>

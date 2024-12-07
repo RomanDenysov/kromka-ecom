@@ -1,5 +1,8 @@
+'use client'
+
 import { format, isBefore, isToday, parse, startOfDay } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
+import { useEffect } from 'react'
 
 import { Label } from '~/lib/ui/components/label'
 import { RadioGroup, RadioGroupItem } from '~/lib/ui/components/radio-group'
@@ -26,6 +29,14 @@ const DateSelector: React.FC<Props> = ({ onDateSelect, defaultValue, availableDa
     return isBefore(date, today) || isToday(date)
   }
 
+  // Находим первую доступную дату
+  const getFirstAvailableDate = () => {
+    return displayDates.find((dateString) => {
+      const date = parse(dateString, 'yyyy-MM-dd', new Date())
+      return !isDateDisabled(date)
+    })
+  }
+
   const handleDateSelect = (dateString: string) => {
     const selectedDate = parse(dateString, 'yyyy-MM-dd', new Date())
     if (!isDateDisabled(selectedDate)) {
@@ -33,9 +44,26 @@ const DateSelector: React.FC<Props> = ({ onDateSelect, defaultValue, availableDa
     }
   }
 
+  // Run effect when component mounts or when defaultValue changes
+  useEffect(() => {
+    if (defaultValue) {
+      // If we have a default value, call onDateSelect with it
+      onDateSelect?.(defaultValue)
+    } else {
+      // If no default value, find and select first available date
+      const firstAvailableDate = getFirstAvailableDate()
+      if (firstAvailableDate) {
+        const date = parse(firstAvailableDate, 'yyyy-MM-dd', new Date())
+        onDateSelect?.(date)
+      }
+    }
+  }, [defaultValue]) // Add defaultValue to dependencies
+
+  const firstAvailableDate = getFirstAvailableDate()
+
   return (
     <RadioGroup
-      value={defaultValue ? format(defaultValue, 'yyyy-MM-dd') : displayDates[0]}
+      value={defaultValue ? format(defaultValue, 'yyyy-MM-dd') : firstAvailableDate}
       className="grid grid-cols-2 gap-4"
       onValueChange={handleDateSelect}
     >

@@ -4,7 +4,7 @@ import { Payload } from 'payload'
 import { initPayload } from '~/server/payload/utils/payload'
 import { TRPCError } from '@trpc/server'
 import { CheckoutOptions, CheckoutProduct } from './validator'
-import { Profile } from '~/server/payload/payload-types'
+import { Profile, User } from '~/server/payload/payload-types'
 import Stripe from 'stripe'
 import { PriceFormatter } from '~/lib/utils'
 import { EmailService } from '~/lib/emails'
@@ -203,7 +203,7 @@ export class CheckoutService {
     options: CheckoutOptions,
     user?: CheckoutUser,
   ) {
-    const profile = await this.getProfile(options.profileId)
+    const profile = await this.getProfile(options!.profileId!)
     const items = await this.getProducts(products.map(({ product }) => product))
     const { totalPrice, orderProducts } = this.calculateOrderDetails(items, products)
 
@@ -212,6 +212,8 @@ export class CheckoutService {
     const order = await this.createOrder(options, totalPrice, products, profile, user)
 
     const userEmail = options.email ?? user?.email ?? profile?.contacts?.email
+    const userName = user?.name ?? profile?.contacts?.name ?? options.name
+    const userPhone = user?.phone ?? profile?.contacts?.phone ?? options.phone
 
     if (options.method === 'store') {
       await EmailService.sendReceiptEmail({
@@ -225,6 +227,21 @@ export class CheckoutService {
         // @ts-ignore
         products: order.productItems,
         total: order.total,
+      })
+
+      await EmailService.sendNewOrderEmail({
+        email: ['romandenysovsk@gmail.com'],
+        orderId: order.id,
+        pickupPlace: typeof order.pickupStore !== 'string' ? order.pickupStore.title : '',
+        // @ts-ignore
+        products: order.productItems,
+        paymentMethod: order.method,
+        pickupTime: new Date(order.pickupDate),
+        customer: {
+          name: userName,
+          email: userEmail,
+          phone: userPhone,
+        },
       })
       return {
         url: this.getSuccessUrl(order.id),

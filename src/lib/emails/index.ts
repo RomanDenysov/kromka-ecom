@@ -7,6 +7,7 @@ import { OrderReadyEmail } from './templates/order-ready-email'
 import { OutOfStockEmail } from './templates/out-of-stock-email'
 import { render } from '@react-email/components'
 import { ThankYouEmail } from './templates/thank-you-email'
+import { NewOrderEmail } from './templates/new-order-email'
 
 interface EmailConfig {
   from: string
@@ -56,7 +57,30 @@ type ThankYouData = {
   orderId: string
 }
 
-type EmailTemplate = 'receipt' | 'order-confirmation' | 'order-ready' | 'out-of-stock' | 'thank-you'
+type NewOrderData = {
+  email: string | string[]
+  orderId: string
+  pickupPlace: string
+  products: Array<{
+    product: Product
+    quantity: number
+  }>
+  paymentMethod: 'card' | 'store'
+  pickupTime: Date
+  customer: {
+    name: string
+    email: string
+    phone: string
+  }
+}
+
+type EmailTemplate =
+  | 'receipt'
+  | 'order-confirmation'
+  | 'order-ready'
+  | 'out-of-stock'
+  | 'thank-you'
+  | 'new-order'
 
 export class EmailService {
   private static transporter: nodemailer.Transporter | null = null
@@ -100,6 +124,8 @@ export class EmailService {
         return render(OutOfStockEmail(data as OutOfStockData))
       case 'thank-you':
         return render(ThankYouEmail(data as OrderConfirmationData))
+      case 'new-order':
+        return render(NewOrderEmail(data as NewOrderData))
       default:
         throw new Error(`Unknown email template: ${template}`)
     }
@@ -110,13 +136,13 @@ export class EmailService {
     subject,
     html,
   }: {
-    to: string
+    to: string | string[]
     subject: string
     html: string
   }) {
     const transporter = await this.getTransporter()
     return transporter.sendMail({
-      from: `"${this.config.fromName}" < ${this.config.from} >`,
+      from: `"${this.config.fromName}" < ${this.config.from} >`, // TODO: Add email from
       to,
       subject,
       html,
@@ -164,6 +190,15 @@ export class EmailService {
     return this.sendEmail({
       to: data.email,
       subject: `Ďakujeme za vašu objednávku - Pekaren Kromka`,
+      html,
+    })
+  }
+
+  static async sendNewOrderEmail(data: NewOrderData) {
+    const html = await this.renderTemplate('new-order', data)
+    return this.sendEmail({
+      to: data.email,
+      subject: `Nová objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
       html,
     })
   }

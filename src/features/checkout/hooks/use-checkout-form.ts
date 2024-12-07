@@ -25,8 +25,8 @@ const checkoutSchema = z.object({
   store: z.string().min(1),
   date: z
     .date({
-      required_error: 'Please select a date and time',
-      invalid_type_error: "That's not a date!",
+      required_error: 'Prosím, zvoľte dátum',
+      invalid_type_error: 'Toto nie je dátum!',
     })
     .min(new Date()),
   method: z.enum(['store', 'card']).default('store'),

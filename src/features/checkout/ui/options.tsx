@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from '~/lib/ui/components/form'
 import DateSelector from './date-selector'
+import { parse } from 'date-fns'
 
 const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = true
 
@@ -20,7 +21,7 @@ const availableDates = ['2024-12-13', '2024-12-14', '2024-12-22', '2024-12-23']
 
 const Options = () => {
   const { control } = useFormContext()
-
+  const defaultDate = parse(availableDates[0], 'yyyy-MM-dd', new Date())
   return (
     <Card className="border-none bg-accent">
       <CardHeader>
@@ -39,7 +40,7 @@ const Options = () => {
                 {DUMMY_CHRISTMAS_DATES_FEATURE_FLAG ? (
                   <DateSelector
                     onDateSelect={(date) => field.onChange(date)}
-                    defaultValue={field.value}
+                    defaultValue={defaultDate}
                     availableDates={availableDates}
                   />
                 ) : (

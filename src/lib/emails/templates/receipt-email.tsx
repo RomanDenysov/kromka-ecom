@@ -108,7 +108,7 @@ export const ReceiptEmail = ({
                           textDecoration: 'underline',
                         }}
                       >
-                        {receiptOrderId}
+                        {`#${receiptOrderId}`}
                       </Link>
                     </Column>
                   </Row>
