@@ -213,7 +213,7 @@ export class CheckoutService {
 
     const userEmail = options.email ?? user?.email ?? profile?.contacts?.email
     const userName = user?.name ?? profile?.contacts?.name ?? options.name
-    const userPhone = user?.phone ?? profile?.contacts?.phone ?? options.phone
+    const userPhone = profile?.contacts?.phone ?? options.phone
 
     if (options.method === 'store') {
       await EmailService.sendReceiptEmail({
