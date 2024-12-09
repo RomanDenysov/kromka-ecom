@@ -1,7 +1,8 @@
+import type { Product } from '@payload-types'
 import {
   Body,
-  Container,
   Column,
+  Container,
   Head,
   Html,
   Img,
@@ -10,9 +11,9 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import { getEmailAssetUrl } from '../utils'
-import type { Product } from '@payload-types'
+import { formatDate } from 'date-fns'
 import { orderIdFormatter } from '~/lib/utils'
+import { getEmailAssetUrl } from '../utils'
 
 type OrderProduct = {
   product: Product
@@ -70,7 +71,7 @@ export const NewOrderEmail = ({
             <Section style={orderDetailsSection}>
               <Text style={sectionTitle}>Detaily objednávky:</Text>
               <Text style={detailText}>
-                Datum vyzdvihnutia: {pickupTime.toLocaleString('sk-SK')}
+                Datum vyzdvihnutia: {formatDate(pickupTime, 'dd-MM-yyyy')}
                 <br />
                 Spôsob platby:{' '}
                 {paymentMethod === 'card' ? 'Zaplatené kartou' : 'Platba na predajni'}

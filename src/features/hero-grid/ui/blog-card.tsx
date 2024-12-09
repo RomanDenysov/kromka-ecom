@@ -20,7 +20,7 @@ const BlogCard = ({ className }: Props) => {
       onMouseEnter={() => setText('Čítať')}
       onMouseLeave={() => setText('KROMKA BLOG')}
       className={cn(
-        'group relative shadow-sm bg-accent rounded-lg grid aspect-video sm:content-center content-end justify-items-start overflow-hidden transition-all md:aspect-square',
+        'group relative shadow bg-accent rounded-lg grid aspect-video sm:content-center content-end justify-items-start overflow-hidden transition-all md:aspect-square',
         className,
       )}
     >

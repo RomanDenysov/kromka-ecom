@@ -10,9 +10,16 @@ import {
   IS_SUPERSCRIPT,
   IS_UNDERLINE,
 } from './nodeFormat'
+import { Product, ProductBlock as ProductBlockType } from '~/server/payload/payload-types'
+import { ProductBlock } from '~/server/payload/blocks/product'
 
-export type NodeTypes = DefaultNodeTypes
+export type NodeTypes = DefaultNodeTypes | ProductNode
 
+type ProductNode = {
+  type: 'product'
+  product: Product
+  layout?: 'card' | 'inline' | 'featured'
+}
 type Props = {
   nodes: NodeTypes[]
 }
@@ -62,24 +69,25 @@ export function serializeLexical({ nodes }: Props): JSX.Element {
         // NOTE: Hacky fix for
         // https://github.com/facebook/lexical/blob/d10c4e6e55261b2fdd7d1845aed46151d0f06a8c/packages/lexical-list/src/LexicalListItemNode.ts#L133
         // which does not return checked: false (only true - i.e. there is no prop for false)
-        const serializedChildrenFn = (node: NodeTypes): JSX.Element | null => {
-          if (node.children == null) {
-            return null
-          } else {
-            if (node?.type === 'list' && node?.listType === 'check') {
-              for (const item of node.children) {
-                if ('checked' in item) {
-                  if (!item?.checked) {
-                    item.checked = false
-                  }
-                }
-              }
-            }
-            return serializeLexical({ nodes: node.children as NodeTypes[] })
-          }
-        }
+        // const serializedChildrenFn = (node: NodeTypes): JSX.Element | null => {
+        //   if (node.children == null) {
+        //     return null
+        //   } else {
+        //     if (node?.type === 'list' && node?.listType === 'check') {
+        //       for (const item of node.children) {
+        //         if ('checked' in item) {
+        //           if (!item?.checked) {
+        //             item.checked = false
+        //           }
+        //         }
+        //       }
+        //     }
+        //     return serializeLexical({ nodes: node.children as NodeTypes[] })
+        //   }
+        // }
 
-        const serializedChildren = 'children' in node ? serializedChildrenFn(node) : ''
+        const serializedChildren =
+          'children' in node ? serializeLexical({ nodes: node.children as NodeTypes[] }) : null
 
         switch (node.type) {
           case 'linebreak': {
@@ -138,7 +146,13 @@ export function serializeLexical({ nodes }: Props): JSX.Element {
               </blockquote>
             )
           }
-
+          case 'product': {
+            return (
+              <div className="col-start-2" key={index}>
+                <ProductBlock product={node.product} layout={node.layout} />
+              </div>
+            )
+          }
           default:
             return null
         }

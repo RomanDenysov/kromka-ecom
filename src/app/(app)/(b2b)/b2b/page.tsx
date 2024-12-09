@@ -30,9 +30,9 @@ export default function B2BPage() {
               </Link>
               , radi s vami dohodneme ďalšie detaily.
             </h4>
-            <span className="text-muted-foreground text-sm">
+            {/* <span className="text-muted-foreground text-sm">
               °Tu časom pribudne katalóg produktov
-            </span>
+            </span> */}
             <Link
               className={cn(buttonVariants({ variant: 'link', size: 'lg' }), 'gap-0.5')}
               href={'/'}

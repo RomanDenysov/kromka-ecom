@@ -279,6 +279,7 @@ export interface Order {
  */
 export interface Profile {
   id: string;
+  contactDisplay?: string | null;
   user?: (string | null) | User;
   contacts?: {
     name?: string | null;
@@ -306,16 +307,6 @@ export interface Store {
   id: string;
   title: string;
   slug?: string | null;
-  productItems?:
-    | {
-        product: string | Product;
-        quantity: number;
-        id?: string | null;
-      }[]
-    | null;
-  image: string | Media;
-  address: string;
-  addressUrl: string;
   contacts: {
     phone: string;
     email?: string | null;
@@ -325,6 +316,18 @@ export interface Store {
     saturday?: string | null;
     sunday?: string | null;
   };
+  inventory?:
+    | {
+        product: string | Product;
+        quantity: number;
+        isAvailable?: boolean | null;
+        stockAlert?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  image: string | Media;
+  address: string;
+  addressUrl: string;
   managers: (string | User)[];
   isVisible?: boolean | null;
   isOpen?: boolean | null;
@@ -378,7 +381,6 @@ export interface Post {
   id: string;
   title: string;
   slug?: string | null;
-  user?: (string | null) | User;
   content: {
     root: {
       type: string;
@@ -396,8 +398,18 @@ export interface Post {
   };
   status?: ('published' | 'draft' | 'archived') | null;
   tags?: (string | Tag)[] | null;
+  relatedPosts?: (string | Post)[] | null;
+  authors?: (string | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
   banner: string | Media;
   isFeatured?: boolean | null;
+  readingTime?: number | null;
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -750,12 +762,21 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  user?: T;
   content?: T;
   status?: T;
   tags?: T;
+  relatedPosts?: T;
+  authors?: T;
+  populatedAuthors?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
   banner?: T;
   isFeatured?: T;
+  readingTime?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -774,6 +795,7 @@ export interface CommentsSelect<T extends boolean = true> {
  * via the `definition` "profiles_select".
  */
 export interface ProfilesSelect<T extends boolean = true> {
+  contactDisplay?: T;
   user?: T;
   contacts?:
     | T
@@ -850,16 +872,6 @@ export interface CategoriesSelect<T extends boolean = true> {
 export interface StoresSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  productItems?:
-    | T
-    | {
-        product?: T;
-        quantity?: T;
-        id?: T;
-      };
-  image?: T;
-  address?: T;
-  addressUrl?: T;
   contacts?:
     | T
     | {
@@ -873,6 +885,18 @@ export interface StoresSelect<T extends boolean = true> {
         saturday?: T;
         sunday?: T;
       };
+  inventory?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        isAvailable?: T;
+        stockAlert?: T;
+        id?: T;
+      };
+  image?: T;
+  address?: T;
+  addressUrl?: T;
   managers?: T;
   isVisible?: T;
   isOpen?: T;
@@ -913,63 +937,24 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
+ * via the `definition` "ProductBlock".
  */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
+export interface ProductBlock {
+  product: string | Product;
+  layout?: ('card' | 'inline' | 'featured') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'banner';
+  blockType: 'product';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  position?: ('default' | 'fullscreen') | null;
   media: string | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
- */
-export interface CallToActionBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cta';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

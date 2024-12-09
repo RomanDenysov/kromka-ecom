@@ -1,17 +1,12 @@
 import type { CollectionConfig } from 'payload'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import slugField from '../../fields/slug'
-import {
-  BlocksFeature,
-  FixedToolbarFeature,
-  HeadingFeature,
-  HorizontalRuleFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-import { Banner, CallToAction, MediaBlock, Product, SocialMediaEmbed } from '../../blocks'
 import { revalidatePost } from './hooks/revalidate-path'
-import { populateAuthors } from './hooks/popolate-authors'
+import { populateAuthors } from './hooks/populate-authors'
+import { enhancedLexical } from './enchanced-lexical'
+import { setPublishDate } from './hooks/set-publish-date'
+import { setAuthor } from './hooks/set-author'
+import { calculateReadingTime } from './hooks/calculate-reading-time'
 
 const Posts: CollectionConfig = {
   slug: COLLECTIONS.POSTS,
@@ -20,6 +15,7 @@ const Posts: CollectionConfig = {
     useAsTitle: 'title',
   },
   hooks: {
+    beforeChange: [setPublishDate, setAuthor, calculateReadingTime],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
   },
@@ -44,22 +40,7 @@ const Posts: CollectionConfig = {
               name: 'content',
               type: 'richText',
               required: true,
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    HeadingFeature({
-                      enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'],
-                    }),
-                    BlocksFeature({
-                      blocks: [Product, Banner, SocialMediaEmbed, MediaBlock, CallToAction],
-                    }),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                  ]
-                },
-              }),
+              editor: enhancedLexical,
               label: false,
             },
           ],
@@ -173,6 +154,17 @@ const Posts: CollectionConfig = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'readingTime',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+      access: {
+        update: () => false,
       },
     },
     {

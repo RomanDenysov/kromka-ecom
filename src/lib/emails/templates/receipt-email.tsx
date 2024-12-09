@@ -1,8 +1,8 @@
 import type { Product } from '@payload-types'
 import {
   Body,
-  Container,
   Column,
+  Container,
   Head,
   Hr,
   Html,
@@ -16,8 +16,8 @@ import {
 import { formatDate } from 'date-fns'
 import { env } from '~/env'
 import { formatPrice } from '~/lib/utils'
-import { getEmailAssetUrl, getProductImageUrl } from '../utils'
 import { orderIdFormatter } from '~/lib/utils'
+import { getEmailAssetUrl, getProductImageUrl } from '../utils'
 
 type ReceiptProduct = {
   product: Product
@@ -33,6 +33,7 @@ interface ReceiptEmailProps {
   pickupPlace: string
   pickupPlaceUrl: string
   products: ReceiptProduct[]
+  pickupDate: Date
   total: number
 }
 
@@ -45,6 +46,7 @@ export const ReceiptEmail = ({
   products,
   pickupPlaceUrl,
   pickupPlace,
+  pickupDate,
   total,
 }: ReceiptEmailProps) => {
   const receiptOrderId = orderIdFormatter(orderId)
@@ -94,7 +96,7 @@ export const ReceiptEmail = ({
                   <Row>
                     <Column style={informationTableColumn}>
                       <Text style={informationTableLabel}>DÁTUM VYTVORENIA OBJEDNÁVKY</Text>
-                      <Text style={informationTableValue}>{formatDate(date, 'dd MM yyyy')}</Text>
+                      <Text style={informationTableValue}>{formatDate(date, 'dd-MM-yyyy')}</Text>
                     </Column>
                   </Row>
 
@@ -115,17 +117,23 @@ export const ReceiptEmail = ({
                 </Section>
               </Column>
               <Column style={informationTableColumn} colSpan={2}>
-                <Text style={informationTableLabel}>MIESTO VYZDVIHNUTIA</Text>
-                <Link
-                  href={pickupPlaceUrl}
-                  style={{
-                    ...informationTableValue,
-                    color: '#15c',
-                    textDecoration: 'underline',
-                  }}
-                >
-                  {pickupPlace}
-                </Link>
+                <Row>
+                  <Text style={informationTableLabel}>MIESTO VYZDVIHNUTIA</Text>
+                  <Link
+                    href={pickupPlaceUrl}
+                    style={{
+                      ...informationTableValue,
+                      color: '#15c',
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    {pickupPlace}
+                  </Link>
+                </Row>
+                <Row>
+                  <Text style={informationTableLabel}>DATUM VYZDVIHNUTIA</Text>
+                  <Text style={informationTableValue}>{formatDate(pickupDate, 'dd-MM-yyyy')}</Text>
+                </Row>
               </Column>
             </Row>
           </Section>
@@ -146,10 +154,10 @@ export const ReceiptEmail = ({
               const formattedProductPrice = formatPrice(unformattedPrice)
 
               return (
-                <Row>
+                <Row key={product.title}>
                   <Column style={{ width: '64px' }}>
                     <Img
-                      src={productImageUrl!}
+                      src={productImageUrl! ?? '/placeholder.png'}
                       width="64"
                       height="64"
                       alt={product.title}

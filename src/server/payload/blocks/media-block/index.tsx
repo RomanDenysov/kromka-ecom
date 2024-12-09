@@ -1,14 +1,13 @@
 import type { StaticImageData } from 'next/image'
 
-import { cn } from '~/lib/utils'
 import React from 'react'
+
+// import type { MediaBlock as MediaBlockProps } from '@payload-types'
+import { Media } from '~/lib/ui/media'
+import { cn } from '~/lib/utils'
 import RichText from '~/lib/ui/rich-text'
 
-import type { MediaBlock as MediaBlockProps } from '@payload-types'
-
-import { Media } from '~/lib/ui/media'
-
-type Props = MediaBlockProps & {
+type Props = {
   breakout?: boolean
   captionClassName?: string
   className?: string
@@ -16,16 +15,16 @@ type Props = MediaBlockProps & {
   imgClassName?: string
   staticImage?: StaticImageData
   disableInnerContainer?: boolean
+  media?: any
 }
 
-const MediaBlock: React.FC<Props> = (props) => {
+export const MediaBlock: React.FC<Props> = (props) => {
   const {
     captionClassName,
     className,
     enableGutter = true,
     imgClassName,
     media,
-    position = 'default',
     staticImage,
     disableInnerContainer,
   } = props
@@ -38,25 +37,22 @@ const MediaBlock: React.FC<Props> = (props) => {
       className={cn(
         '',
         {
-          container: position === 'default' && enableGutter,
+          container: enableGutter,
         },
         className,
       )}
     >
-      {position === 'fullscreen' && (
-        <div className="relative">
-          <Media resource={media} src={staticImage} />
-        </div>
-      )}
-      {position === 'default' && (
-        <Media imgClassName={cn('rounded', imgClassName)} resource={media} src={staticImage} />
-      )}
+      <Media
+        imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
+        resource={media}
+        src={staticImage}
+      />
       {caption && (
         <div
           className={cn(
             'mt-6',
             {
-              container: position === 'fullscreen' && !disableInnerContainer,
+              container: !disableInnerContainer,
             },
             captionClassName,
           )}
@@ -67,4 +63,3 @@ const MediaBlock: React.FC<Props> = (props) => {
     </div>
   )
 }
-export default MediaBlock

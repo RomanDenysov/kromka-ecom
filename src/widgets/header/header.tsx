@@ -19,7 +19,7 @@ export default function Header() {
 
         <div className="grid flex-1 place-content-center text-primary">
           <Link href="/">
-            <Icons.kromka className="h-5 w-auto stroke-primary fill-primary md:h-7 " />
+            <Icons.kromka className="h-5 w-auto stroke-transparent text-primary fill-primary md:h-7 " />
           </Link>
         </div>
 

@@ -15,7 +15,7 @@ export default function SubscribeSection() {
   }
 
   return (
-    <section className="group relative overflow-hidden rounded-lg">
+    <section className="group relative overflow-hidden border shadow rounded-lg">
       <AspectRatio ratio={21 / 9} className="relative">
         <Image
           src={'/images/asset-1.webp'}

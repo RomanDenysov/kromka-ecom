@@ -1,3 +1,5 @@
+import NotAvailableAlert from '../_components/not-available-alert'
+
 export default function SettingsPage() {
-  return <div>Teraz nedostupné</div>
+  return <NotAvailableAlert />
 }

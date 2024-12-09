@@ -42,7 +42,7 @@ export const ImageSlider = ({ urls, brightness = true }: ImageSliderProps) => {
 
   if (!isMounted) return null
   return (
-    <div className="group group relative aspect-square overflow-hidden rounded-md bg-zinc-100 shadow-md">
+    <div className="group group relative aspect-square overflow-hidden rounded-lg shadow bg-zinc-100 border">
       <div className="absolute inset-0 z-10 opacity-0 transition group-hover:opacity-100">
         <button
           type="button"

@@ -10,7 +10,7 @@ import { Suspense } from 'react'
 
 export default function Footer() {
   return (
-    <footer className="mx-auto bg-muted">
+    <footer className="mx-auto bg-muted dark:bg-background">
       <Container>
         <div className="size-full border-border border-t py-8 md:py-16">
           <div className="grid place-content-center">

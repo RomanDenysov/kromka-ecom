@@ -24,11 +24,11 @@ const ProfileNavigation = ({
   const pathname = usePathname()
 
   return (
-    <Container className="py-5 space-y-2">
+    <Container className="py-5 md:py-8 space-y-5 md:space-y-10">
       <div className="flex items-center justify-between">
-        <div className="border bg-background rounded-xl py-1 px-2 w-full sm:w-fit">
+        <div className="bg-background rounded-xl py-1 px-2 w-full sm:w-fit">
           <AnimatedBackground
-            className="rounded-xl bg-accent border"
+            className="rounded-xl bg-accent"
             defaultValue={PROFILE_NAVIGATION.filter((item) => item.href === pathname)[0].label}
             transition={{ ease: 'easeInOut', duration: 0.2 }}
           >
@@ -44,12 +44,12 @@ const ProfileNavigation = ({
             ))}
           </AnimatedBackground>
         </div>
-        <span className="hidden sm:flex text-muted-foreground items-center justify-end gap-x-2 text-base font-semibold rounded-lg bg-accent h-max p-2.5">
+        <span className="hidden sm:flex  bg-background rounded-xl items-center justify-end gap-x-2 text-base font-semibold h-max p-2.5">
           <User2Icon size={20} />
           {user?.email}
         </span>
       </div>
-      <div>{children}</div>
+      {children}
     </Container>
   )
 }

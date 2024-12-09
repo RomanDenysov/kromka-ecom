@@ -40,7 +40,7 @@ const BlogCarousel = ({ posts }: Props) => {
             <div
               key={item.title + index.toString()}
               className={cn(
-                'absolute inset-0 transition-opacity duration-500',
+                'absolute inset-0 transition-opacity duration-500 border shadow',
                 index === currentSlide ? 'opacity-100 z-20' : 'opacity-0',
               )}
             >

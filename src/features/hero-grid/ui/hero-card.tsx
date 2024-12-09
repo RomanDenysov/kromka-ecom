@@ -23,7 +23,7 @@ const HeroCard = ({ className, title, alternativeTitle, href, image }: Props) =>
       onMouseEnter={() => setText(alternativeTitle)}
       onMouseLeave={() => setText(title)}
       className={cn(
-        'group relative shadow-sm rounded-lg grid aspect-square overflow-hidden transition-all',
+        'group relative shadow rounded-lg grid aspect-square overflow-hidden transition-all',
         className,
       )}
     >

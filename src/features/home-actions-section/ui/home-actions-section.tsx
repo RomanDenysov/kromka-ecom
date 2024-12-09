@@ -2,14 +2,14 @@ import { ActionCard, B2BCard, PostCard } from '~/features/home-actions-section/u
 
 const actionCards = [
   {
-    className: 'sm:col-span-1 h-40 sm:h-80',
+    className: 'sm:col-span-1 h-40 sm:h-80 border',
     href: '/',
     title: 'SPOLUPRÁCA',
     alternativeTitle: 'Zistiť viac',
     image: '/images/spolupraca-banner.webp',
   },
   {
-    className: 'sm:col-span-2 h-40 sm:h-80',
+    className: 'sm:col-span-2 h-40 sm:h-80 border',
     href: '/b2b',
     title: 'B2B Riešenia',
     alternativeTitle: 'Zistiť viac',

@@ -1,14 +1,13 @@
-import { stripe } from '~/lib/stripe'
-import { env } from '~/env'
-import { Payload } from 'payload'
-import { initPayload } from '~/server/payload/utils/payload'
 import { TRPCError } from '@trpc/server'
-import { CheckoutOptions, CheckoutProduct } from './validator'
-import { Profile, User } from '~/server/payload/payload-types'
+import { Payload } from 'payload'
 import Stripe from 'stripe'
-import { PriceFormatter } from '~/lib/utils'
+import { env } from '~/env'
 import { EmailService } from '~/lib/emails'
-import { UpdateProfileSchema } from '../profiles/validator'
+import { stripe } from '~/lib/stripe'
+import { PriceFormatter } from '~/lib/utils'
+import { Profile } from '~/server/payload/payload-types'
+import { initPayload } from '~/server/payload/utils/payload'
+import { CheckoutOptions, CheckoutProduct } from './validator'
 
 interface OrderProduct {
   productId: string
@@ -22,6 +21,8 @@ interface CheckoutUser {
   name?: string | null
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
+// biome-ignore lint/complexity/noThisInStatic: <explanation>
 export class CheckoutService {
   private static readonly BASE_URL = `${env.NEXT_PUBLIC_SERVER_URL}/checkout`
   private static payload: Payload | null = null
@@ -226,11 +227,12 @@ export class CheckoutService {
         pickupPlaceUrl: typeof order.pickupStore !== 'string' ? order.pickupStore.addressUrl : '',
         // @ts-ignore
         products: order.productItems,
+        pickupDate: order.pickupDate,
         total: order.total,
       })
 
       await EmailService.sendNewOrderEmail({
-        email: ['romandenysovsk@gmail.com'],
+        email: ['romandenysovsk@gmail.com', 'kromka@kavejo.sk'],
         orderId: order.id,
         pickupPlace: typeof order.pickupStore !== 'string' ? order.pickupStore.title : '',
         // @ts-ignore

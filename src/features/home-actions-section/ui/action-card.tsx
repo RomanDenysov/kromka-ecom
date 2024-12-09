@@ -23,7 +23,7 @@ const ActionCard = ({ className, href, title, alternativeTitle, image }: Props) 
       onMouseEnter={() => setText(alternativeTitle)}
       onMouseLeave={() => setText(title)}
       className={cn(
-        'overflow-hidden shadow-sm group aspect-auto relative rounded-lg transition-all',
+        'overflow-hidden shadowg group aspect-auto relative rounded-lg transition-all',
         className,
       )}
     >

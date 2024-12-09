@@ -1,13 +1,13 @@
-import nodemailer from 'nodemailer'
 import { Product } from '@payload-types'
+import { render } from '@react-email/components'
+import nodemailer from 'nodemailer'
 import { env } from '~/env'
-import { ReceiptEmail } from './templates/receipt-email'
+import { NewOrderEmail } from './templates/new-order-email'
 import { OrderConfirmationEmail } from './templates/order-confirmation-email'
 import { OrderReadyEmail } from './templates/order-ready-email'
 import { OutOfStockEmail } from './templates/out-of-stock-email'
-import { render } from '@react-email/components'
+import { ReceiptEmail } from './templates/receipt-email'
 import { ThankYouEmail } from './templates/thank-you-email'
-import { NewOrderEmail } from './templates/new-order-email'
 
 interface EmailConfig {
   from: string
@@ -30,6 +30,7 @@ type ReceiptEmailData = {
     product: Product
     quantity: number
   }>
+  pickupDate: Date
   total: number
 }
 
@@ -82,6 +83,7 @@ type EmailTemplate =
   | 'thank-you'
   | 'new-order'
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class EmailService {
   private static transporter: nodemailer.Transporter | null = null
   private static config: EmailConfig = {

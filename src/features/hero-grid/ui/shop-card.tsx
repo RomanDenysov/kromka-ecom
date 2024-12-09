@@ -19,7 +19,7 @@ const ShopCard = ({ className }: Props) => {
       href={'/shop'}
       prefetch={true}
       className={cn(
-        'group relative rounded-lg shadow-sm grid aspect-video size-full sm:content-center justify-items-start content-end overflow-hidden transition-all',
+        'group relative rounded-lg shadow grid aspect-video size-full sm:content-center justify-items-start content-end overflow-hidden transition-all',
         className,
       )}
     >
