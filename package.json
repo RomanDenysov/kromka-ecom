@@ -73,7 +73,7 @@
     "next-themes": "^0.3.0",
     "nodemailer": "^6.9.16",
     "payload": "3.1.0",
-    "payload-authjs": "^0.3.4",
+    "payload-authjs": "^0.4.0",
     "react": "19.0.0-rc-65a56d0e-20241020",
     "react-day-picker": "8.10.1",
     "react-dom": "19.0.0-rc-65a56d0e-20241020",

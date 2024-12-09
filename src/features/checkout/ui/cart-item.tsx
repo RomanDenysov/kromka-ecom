@@ -1,12 +1,12 @@
 import { ImageIcon, X } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { memo } from 'react'
+import { ItemQuantityButton } from '~/features/checkout/ui'
 import { useConfirm } from '~/hooks/use-confirm'
 import { formatPrice } from '~/lib/utils'
 import type { Product } from '~/server/payload/payload-types'
 import { useCart } from '~/store/cart/use-cart'
-import { ItemQuantityButton } from '~/features/checkout/ui'
-import Link from 'next/link'
-import { memo } from 'react'
 
 type Props = {
   product: Product
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const CartItemImage = memo(
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   ({ image, title, slug }: { image: any; title: string; slug: string }) => {
     if (image && typeof image !== 'string' && image?.url) {
       return (
@@ -22,7 +23,7 @@ const CartItemImage = memo(
             loading="eager"
             decoding="sync"
             quality={65}
-            src={image.url}
+            src={image.url ?? '/placeholder.png'}
             alt={title}
             fill
             className="size-full rounded-md object-cover object-center shadow-md"

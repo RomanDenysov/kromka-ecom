@@ -1,9 +1,9 @@
 'use client'
 
+import type { Product } from '@payload-types'
 import { MinusIcon, PlusIcon } from 'lucide-react'
 import type React from 'react'
 import { Button } from '~/lib/ui/components/button'
-import type { Product } from '@payload-types'
 import { useCart } from '~/store/cart/use-cart'
 
 type Props = {
@@ -37,7 +37,7 @@ const FastAddButton = ({ product }: Props) => {
 
   if (currentQuantity > 0) {
     return (
-      <div className="z-30 flex h-[28px] w-[76px] items-center justify-between rounded-md border border-border bg-background shadow-sm ">
+      <div className="z-30 flex h-[28px] w-[76px] items-center justify-between rounded-md border bg-background shadow-sm">
         <button
           type="button"
           onClick={(e) => handleRemoveItem(e)}
@@ -45,7 +45,7 @@ const FastAddButton = ({ product }: Props) => {
           className="grid size-full flex-1 place-content-center rounded-l-md hover:bg-secondary"
           aria-label="decrease button"
         >
-          <MinusIcon size={16} className="text-muted-foreground" />
+          <MinusIcon size={16} className="" />
         </button>
         <button
           type="button"
@@ -55,7 +55,7 @@ const FastAddButton = ({ product }: Props) => {
           }}
           className="pointer-events-none grid flex-1 select-none place-content-center"
         >
-          <span className="text-muted-foreground text-sm">{currentQuantity}</span>
+          <span className=" text-sm">{currentQuantity}</span>
         </button>
         <button
           type="button"
@@ -64,7 +64,7 @@ const FastAddButton = ({ product }: Props) => {
           className="grid size-full flex-1 place-content-center rounded-r-md hover:bg-secondary"
           aria-label="decrease button"
         >
-          <PlusIcon size={16} className="text-muted-foreground" />
+          <PlusIcon size={16} className="" />
         </button>
       </div>
     )

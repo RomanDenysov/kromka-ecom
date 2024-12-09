@@ -1,8 +1,8 @@
 'use client'
 
+import type { Store } from '@payload-types'
 import { CheckIcon, ChevronsUpDown, StoreIcon } from 'lucide-react'
 import { memo, useCallback } from 'react'
-import { cn } from '~/lib/utils'
 import { Button } from '~/lib/ui/components/button'
 import {
   Command,
@@ -14,9 +14,9 @@ import {
 } from '~/lib/ui/components/command'
 import { Popover, PopoverContent, PopoverTrigger } from '~/lib/ui/components/popover'
 import { Skeleton } from '~/lib/ui/components/skeleton'
-import { api } from '~/trpc/react'
-import { Store } from '@payload-types'
+import { cn } from '~/lib/utils'
 import { useCurrentStore } from '~/store/store/use-current-store'
+import { api } from '~/trpc/react'
 
 type Props = {
   width?: string
@@ -49,14 +49,15 @@ const StoreSelector = memo(({ width, onStoreChange, className }: Props) => {
       <PopoverTrigger asChild>
         <Button
           size={'lg'}
+          // biome-ignore lint/a11y/useSemanticElements: <explanation>
           role="combobox"
           aria-haspopup="listbox"
           aria-label="Store selector"
           variant={'outline'}
           className={cn('w-[200px] px-2.5 items-center justify-between', width, className)}
         >
-          <StoreIcon size={20} className="text-muted-foreground" />
-          {store?.title || 'Vyberte si obchod...'}
+          <StoreIcon size={20} className="text-muted-foreground " />
+          <span className="truncate">{store?.title || 'Vyberte si obchod...'}</span>
           <ChevronsUpDown size={16} className="ml-auto shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -74,7 +75,7 @@ const StoreSelector = memo(({ width, onStoreChange, className }: Props) => {
                   value={s.title}
                 >
                   <StoreIcon size={16} className="mr-2 text-muted-foreground" />
-                  {s.title}
+                  <span className="truncate">{s.title}</span>
                   <CheckIcon
                     size={16}
                     className={cn(
