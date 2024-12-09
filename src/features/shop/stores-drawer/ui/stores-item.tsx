@@ -1,6 +1,6 @@
 'use client'
 
-import { Store } from '@payload-types'
+import type { Store } from '@payload-types'
 import { MapPinIcon } from 'lucide-react'
 import Image from 'next/image'
 import { AspectRatio } from '~/lib/ui/components/aspect-ratio'
@@ -23,8 +23,8 @@ const StoresItem = ({ store }: Props) => {
 
   const image = typeof store.image !== 'string' ? store.image.url! : store.image
   return (
-    <div className="rounded-lg relative group transition overflow-hidden size-full flex flex-col items-center justify-center shadow-sm">
-      <div className="relative size-full flex-1">
+    <div className="rounded-lg border sm:border-none relative group transition sm:overflow-hidden size-full flex flex-col items-center justify-center shadow-sm">
+      <div className="relative hidden sm:flex size-full flex-1">
         <AspectRatio>
           <Image
             loading="eager"
@@ -37,9 +37,9 @@ const StoresItem = ({ store }: Props) => {
           />
         </AspectRatio>
       </div>
-      <div className="absolute z-10 inset-0 bg-black/20 backdrop-blur-[2px] opacity-0 transition-opacity group-hover:opacity-100 "></div>
-      <div className="bg-white group-hover:bg-gradient-to-t from-white to-accent z-20 transition border border-border rounded-b-lg size-full p-4 space-y-4">
-        <h4 className="text-lg lg:text-xl font-bold line-clamp-2 text-center text-primary">
+      <div className="absolute z-10 inset-0 bg-black/20 backdrop-blur-[2px] opacity-0 transition-opacity group-hover:opacity-100 " />
+      <div className="flex flex-col items-center justify-between group-hover:bg-gradient-to-t from-white to-accent z-20 transition border border-border rounded-b-lg size-full p-2 sm:p-4 space-y-2 sm:space-y-4">
+        <h4 className="text-base lg:text-xl font-semibold text-balance sm:font-bold line-clamp-2 text-center text-primary w-[90%]">
           {store.title}
         </h4>
         <a
@@ -49,7 +49,7 @@ const StoresItem = ({ store }: Props) => {
           className="flex hover:underline hover:text-primary transition items-center justify-center gap-x-1 text-muted-foreground"
         >
           <MapPinIcon size={16} />
-          <span className="text-base text-center text-muted-foreground">{store.address}</span>
+          <span className="text-sm text-center text-muted-foreground">{store.address}</span>
         </a>
         <Button onClick={handleClick} className="w-full">
           Vybrať obchod

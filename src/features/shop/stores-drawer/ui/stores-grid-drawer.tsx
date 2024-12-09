@@ -10,9 +10,10 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '~/lib/ui/components/drawer'
+import { ScrollArea } from '~/lib/ui/components/scroll-area'
 import { useCurrentStore } from '~/store/store/use-current-store'
-import { useStoresDrawer } from '../hooks/use-stores-drawer'
 import { api } from '~/trpc/react'
+import { useStoresDrawer } from '../hooks/use-stores-drawer'
 
 const StoresGridDrawer = () => {
   const [stores] = api.stores.getStores.useSuspenseQuery()
@@ -39,7 +40,8 @@ const StoresGridDrawer = () => {
               časti stránky.
             </DrawerDescription>
           </DrawerHeader>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 px-4 pb-2 h-full">
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 px-4 pb-2 h-full">
             {stores?.map((store) => <StoresItem store={store} key={store.id} />)}
           </div>
         </div>
