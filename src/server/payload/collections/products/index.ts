@@ -1,10 +1,10 @@
 import type { CollectionConfig } from 'payload'
+import { stripe } from '~/lib/stripe'
+import { PriceFormatter } from '~/lib/utils'
+import { isAdmin, isAdminOrManager } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import orderField from '../../fields/order'
 import slugField from '../../fields/slug'
-import { stripe } from '~/lib/stripe'
-import { isAdmin, isAdminOrManager } from '../../access'
-import { PriceFormatter } from '~/lib/utils'
 
 const Products: CollectionConfig = {
   slug: COLLECTIONS.PRODUCTS,
@@ -22,10 +22,10 @@ const Products: CollectionConfig = {
   hooks: {
     beforeValidate: [
       async ({ data }) => {
-        if (data && data.price) {
+        if (data?.price) {
           data.price = PriceFormatter.formatPriceNumber(data.price)
         }
-        if (data && data.optsPrice) {
+        if (data?.optsPrice) {
           data.optsPrice = PriceFormatter.formatPriceNumber(data.optsPrice)
         }
       },

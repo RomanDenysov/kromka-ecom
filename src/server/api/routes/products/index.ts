@@ -1,9 +1,9 @@
-import type { Sort, Where } from 'payload'
-import { createTRPCRouter, publicProcedure } from '../../trpc'
-import { byIdValidator, infiniteQueryValidator } from './validator'
-import { bySlugValidator } from '../categories/validator'
 import { TRPCError } from '@trpc/server'
+import type { Where } from 'payload'
 import { z } from 'zod'
+import { createTRPCRouter, publicProcedure } from '../../trpc'
+import { bySlugValidator } from '../categories/validator'
+import { byIdValidator, infiniteQueryValidator } from './validator'
 
 export const productsRouter = createTRPCRouter({
   getInitialProducts: publicProcedure
@@ -58,7 +58,9 @@ export const productsRouter = createTRPCRouter({
     }),
   infiniteProducts: publicProcedure.input(infiniteQueryValidator).query(async ({ input, ctx }) => {
     const { query, cursor } = input
-    const { sort, limit, search, excludeId, category, ...queryOpts } = query
+    const { sort, limit, excludeId, category, ...queryOpts } = query
+
+    const page = cursor ?? 1
 
     const buildWhereClause = async (): Promise<Where> => {
       const conditions: Where = {}
@@ -71,13 +73,6 @@ export const productsRouter = createTRPCRouter({
 
       if (excludeId) {
         conditions.id = { not_equals: excludeId }
-      }
-
-      if (cursor?.createdAt && sort?.[0]) {
-        const isDescending = sort[0].startsWith('-')
-        conditions.createdAt = {
-          [isDescending ? 'less_than' : 'greater_than']: cursor.createdAt,
-        }
       }
 
       if (category) {
@@ -110,43 +105,23 @@ export const productsRouter = createTRPCRouter({
         }
       }
 
-      if (search) {
-        conditions.or = [
-          { title: { contains: search } },
-          { 'category.title': { contains: search } },
-          { tags: { contains: search } },
-        ]
-      }
       return conditions
     }
 
-    const buildSortOptions = (): Sort => {
-      if (!sort || sort.length === 0) return ['-createdAt']
-      return sort
-    }
-
-    const result = await ctx.payload.find({
+    const { docs, totalDocs, hasNextPage, nextPage } = await ctx.payload.find({
       collection: 'products',
-      limit: limit + 1,
-      sort: buildSortOptions(),
+      limit: limit,
+      sort: sort || ['-createdAt'],
+      page,
       where: await buildWhereClause(),
       depth: 2,
     })
 
-    const hasMore = result.docs.length > limit
-    const docs = result.docs.slice(0, limit)
-    const lastDoc = docs[docs.length - 1]
-    const nextCursor = hasMore ? { createdAt: lastDoc.createdAt, id: lastDoc.id } : undefined
-
     return {
-      data: docs.map((doc) => ({
-        ...doc,
-        priceId: undefined,
-        stripeId: undefined,
-      })),
-      nextCursor,
-      total: result.totalDocs,
-      hasMore,
+      products: docs,
+      total: totalDocs,
+      hasNextPage,
+      nextCursor: hasNextPage ? nextPage : undefined,
     }
   }),
 

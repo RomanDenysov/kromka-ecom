@@ -2,14 +2,13 @@
 
 import { ChevronRightIcon, Loader2Icon } from 'lucide-react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { ProductsListing } from '~/features/products-reel/ui'
 import { Heading } from '~/lib/ui/heading'
+import { LoaderButton } from '~/lib/ui/loader-button'
 import { cn, generateProductQuantityStr } from '~/lib/utils'
 import { api } from '~/trpc/react'
-import { ProductsQueryType } from '../types'
-import { Product } from '~/server/payload/payload-types'
-import { LoaderButton } from '~/lib/ui/loader-button'
+import type { ProductsQueryType } from '../types'
 
 type Props = {
   className?: string
@@ -17,7 +16,6 @@ type Props = {
   title?: string
   subtitle?: string
   total?: boolean
-  filteredOptions?: string
   query: ProductsQueryType
   showLoadMore?: boolean
 }
@@ -31,9 +29,7 @@ const ProductsReel = ({
   total = false,
   showLoadMore = false,
 }: Props) => {
-  const [products, setProducts] = useState<Product[] | null>(null)
-
-  const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
     api.products.infiniteProducts.useInfiniteQuery(
       {
         query: { ...query, limit: query.limit ?? 12 },
@@ -45,26 +41,27 @@ const ProductsReel = ({
       },
     )
 
-  useEffect(() => {
-    if (data?.pages) {
-      const allProducts = data.pages.flatMap((page) => page.data)
-      setProducts(allProducts)
+  const products = useMemo(() => {
+    if (!isLoading && data?.pages) {
+      const allProducts = data.pages.flatMap((page) => page.products)
+      return allProducts
     }
-  }, [data])
+    return []
+  }, [data, isLoading])
 
-  // if (!products && isLoading) {
-  //   return (
-  //     <div className="size-full grid place-content-center py-40">
-  //       <Loader2Icon className="animate-spin size-10 text-muted-foreground" />
-  //     </div>
-  //   )
-  // }
+  if (isLoading) {
+    return (
+      <div className="size-full grid place-content-center py-40">
+        <Loader2Icon className="animate-spin size-10 text-muted-foreground/70" />
+      </div>
+    )
+  }
 
   if (!products || products.length === 0) {
     return null
   }
 
-  const totalPages = data?.pages[0]?.total
+  const totalProducts = data?.pages[0]?.total
 
   return (
     <article className={cn('py-10', className)} aria-label="Product showcase">
@@ -73,7 +70,7 @@ const ProductsReel = ({
         {title && (
           <Heading
             title={title}
-            subtitle={total ? generateProductQuantityStr(totalPages) : subtitle}
+            subtitle={total ? generateProductQuantityStr(totalProducts) : subtitle}
             className="w-full"
           />
         )}

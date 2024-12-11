@@ -1,12 +1,13 @@
 'use client'
 
+import { TagIcon } from 'lucide-react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { useDebounce } from 'react-use'
 import { Button } from '~/lib/ui/components/button'
 import { ScrollArea, ScrollBar } from '~/lib/ui/components/scroll-area'
 import { cn } from '~/lib/utils'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { api } from '~/trpc/react'
-import { TagIcon } from 'lucide-react'
 
 const CategoriesCarousel = () => {
   const [categories] = api.categories.getAll.useSuspenseQuery()
@@ -24,13 +25,17 @@ const CategoriesCarousel = () => {
     [searchParams],
   )
 
-  useEffect(() => {
-    if (activeCategory.length > 0) {
-      router.push(pathname + '?' + createQueryString('category', activeCategory.join(',')))
-    } else {
-      router.push(pathname)
-    }
-  }, [activeCategory, router, pathname, createQueryString])
+  useDebounce(
+    () => {
+      if (activeCategory.length > 0) {
+        router.push(`${pathname}?${createQueryString('category', activeCategory.join(','))}`)
+      } else {
+        router.push(pathname)
+      }
+    },
+    500,
+    [activeCategory, router, pathname, createQueryString],
+  )
 
   const toggleCategory = (category: string) => {
     if (activeCategory.includes(category)) {
@@ -62,10 +67,10 @@ const CategoriesCarousel = () => {
                   type="button"
                   variant={'outline'}
                   key={category.title + index.toString()}
-                  onClick={() => toggleCategory(category.slug!)}
+                  onClick={() => toggleCategory(category.slug || '')}
                   className={cn(
                     'px-2.5 text-primary font-semibold',
-                    activeCategory.includes(category.slug!) && 'bg-accent',
+                    activeCategory.includes(category.slug || '') && 'bg-accent',
                   )}
                 >
                   {category.title}

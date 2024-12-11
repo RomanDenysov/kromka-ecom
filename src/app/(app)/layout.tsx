@@ -1,6 +1,6 @@
+import localFont from 'next/font/local'
 import type { Metadata } from 'next/types'
 import { absoluteUrl, cn } from '~/lib/utils'
-import localFont from 'next/font/local'
 import { Providers } from '~/providers'
 import '~/lib/styles/globals.css'
 import { env } from '~/env'
@@ -11,7 +11,7 @@ const GreedCondensed = localFont({
   variable: '--font-greed-condensed',
 })
 
-export const revalidate = 86400 // 24 hours
+// export const revalidate = 86400 // 24 hours
 export const experimental_ppr = true
 
 export const metadata: Metadata = {

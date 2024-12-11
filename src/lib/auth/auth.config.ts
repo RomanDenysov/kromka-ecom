@@ -1,10 +1,10 @@
 import type { User as TUser } from '@payload-types'
 import type { DefaultSession, NextAuthConfig, Profile } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
+import type { Provider } from 'next-auth/providers'
 import Google from 'next-auth/providers/google'
 import Nodemailer from 'next-auth/providers/nodemailer'
 import { env } from '~/env'
-import type { Provider } from 'next-auth/providers'
 
 declare module 'next-auth/jwt' {
   interface JWT extends Pick<Profile, 'role'> {
@@ -44,54 +44,41 @@ const providers: Provider[] = [
   }),
 ]
 
-const csrfOptions =
-  env.NODE_ENV === 'production'
-    ? {
-        name: `__Host-next-auth.csrf-token`,
-        options: {
-          httpOnly: true,
-          sameSite: 'lax',
-          path: '/',
-          secure: true,
-        },
-      }
-    : undefined
-
 export default {
   providers,
   trustHost: true,
   useSecureCookies: env.NODE_ENV === 'production',
-  cookies:
-    env.NODE_ENV === 'production'
-      ? {
-          sessionToken: {
-            name: `__Secure-next-auth.session-token`,
-            options: {
-              httpOnly: true,
-              sameSite: 'lax',
-              path: '/',
-              secure: true,
-            },
-          },
-          callbackUrl: {
-            name: `__Secure-next-auth.callback-url`,
-            options: {
-              sameSite: 'lax',
-              path: '/',
-              secure: true,
-            },
-          },
-          csrfToken: {
-            name: `__Host-next-auth.csrf-token`,
-            options: {
-              httpOnly: true,
-              sameSite: 'lax',
-              path: '/',
-              secure: true,
-            },
-          },
-        }
-      : undefined,
+  // cookies:
+  //   env.NODE_ENV === 'production'
+  //     ? {
+  //         sessionToken: {
+  //           name: `__Secure-next-auth.session-token`,
+  //           options: {
+  //             httpOnly: true,
+  //             sameSite: 'lax',
+  //             path: '/',
+  //             secure: true,
+  //           },
+  //         },
+  //         callbackUrl: {
+  //           name: `__Secure-next-auth.callback-url`,
+  //           options: {
+  //             sameSite: 'lax',
+  //             path: '/',
+  //             secure: true,
+  //           },
+  //         },
+  //         csrfToken: {
+  //           name: `__Host-next-auth.csrf-token`,
+  //           options: {
+  //             httpOnly: true,
+  //             sameSite: 'lax',
+  //             path: '/',
+  //             secure: true,
+  //           },
+  //         },
+  //       }
+  //     : undefined,
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days

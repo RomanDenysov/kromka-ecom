@@ -1,10 +1,10 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { ProductsReel } from '~/features/products-reel/ui'
 import { CategoriesCarousel } from '~/features/shop/categories/ui'
 import { StoresGridDrawer } from '~/features/shop/stores-drawer/ui'
 import { Container } from '~/lib/ui/container'
-import { api, HydrateClient } from '~/trpc/server'
+import { HydrateClient, api } from '~/trpc/server'
 
 type Props = {
   searchParams: Promise<{
