@@ -9,7 +9,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <TRPCReactProvider>
       <SessionProvider>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <SheetsProvider />
           <CookieBannerProvider />
           <Toaster position="top-center" richColors />
