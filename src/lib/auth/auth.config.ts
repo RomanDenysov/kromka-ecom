@@ -81,7 +81,7 @@ export default {
   //     : undefined,
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 5 * 24 * 60 * 60, // 5 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
   jwt: {

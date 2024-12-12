@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdminOrCurrentUser } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 
 const Supports: CollectionConfig = {
@@ -7,6 +8,13 @@ const Supports: CollectionConfig = {
     group: COLLECTIONS_GROUPS.ADMIN,
     useAsTitle: 'user',
     defaultColumns: ['user', 'case'],
+    hidden: true,
+  },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: isAdminOrCurrentUser,
+    delete: () => false,
   },
   fields: [
     {

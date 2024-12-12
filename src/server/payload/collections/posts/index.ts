@@ -1,12 +1,13 @@
 import type { CollectionConfig } from 'payload'
+import { isAdminOrAuthor } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import slugField from '../../fields/slug'
-import { revalidatePost } from './hooks/revalidate-path'
-import { populateAuthors } from './hooks/populate-authors'
 import { enhancedLexical } from './enchanced-lexical'
-import { setPublishDate } from './hooks/set-publish-date'
-import { setAuthor } from './hooks/set-author'
 import { calculateReadingTime } from './hooks/calculate-reading-time'
+import { populateAuthors } from './hooks/populate-authors'
+import { revalidatePost } from './hooks/revalidate-path'
+import { setAuthor } from './hooks/set-author'
+import { setPublishDate } from './hooks/set-publish-date'
 
 const Posts: CollectionConfig = {
   slug: COLLECTIONS.POSTS,
@@ -18,6 +19,12 @@ const Posts: CollectionConfig = {
     beforeChange: [setPublishDate, setAuthor, calculateReadingTime],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
+  },
+  access: {
+    read: () => true,
+    create: isAdminOrAuthor,
+    update: isAdminOrAuthor,
+    delete: isAdminOrAuthor,
   },
   fields: [
     {

@@ -9,6 +9,8 @@ import {
   Loader2,
   StarIcon,
 } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { Fragment, useState } from 'react'
 import { Button, buttonVariants } from '~/lib/ui/components/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/lib/ui/components/card'
@@ -20,12 +22,10 @@ import {
 import { ScrollArea } from '~/lib/ui/components/scroll-area'
 import { Separator } from '~/lib/ui/components/separator'
 import { Icons } from '~/lib/ui/icons'
-import Image from 'next/image'
 import { cn, formatPrice } from '~/lib/utils'
-import { api } from '~/trpc/react'
-import { Order } from '~/server/payload/payload-types'
-import Link from 'next/link'
+import type { Order } from '~/server/payload/payload-types'
 import { useUser } from '~/store/user/use-user'
+import { api } from '~/trpc/react'
 
 type Props = {
   orderId: string
@@ -156,7 +156,7 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
                           : productData.category
 
                       return (
-                        <Fragment key={index}>
+                        <Fragment key={index.toString()}>
                           <div className="flex items-center gap-4 py-4">
                             <Image
                               src={productImageUrl || '/images/asset-1.webp'}

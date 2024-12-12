@@ -8,6 +8,7 @@ const Carts: CollectionConfig = {
     group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'user',
     defaultColumns: ['user', 'total'],
+    hidden: true,
   },
   access: {
     read: () => true,

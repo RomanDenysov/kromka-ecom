@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdminOrCurrentUser } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 
 const Profiles: CollectionConfig = {
@@ -9,6 +10,9 @@ const Profiles: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: () => true,
+    update: isAdminOrCurrentUser,
+    delete: () => false,
   },
   fields: [
     {

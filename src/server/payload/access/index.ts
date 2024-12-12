@@ -1,4 +1,4 @@
-import { Access } from 'payload'
+import type { Access } from 'payload'
 
 const staffRoles = ['admin', 'manager', 'author']
 

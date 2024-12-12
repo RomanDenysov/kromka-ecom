@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdminOrManager } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import slugField from '../../fields/slug'
 
@@ -10,9 +11,9 @@ const Stores: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: () => true,
-    update: () => true,
-    delete: () => true,
+    create: isAdminOrManager,
+    update: isAdminOrManager,
+    delete: () => false,
   },
   fields: [
     {

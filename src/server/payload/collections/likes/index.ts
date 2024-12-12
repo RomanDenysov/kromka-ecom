@@ -6,8 +6,14 @@ const Likes: CollectionConfig = {
   admin: {
     group: COLLECTIONS_GROUPS.BLOG,
     useAsTitle: 'user',
+    hidden: true,
   },
-  access: {},
+  access: {
+    read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
+  },
   hooks: {},
   fields: [
     {

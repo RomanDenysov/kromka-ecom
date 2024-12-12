@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdminOrCurrentUser } from '../../access'
 import { COLLECTIONS_GROUPS } from '../../config'
 
 const Users: CollectionConfig = {
@@ -6,6 +7,12 @@ const Users: CollectionConfig = {
   admin: {
     group: COLLECTIONS_GROUPS.ADMIN,
     useAsTitle: 'email',
+  },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: isAdminOrCurrentUser,
+    delete: () => false,
   },
   fields: [
     {

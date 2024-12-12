@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdminOrManager } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import orderField from '../../fields/order'
 import slugField from '../../fields/slug'
@@ -9,6 +10,12 @@ const Categories: CollectionConfig = {
     group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'title',
     defaultColumns: ['title', 'order'],
+  },
+  access: {
+    read: () => true,
+    create: isAdminOrManager,
+    update: isAdminOrManager,
+    delete: isAdminOrManager,
   },
   fields: [
     {

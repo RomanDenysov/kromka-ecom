@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
-import slugField from '../../fields/slug'
+import { isAdminOrAuthor } from '../../access'
 import { COLLECTIONS_GROUPS } from '../../config'
+import slugField from '../../fields/slug'
 
 const Tags: CollectionConfig = {
   slug: 'tags',
@@ -10,6 +11,9 @@ const Tags: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isAdminOrAuthor,
+    update: isAdminOrAuthor,
+    delete: isAdminOrAuthor,
   },
   fields: [
     {

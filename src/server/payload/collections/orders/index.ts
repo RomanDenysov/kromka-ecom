@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdmin, isAdminOrManager } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import productItemsField from '../../fields/product-items'
 import { handleStatusChange } from './hooks'
@@ -9,6 +10,12 @@ const Orders: CollectionConfig = {
     group: COLLECTIONS_GROUPS.SHOP,
     useAsTitle: 'user',
     defaultColumns: ['user', 'status', 'total'],
+  },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: isAdminOrManager,
+    delete: isAdmin,
   },
   hooks: {
     beforeChange: [
