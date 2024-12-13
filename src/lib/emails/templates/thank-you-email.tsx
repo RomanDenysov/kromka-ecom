@@ -1,7 +1,7 @@
 import {
   Body,
-  Container,
   Column,
+  Container,
   Head,
   Html,
   Img,
@@ -31,8 +31,8 @@ export const ThankYouEmail = ({ orderId }: ThankYouEmailProps) => {
               <Column align="center">
                 <Img
                   src={getEmailAssetUrl(`/logo/logo-black-rounded.png`)}
-                  width="100"
-                  height="100"
+                  width="70"
+                  height="70"
                   alt="Kromka Logo"
                 />
               </Column>
@@ -53,8 +53,8 @@ export const ThankYouEmail = ({ orderId }: ThankYouEmailProps) => {
               <Column align="center" style={footerIcon}>
                 <Img
                   src={getEmailAssetUrl(`/logo/kromka_logo.svg`)}
-                  width="26"
-                  height="26"
+                  width="30"
+                  height="30"
                   alt="Kromka Logo"
                 />
               </Column>

@@ -9,3 +9,4 @@ export * from './get-base-url'
 export * from './order-formatter'
 
 export * from './absolute-url'
+export * from './date-service'

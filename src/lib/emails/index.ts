@@ -1,4 +1,4 @@
-import { Product } from '@payload-types'
+import type { Product } from '@payload-types'
 import { render } from '@react-email/components'
 import nodemailer from 'nodemailer'
 import { env } from '~/env'
@@ -20,7 +20,7 @@ interface EmailConfig {
 
 type ReceiptEmailData = {
   email: string
-  date: Date
+  date: string
   status: string
   orderId: string
   method: 'card' | 'store'
@@ -30,7 +30,7 @@ type ReceiptEmailData = {
     product: Product
     quantity: number
   }>
-  pickupDate: Date
+  pickupDate: string
   total: number
 }
 
@@ -67,7 +67,7 @@ type NewOrderData = {
     quantity: number
   }>
   paymentMethod: 'card' | 'store'
-  pickupTime: Date
+  pickupTime: string
   customer: {
     name: string
     email: string
@@ -84,6 +84,7 @@ type EmailTemplate =
   | 'new-order'
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
+// biome-ignore lint/complexity/noThisInStatic: <explanation>
 export class EmailService {
   private static transporter: nodemailer.Transporter | null = null
   private static config: EmailConfig = {

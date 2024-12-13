@@ -1,13 +1,13 @@
 import { TRPCError } from '@trpc/server'
-import { Payload } from 'payload'
-import Stripe from 'stripe'
+import type { Payload } from 'payload'
+import type Stripe from 'stripe'
 import { env } from '~/env'
 import { EmailService } from '~/lib/emails'
 import { stripe } from '~/lib/stripe'
-import { PriceFormatter } from '~/lib/utils'
-import { Profile } from '~/server/payload/payload-types'
+import { DateService, PriceFormatter } from '~/lib/utils'
+import type { Profile } from '~/server/payload/payload-types'
 import { initPayload } from '~/server/payload/utils/payload'
-import { CheckoutOptions, CheckoutProduct } from './validator'
+import type { CheckoutOptions, CheckoutProduct } from './validator'
 
 interface OrderProduct {
   productId: string
@@ -138,7 +138,7 @@ export class CheckoutService {
         profile: profile?.id || null,
         pickupStore: profile?.customerOptions?.store || options.store,
         productItems: products,
-        pickupDate: options.date.toISOString(),
+        pickupDate: DateService.formatToISO(options.date),
         method: options.method || profile?.customerOptions?.method,
         paymentStatus: 'pending',
         status: 'new',
@@ -219,7 +219,7 @@ export class CheckoutService {
     if (options.method === 'store') {
       await EmailService.sendReceiptEmail({
         email: userEmail,
-        date: new Date(order.createdAt),
+        date: DateService.formatForEmail(order.createdAt),
         status: 'Nová objednávka',
         orderId: order.id,
         method: order.method,
@@ -227,7 +227,7 @@ export class CheckoutService {
         pickupPlaceUrl: typeof order.pickupStore !== 'string' ? order.pickupStore.addressUrl : '',
         // @ts-ignore
         products: order.productItems,
-        pickupDate: order.pickupDate,
+        pickupDate: DateService.formatForEmail(order.pickupDate),
         total: order.total,
       })
 
@@ -238,7 +238,7 @@ export class CheckoutService {
         // @ts-ignore
         products: order.productItems,
         paymentMethod: order.method,
-        pickupTime: new Date(order.pickupDate),
+        pickupTime: DateService.formatForEmail(order.pickupDate),
         customer: {
           name: userName,
           email: userEmail,

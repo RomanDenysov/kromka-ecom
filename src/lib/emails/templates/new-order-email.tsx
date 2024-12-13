@@ -26,7 +26,7 @@ interface NewOrderEmailProps {
   products: OrderProduct[]
   customerNote?: string
   paymentMethod: 'card' | 'store'
-  pickupTime: Date
+  pickupTime: string
   customer: {
     name: string
     email: string
@@ -71,7 +71,7 @@ export const NewOrderEmail = ({
             <Section style={orderDetailsSection}>
               <Text style={sectionTitle}>Detaily objednávky:</Text>
               <Text style={detailText}>
-                Datum vyzdvihnutia: {formatDate(pickupTime, 'dd-MM-yyyy')}
+                Datum vyzdvihnutia: {pickupTime}
                 <br />
                 Spôsob platby:{' '}
                 {paymentMethod === 'card' ? 'Zaplatené kartou' : 'Platba na predajni'}

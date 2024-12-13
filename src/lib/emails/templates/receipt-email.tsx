@@ -26,14 +26,14 @@ type ReceiptProduct = {
 
 interface ReceiptEmailProps {
   email: string
-  date: Date
+  date: string
   status: string
   orderId: string
   method: 'card' | 'store'
   pickupPlace: string
   pickupPlaceUrl: string
   products: ReceiptProduct[]
-  pickupDate: Date
+  pickupDate: string
   total: number
 }
 
@@ -64,7 +64,7 @@ export const ReceiptEmail = ({
                 {/* TODO: Add kromka logo */}
                 <Img
                   src={getEmailAssetUrl('/logo/kromka-sign.png')}
-                  width="190"
+                  width="100"
                   height="42"
                   alt="Kromka Logo"
                 />
@@ -96,7 +96,7 @@ export const ReceiptEmail = ({
                   <Row>
                     <Column style={informationTableColumn}>
                       <Text style={informationTableLabel}>DÁTUM VYTVORENIA OBJEDNÁVKY</Text>
-                      <Text style={informationTableValue}>{formatDate(date, 'dd-MM-yyyy')}</Text>
+                      <Text style={informationTableValue}>{date}</Text>
                     </Column>
                   </Row>
 
@@ -132,7 +132,7 @@ export const ReceiptEmail = ({
                 </Row>
                 <Row>
                   <Text style={informationTableLabel}>DATUM VYZDVIHNUTIA</Text>
-                  <Text style={informationTableValue}>{formatDate(pickupDate, 'dd-MM-yyyy')}</Text>
+                  <Text style={informationTableValue}>{pickupDate}</Text>
                 </Row>
               </Column>
             </Row>
@@ -205,8 +205,8 @@ export const ReceiptEmail = ({
               <Column align="center" style={footerIcon}>
                 <Img
                   src={getEmailAssetUrl('/logo/logo-black-rounded.png')}
-                  width="26"
-                  height="26"
+                  width="40"
+                  height="40"
                   alt="Kromka Logo"
                 />
               </Column>
