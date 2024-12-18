@@ -63,7 +63,9 @@ export const productsRouter = createTRPCRouter({
     const page = cursor ?? 1
 
     const buildWhereClause = async (): Promise<Where> => {
-      const conditions: Where = {}
+      const conditions: Where = {
+        status: { equals: 'active' },
+      }
 
       for (const [key, value] of Object.entries(queryOpts)) {
         if (value !== undefined) {
@@ -130,6 +132,7 @@ export const productsRouter = createTRPCRouter({
       collection: 'products',
       where: {
         id: { equals: input.id },
+        status: { equals: 'active' },
       },
       limit: 1,
     })
@@ -142,6 +145,7 @@ export const productsRouter = createTRPCRouter({
       collection: 'products',
       where: {
         slug: { equals: input.slug },
+        status: { equals: 'active' },
       },
       limit: 1,
     })
