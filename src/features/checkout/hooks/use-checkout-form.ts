@@ -42,7 +42,7 @@ type CheckoutFormProps = {
   options?: any
 }
 
-export const availableDates = ['2024-12-22', '2024-12-23']
+export const availableDates = ['2024-12-23']
 
 export default function useCheckoutForm({ user, profile }: CheckoutFormProps) {
   const currentStore = useCurrentStore((state) => state.store)

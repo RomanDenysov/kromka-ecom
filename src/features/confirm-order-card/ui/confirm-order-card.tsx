@@ -98,7 +98,9 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
                 <div>{orderData.method === 'card' ? 'Platba kartou' : 'Platba v obchode'}</div>
               </div>
               <div>
-                <div className="text-sm font-medium text-gray-500">DÁTUM VYTVORENIA OBJEDNÁVKY</div>
+                <div className="text-sm font-medium text-gray-500">
+                  DÁTUM VYZDVIHNUTIA OBJEDNÁVKY
+                </div>
                 <div>{formatDate(orderData.pickupDate, 'dd MM yyyy')}</div>
               </div>
               <div>
