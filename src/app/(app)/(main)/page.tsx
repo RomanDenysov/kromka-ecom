@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { EndSellingDialog } from '~/features/end-selling-dialog/ui'
 import { HeroGrid } from '~/features/hero-grid/ui'
 import { HomeActionsSection } from '~/features/home-actions-section/ui'
 import { PostsReel } from '~/features/posts-reel/ui'
@@ -9,6 +10,7 @@ import { Container } from '~/lib/ui/container'
 export default async function HomePage() {
   return (
     <Container className="py-5 md:py-8 space-y-5 md:space-y-10">
+      <EndSellingDialog />
       <HeroGrid />
 
       {/* PRODUCTS REEL */}
