@@ -2,10 +2,11 @@ import { TagIcon } from 'lucide-react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
+import { SubscribeSection } from '~/features/subscribe-section/ui'
 import { AspectRatio } from '~/lib/ui/components/aspect-ratio'
 import { Badge } from '~/lib/ui/components/badge'
 import { Container } from '~/lib/ui/container'
-import { RichText } from '~/lib/ui/rich-text'
+import RichText from '~/lib/ui/rich-text'
 import type { Tag } from '~/server/payload/payload-types'
 import { api } from '~/trpc/server'
 import PostInfo from './_components/post-info'
@@ -29,24 +30,26 @@ export default async function PostPage({ params }: Props) {
   const postBanner = typeof post.banner !== 'string' && post.banner.url
 
   return (
-    <Container>
-      <article className="prose prose-zinc mx-auto dark:prose-invert">
-        <div className="relative mb-8 overflow-hidden rounded-xl">
-          <AspectRatio ratio={16 / 9}>
-            {postBanner && (
-              <Image
-                alt={post.title}
-                className="object-cover"
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={postBanner}
-              />
-            )}
-          </AspectRatio>
+    <Container className="py-10 space-y-10 md:py-20">
+      <article>
+        <div className="relative aspect-video mb-8 overflow-hidden rounded grid place-content-center px-8 text-center">
+          {postBanner && (
+            <Image
+              alt={post.title}
+              loading="eager"
+              decoding="sync"
+              className="object-cover object-center absolute inset-0 rounded brightness-95 z-0"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              src={postBanner}
+            />
+          )}
+          <h1 className="text-2xl md:text-4xl font-bold z-10 tracking-tight text-primary-foreground">
+            {post.title}
+          </h1>
         </div>
 
         <div className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold">{post.title}</h1>
           <PostInfo post={post} />
         </div>
 
@@ -65,11 +68,16 @@ export default async function PostPage({ params }: Props) {
         )}
 
         {post.content && (
-          <div className="prose-custom">
-            <RichText content={post.content} />
+          <div className="prose-zinc mx-auto">
+            <RichText
+              className="max-w-[48rem] lg:max-w-4xl mx-auto"
+              data={post.content}
+              enableGutter={false}
+            />
           </div>
         )}
       </article>
+      <SubscribeSection />
     </Container>
   )
 }

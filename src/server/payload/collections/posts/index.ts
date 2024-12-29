@@ -70,7 +70,6 @@ const Posts: CollectionConfig = {
               name: 'content',
               type: 'richText',
               required: true,
-              // editor: enhancedLexical,
               label: false,
             },
           ],

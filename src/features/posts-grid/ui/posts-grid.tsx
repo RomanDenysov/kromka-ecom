@@ -1,10 +1,10 @@
+import type { Post, Tag } from '@payload-types'
 import { ClockIcon, MessageSquareIcon, ThumbsUpIcon } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Badge } from '~/lib/ui/components/badge'
 import { Card, CardContent } from '~/lib/ui/components/card'
 import { Heading } from '~/lib/ui/heading'
-import Link from 'next/link'
-import { Post, Tag } from '@payload-types'
 
 type Props = {
   posts: Post[]
@@ -47,9 +47,10 @@ const PostsGrid = ({ posts }: Props) => {
                   <h3 className="text-lg font-semibold line-clamp-2">{post.title}</h3>
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <ClockIcon className="w-4 h-4" />3 min čítania
+                      <ClockIcon className="w-4 h-4" />
+                      {post.readingTime} min čítania
                     </div>
-                    <div className="flex items-center gap-3">
+                    {/* <div className="flex items-center gap-3">
                       <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
                         <ThumbsUpIcon className="w-4 h-4" />
                         <span>{5}</span>
@@ -58,7 +59,7 @@ const PostsGrid = ({ posts }: Props) => {
                         <MessageSquareIcon className="w-4 h-4" />
                         <span>{5}</span>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </CardContent>
               </Link>

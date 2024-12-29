@@ -29,7 +29,7 @@ export default async function HomePage() {
       {/* <ProductsReel href={'/shop'} title={'New products'} query={{ limit: 8 }} /> */}
 
       {/* POSTS REEL */}
-      <PostsReel href="/blog" title="Posledne posty" />
+      {/* <PostsReel href="/blog" title="Posledne posty" /> */}
       {/* SUBSCRIBE SECTIONS */}
       <SubscribeSection />
     </Container>

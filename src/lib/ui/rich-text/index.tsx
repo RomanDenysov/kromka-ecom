@@ -1,21 +1,38 @@
-import { type DefaultEditorType, RichTextElement } from '@payloadcms/richtext-lexical'
+import type { DefaultNodeTypes } from '@payloadcms/richtext-lexical'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import {
+  type JSXConvertersFunction,
+  RichText as RichTextWithoutBlocks,
+} from '@payloadcms/richtext-lexical/react'
+import { cn } from '~/lib/utils'
 
-type RichTextContent = {
-  root: DefaultEditorType['root']
-} | null | undefined
+type NodeTypes = DefaultNodeTypes
 
-interface RichTextProps {
-  content: RichTextContent
-}
+const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
+  ...defaultConverters,
+})
 
-export const RichText: React.FC<RichTextProps> = ({ content }) => {
-  if (!content?.root?.children) {
-    return null
-  }
+type Props = {
+  data: SerializedEditorState
+  enableGutter?: boolean
+  enableProse?: boolean
+} & React.HTMLAttributes<HTMLDivElement>
+
+export default function RichText(props: Props) {
+  const { className, enableProse = true, enableGutter = true, ...rest } = props
 
   return (
-    <div className="prose prose-lg max-w-none">
-      <RichTextElement content={content} />
-    </div>
+    <RichTextWithoutBlocks
+      converters={jsxConverters}
+      className={cn(
+        {
+          container: enableGutter,
+          'max-w-none': !enableGutter,
+          'mx-auto prose md:prose-md dark:prose-invert': enableProse,
+        },
+        className,
+      )}
+      {...rest}
+    />
   )
 }

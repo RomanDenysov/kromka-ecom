@@ -1,7 +1,7 @@
 import type { CollectionSlug, PayloadRequest } from 'payload'
 
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
-  posts: '/posts',
+  posts: '/blog', // Изменено с '/posts' на '/blog'
 }
 
 type Props = {
@@ -11,26 +11,29 @@ type Props = {
 }
 
 export const generatePreviewPath = ({ collection, slug, req }: Props) => {
-  const path = `${collectionPrefixMap[collection]}/${slug}`
-
-  const params = {
-    slug,
-    collection,
-    path,
+  // Базовый путь для коллекции
+  const collectionPrefix = collectionPrefixMap[collection]
+  if (!collectionPrefix) {
+    throw new Error(`Unknown collection: ${collection}`)
   }
 
-  const encodedParams = new URLSearchParams()
+  // Генерируем путь для конечной страницы
+  const path = `${collectionPrefix}/${slug}`
 
-  // biome-ignore lint/complexity/noForEach: <explanation>
-  Object.entries(params).forEach(([key, value]) => {
-    encodedParams.append(key, value)
-  })
+  const baseUrl = new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ||
+      process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+      'http://localhost:3000',
+  )
 
-  const isProduction =
-    process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL_PROJECT_PRODUCTION_URL)
-  const protocol = isProduction ? 'https:' : req.protocol
+  // URL для preview endpoint
+  const previewUrl = new URL('/next/preview', baseUrl)
 
-  const url = `${protocol}//${req.host}/next/preview?${encodedParams.toString()}`
+  // Добавляем параметры
+  previewUrl.searchParams.set('slug', slug)
+  previewUrl.searchParams.set('collection', collection)
+  previewUrl.searchParams.set('path', path)
 
-  return url
+  console.log('Generated preview URL:', previewUrl.toString())
+  return previewUrl.toString()
 }
