@@ -1,13 +1,13 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import type { CollectionConfig } from 'payload'
-import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
-import { isAdmin, isAdminOrAuthor, isAdminOrManager, isStaff } from '../../access'
 import {
   FixedToolbarFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import type { CollectionConfig } from 'payload'
+import { env } from '~/env'
+import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -89,7 +89,10 @@ const Media: CollectionConfig = {
         fit: 'cover',
       },
     ],
-    staticDir: '/app/public/media', // путь в контейнере
+    staticDir:
+      env.NODE_ENV === 'production'
+        ? '/app/public/media'
+        : path.resolve(dirname, '../../../../../public/media'), // путь в контейнере
   },
 }
 

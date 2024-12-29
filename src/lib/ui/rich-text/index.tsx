@@ -1,38 +1,21 @@
-import { cn } from '~/lib/utils'
-import React from 'react'
+import { type DefaultEditorType, RichTextElement } from '@payloadcms/richtext-lexical'
 
-import { serializeLexical } from './serialize'
+type RichTextContent = {
+  root: DefaultEditorType['root']
+} | null | undefined
 
-type Props = {
-  className?: string
-  content: Record<string, any>
-  enableGutter?: boolean
-  enableProse?: boolean
+interface RichTextProps {
+  content: RichTextContent
 }
 
-const RichText = ({ className, content, enableGutter = true, enableProse = true }: Props) => {
-  if (!content) {
+export const RichText: React.FC<RichTextProps> = ({ content }) => {
+  if (!content?.root?.children) {
     return null
   }
 
   return (
-    <div
-      className={cn(
-        {
-          'container ': enableGutter,
-          'max-w-none': !enableGutter,
-          'mx-auto prose dark:prose-invert ': enableProse,
-        },
-        className,
-      )}
-    >
-      {content &&
-        !Array.isArray(content) &&
-        typeof content === 'object' &&
-        'root' in content &&
-        serializeLexical({ nodes: content?.root?.children })}
+    <div className="prose prose-lg max-w-none">
+      <RichTextElement content={content} />
     </div>
   )
 }
-
-export default RichText

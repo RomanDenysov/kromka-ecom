@@ -1,7 +1,7 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import {
@@ -20,12 +20,25 @@ import {
   Users,
 } from './collections'
 
+import {
+  BlockQuoteFeature,
+  BoldFeature,
+  HeadingFeature,
+  ItalicFeature,
+  lexicalEditor,
+  LinkFeature,
+  ParagraphFeature,
+  StrikethroughFeature,
+  SubscriptFeature,
+  SuperscriptFeature,
+  UnderlineFeature,
+  UploadFeature,
+} from '@payloadcms/richtext-lexical'
 import { authjsPlugin } from 'payload-authjs'
 import { env } from '~/env'
 import authConfig from '~/lib/auth/auth.config'
 import { COLLECTIONS } from './config'
 import { getEmailAdapter } from './utils/email-adapter'
-import { defaultLexical } from './utils/editor'
 // import { migrations } from '~/migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -76,7 +89,47 @@ export default buildConfig({
     Categories,
     Stores,
   ],
-  editor: defaultLexical,
+  // editor: defaultLexical,
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      HeadingFeature({
+        enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      }),
+      BlockQuoteFeature({}),
+      BoldFeature(),
+      ItalicFeature(),
+      UnderlineFeature(),
+      StrikethroughFeature(),
+      SubscriptFeature(),
+      SuperscriptFeature(),
+      ParagraphFeature(),
+      LinkFeature({
+        fields: [
+          {
+            name: 'rel',
+            label: 'Rel Attribute',
+            type: 'select',
+            hasMany: true,
+            options: ['nofollow', 'noopener', 'noreferrer'],
+          },
+        ],
+      }),
+      UploadFeature({
+        collections: {
+          media: {
+            fields: [
+              {
+                name: 'alt',
+                type: 'text',
+                required: true,
+              },
+            ],
+          },
+        },
+      }),
+    ],
+  }),
   secret: env.PAYLOAD_SECRET,
   cors: ['https://checkout.stripe.com', env.NEXT_PUBLIC_SERVER_URL],
   csrf: ['https://checkout.stripe.com', env.NEXT_PUBLIC_SERVER_URL],

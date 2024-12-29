@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '~/lib/ui/components/tooltip'
-import { Post } from '@payload-types'
+import type { Post } from '@payload-types'
 import { getNameInitials } from '~/lib/utils'
 
 const PostInfo = ({ post }: { post: Post }) => {

@@ -1,4 +1,4 @@
-import { CollectionBeforeChangeHook } from 'payload'
+import type { CollectionBeforeChangeHook } from 'payload'
 
 export const setAuthor: CollectionBeforeChangeHook = async ({ req, data, operation }) => {
   // Only set author on create

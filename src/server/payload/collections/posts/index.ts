@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
+import { generatePreviewPath } from '~/lib/utils'
 import { isAdminOrAuthor } from '../../access'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'
 import slugField from '../../fields/slug'
-import { enhancedLexical } from './enchanced-lexical'
 import { calculateReadingTime } from './hooks/calculate-reading-time'
 import { populateAuthors } from './hooks/populate-authors'
 import { revalidatePost } from './hooks/revalidate-path'
@@ -14,11 +14,34 @@ const Posts: CollectionConfig = {
   admin: {
     group: COLLECTIONS_GROUPS.BLOG,
     useAsTitle: 'title',
+    livePreview: {
+      url: ({ data, req }) => {
+        const path = generatePreviewPath({
+          slug: typeof data?.slug === 'string' ? data.slug : '',
+          collection: 'posts',
+          req,
+        })
+
+        return path
+      },
+    },
+    preview: (data, { req }) =>
+      generatePreviewPath({
+        slug: typeof data?.slug === 'string' ? data.slug : '',
+        collection: 'posts',
+        req,
+      }),
   },
   hooks: {
     beforeChange: [setPublishDate, setAuthor, calculateReadingTime],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
+    beforeValidate: [
+      ({ data }) => {
+        console.log('Data before validation:', JSON.stringify(data, null, 2))
+        return data
+      },
+    ],
   },
   access: {
     read: () => true,
@@ -47,7 +70,7 @@ const Posts: CollectionConfig = {
               name: 'content',
               type: 'richText',
               required: true,
-              editor: enhancedLexical,
+              // editor: enhancedLexical,
               label: false,
             },
           ],

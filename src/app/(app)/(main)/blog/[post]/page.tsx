@@ -1,14 +1,14 @@
+import { TagIcon } from 'lucide-react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { AspectRatio } from '~/lib/ui/components/aspect-ratio'
 import { Badge } from '~/lib/ui/components/badge'
 import { Container } from '~/lib/ui/container'
-import RichText from '~/lib/ui/rich-text'
-import { Tag } from '~/server/payload/payload-types'
+import { RichText } from '~/lib/ui/rich-text'
+import type { Tag } from '~/server/payload/payload-types'
 import { api } from '~/trpc/server'
 import PostInfo from './_components/post-info'
-import { TagIcon } from 'lucide-react'
 
 type Props = {
   params: Promise<{
@@ -29,45 +29,47 @@ export default async function PostPage({ params }: Props) {
   const postBanner = typeof post.banner !== 'string' && post.banner.url
 
   return (
-    <Container className="py-8 md:py-16 max-w-5xl mx-auto space-y-12">
-      <AspectRatio ratio={16 / 9} className="bg-muted relative rounded-lg shadow border">
-        <Image
-          src={'/placeholder.png'}
-          alt={post.title}
-          fill
-          className="object-cover z-0 object-center rounded-lg shadow border"
-          decoding="sync"
-          loading="eager"
-          priority={true}
-        />
-        <div className="absolute bg-black/30 inset-0 z-10 grid place-content-center">
-          <div className="z-20">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black line-clamp-2 text-center">
-              {post.title}
-            </h1>
-          </div>
+    <Container>
+      <article className="prose prose-zinc mx-auto dark:prose-invert">
+        <div className="relative mb-8 overflow-hidden rounded-xl">
+          <AspectRatio ratio={16 / 9}>
+            {postBanner && (
+              <Image
+                alt={post.title}
+                className="object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={postBanner}
+              />
+            )}
+          </AspectRatio>
         </div>
-      </AspectRatio>
-      <PostInfo post={post} />
-      <div className="flex flex-wrap gap-2 mb-8">
-        <TagIcon size={16} />
-        {post.tags &&
-          post.tags.map((tag) => {
-            const postTag = tag as Tag
-            return (
-              <Badge key={postTag.id} variant="secondary">
-                {postTag.title}
-              </Badge>
-            )
-          })}
-      </div>
-      <Suspense>
-        <RichText
-          className="col-span-3 col-start-1 grid-rows-[1fr] lg:grid lg:grid-cols-subgrid"
-          content={post.content}
-          enableGutter={false}
-        />
-      </Suspense>
+
+        <div className="mb-8">
+          <h1 className="mb-4 text-4xl font-bold">{post.title}</h1>
+          <PostInfo post={post} />
+        </div>
+
+        {post.tags && post.tags.length > 0 && (
+          <div className="mb-8 flex flex-wrap gap-2">
+            {post.tags.map((tag) => {
+              const postTag = tag as Tag
+              return (
+                <Badge key={postTag.id} variant="outline">
+                  <TagIcon className="mr-1 h-3 w-3" />
+                  {postTag.title}
+                </Badge>
+              )
+            })}
+          </div>
+        )}
+
+        {post.content && (
+          <div className="prose-custom">
+            <RichText content={post.content} />
+          </div>
+        )}
+      </article>
     </Container>
   )
 }

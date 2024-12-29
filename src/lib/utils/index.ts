@@ -10,3 +10,7 @@ export * from './order-formatter'
 
 export * from './absolute-url'
 export * from './date-service'
+
+export * from './generate-preview-path'
+export * from './generate-slug'
+

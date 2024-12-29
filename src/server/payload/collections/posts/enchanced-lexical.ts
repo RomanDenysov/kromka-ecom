@@ -1,20 +1,16 @@
-import { Config } from 'payload'
 import {
   BlocksFeature,
-  BoldFeature,
-  ItalicFeature,
-  LinkFeature,
-  ParagraphFeature,
-  UnderlineFeature,
-  lexicalEditor,
-  HeadingFeature,
-  UploadFeature,
-  HorizontalRuleFeature,
   FixedToolbarFeature,
+  HeadingFeature,
+  HorizontalRuleFeature,
   InlineToolbarFeature,
+  LinkFeature,
+  UploadFeature,
+  lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import { ProductBlock } from '../../blocks/product/config'
+import type { Config } from 'payload'
 import { MediaBlock } from '../../blocks/media-block/config'
+import { ProductBlock } from '../../blocks/product/config'
 
 export const enhancedLexical: Config['editor'] = lexicalEditor({
   features: ({ rootFeatures }) => {
@@ -57,6 +53,11 @@ export const enhancedLexical: Config['editor'] = lexicalEditor({
               {
                 name: 'caption',
                 type: 'text',
+              },
+              {
+                name: 'altText',
+                type: 'text',
+                required: true,
               },
             ],
           },
