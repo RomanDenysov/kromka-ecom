@@ -1,5 +1,5 @@
 {
-  "id": "20693aed-b7f2-4b84-9b13-0068f547bb98",
+  "id": "6d1f2cd0-7ecd-4799-b2f7-d3a01ad0a3e4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -2143,6 +2143,12 @@
           "notNull": false,
           "default": false
         },
+        "reading_time": {
+          "name": "reading_time",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
         "published_at": {
           "name": "published_at",
           "type": "timestamp(3) with time zone",
@@ -2562,6 +2568,12 @@
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
+        },
+        "contact_display": {
+          "name": "contact_display",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "user_id": {
           "name": "user_id",
