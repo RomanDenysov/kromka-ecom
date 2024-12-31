@@ -60,23 +60,21 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
               {
                 name: 'caption',
                 type: 'text',
-                label: 'Описание фото',
-                required: true,
+                label: 'Description',
               },
               {
                 name: 'altText',
                 type: 'text',
-                label: 'Альтернативный текст',
-                required: true,
+                label: 'Alt text',
               },
               {
                 name: 'stage',
                 type: 'select',
                 label: 'Этап приготовления',
                 options: [
-                  { label: 'Ингредиенты', value: 'ingredients' },
-                  { label: 'Процесс', value: 'process' },
-                  { label: 'Готовый результат', value: 'result' },
+                  { label: 'Ingredients', value: 'ingredients' },
+                  { label: 'Process', value: 'process' },
+                  { label: 'Result', value: 'result' },
                 ],
               },
             ],
