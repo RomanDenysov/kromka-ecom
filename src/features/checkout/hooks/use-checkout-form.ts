@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Profile, User } from '@payload-types'
-import { isBefore, parse, startOfDay } from 'date-fns'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useCurrentStore } from '~/store/store/use-current-store'
@@ -24,12 +23,11 @@ const checkoutSchema = z.object({
       'Aby ste mohli pokračovať, musíte súhlasiť s obchodnými podmienkami.',
     ),
   store: z.string().min(1, { message: 'Vyberte si predajňu pre vyzdvihnutie objednávky' }),
-  date: z
-    .date({
-      required_error: 'Prosím, zvoľte dátum',
-      invalid_type_error: 'Toto nie je dátum!',
-    })
-    .min(new Date()),
+  date: z.date({
+    required_error: 'Prosím, zvoľte dátum',
+    invalid_type_error: 'Toto nie je dátum!',
+  }),
+  // .min(new Date()),
   method: z.enum(['store', 'card']).default('store'),
 })
 
@@ -47,13 +45,13 @@ export const availableDates = ['2024-12-31']
 export default function useCheckoutForm({ user, profile }: CheckoutFormProps) {
   const currentStore = useCurrentStore((state) => state.store)
 
-  const validDates = useMemo(() => {
-    const today = startOfDay(new Date())
-    return availableDates.filter((dateString) => {
-      const date = parse(dateString, 'yyyy-MM-dd', new Date())
-      return !isBefore(date, today)
-    })
-  }, [])
+  // const validDates = useMemo(() => {
+  //   const today = startOfDay(new Date())
+  //   return availableDates.filter((dateString) => {
+  //     const date = parse(dateString, 'yyyy-MM-dd', new Date())
+  //     return !isBefore(date, today)
+  //   })
+  // }, [])
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
@@ -64,7 +62,8 @@ export default function useCheckoutForm({ user, profile }: CheckoutFormProps) {
       phone: '',
       store: currentStore?.id || '',
       terms: false,
-      date: parse(validDates[0], 'yyyy-MM-dd', new Date()),
+      // date: parse(validDates[0], 'yyyy-MM-dd', new Date()),
+      date: undefined,
       method: 'store' as const,
     },
   })
@@ -80,7 +79,7 @@ export default function useCheckoutForm({ user, profile }: CheckoutFormProps) {
         method: 'store' as const,
       })
     }
-  }, [user, profile, currentStore?.id, form.reset])
+  }, [user, profile, currentStore?.id, form])
 
   useEffect(() => {
     if (currentStore?.id) {
@@ -89,7 +88,7 @@ export default function useCheckoutForm({ user, profile }: CheckoutFormProps) {
         shouldDirty: true,
       })
     }
-  }, [currentStore, form.setValue])
+  }, [currentStore, form])
 
   return form
 }

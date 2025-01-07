@@ -10,7 +10,7 @@ type Props = {
   defaultValue?: string
 }
 
-const DISABLED_CARD_PAYMENT_METHOD_FEATURE_FLAG = true
+const DISABLED_CARD_PAYMENT_METHOD_FEATURE_FLAG = false
 
 const PaymentMethod = ({ onMethodSelect, defaultValue }: Props) => {
   const onDisabledCardClick = (e: React.MouseEvent) => {
