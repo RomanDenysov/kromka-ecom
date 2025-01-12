@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDebounce } from 'react-use'
 import { Button } from '~/lib/ui/components/button'
 import { ScrollArea, ScrollBar } from '~/lib/ui/components/scroll-area'
+import { Container } from '~/lib/ui/container'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 
@@ -48,6 +49,7 @@ const CategoriesCarousel = () => {
   return (
     <section className="sticky top-16 z-40">
       <div className="bg-background size-full">
+        <Container>
         <div className="flex rounded-lg px-1 gap-3 items-center justify-start">
           <TagIcon size={20} className="text-muted-foreground hidden sm:block" />
           <Button
@@ -80,7 +82,8 @@ const CategoriesCarousel = () => {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </div>
-      </div>
+        </Container>
+        </div>
     </section>
   )
 }

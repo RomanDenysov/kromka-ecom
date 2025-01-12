@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { ProductsReel } from '~/features/products-reel/ui'
-import { CategoriesCarousel } from '~/features/shop/categories/ui'
-import { StoresGridDrawer } from '~/features/shop/stores-drawer/ui'
 import { Container } from '~/lib/ui/container'
 import { HydrateClient, api } from '~/trpc/server'
 
@@ -47,18 +45,13 @@ export default async function ShopPage({ searchParams }: Props) {
         .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
     : []
 
-  void api.categories.getAll.prefetch()
   void api.products.infiniteProducts.prefetchInfinite({
     query: { limit: 12, category: selectedCategoriesSlug },
   })
 
   return (
     <Container className="py-5 md:py-8 space-y-5">
-      <StoresGridDrawer />
       <HydrateClient>
-        <Suspense>
-          <CategoriesCarousel />
-        </Suspense>
         <Suspense>
           <ProductsReel
             title={'Naše Produkty'}

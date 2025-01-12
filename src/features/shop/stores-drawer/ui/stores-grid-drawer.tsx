@@ -1,7 +1,7 @@
 'use client'
 
-import { Store } from '@payload-types'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useMountedState } from 'react-use'
 import { StoresItem } from '~/features/shop/stores-drawer/ui'
 import {
   Drawer,
@@ -10,24 +10,26 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '~/lib/ui/components/drawer'
-import { ScrollArea } from '~/lib/ui/components/scroll-area'
 import { useCurrentStore } from '~/store/store/use-current-store'
 import { api } from '~/trpc/react'
 import { useStoresDrawer } from '../hooks/use-stores-drawer'
 
 const StoresGridDrawer = () => {
-  const [stores] = api.stores.getStores.useSuspenseQuery()
+  const isMounted = useMountedState()
+  const { data: stores, isLoading: isLoadingQuery } = api.stores.getStores.useQuery()
   const isOpen = useStoresDrawer((state) => state.isOpen)
   const onClose = useStoresDrawer((state) => state.onClose)
   const onOpen = useStoresDrawer((state) => state.onOpen)
   const store = useCurrentStore((state) => state.store)
-  const isLoading = useCurrentStore((state) => state.isLoading)
+  const isLoadingStore = useCurrentStore((state) => state.isLoading)
+
+  const isLoading = isLoadingStore || isLoadingQuery
 
   useEffect(() => {
     if (!store && !isLoading) onOpen()
   }, [store, onOpen, isLoading])
 
-  if (!stores) return null
+  if (!stores || !isMounted) return null
 
   return (
     <Drawer open={isOpen} onOpenChange={onClose}>

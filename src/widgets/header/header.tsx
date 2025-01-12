@@ -1,12 +1,13 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import CartButton from '~/features/cart-sheet/ui/cart-button'
 import { UserButton } from '~/features/user-button/ui'
 import { Separator } from '~/lib/ui/components/separator'
 import { Container } from '~/lib/ui/container'
 import { Icons } from '~/lib/ui/icons'
+// import { DesktopNav } from './desktop-nav'
 import { MobileNav } from './mobile-nav'
 import { Navbar } from './navbar'
-import { Suspense } from 'react'
 
 export default function Header() {
   return (
@@ -15,6 +16,7 @@ export default function Header() {
         <div className="flex flex-1 items-center justify-start">
           <MobileNav />
           <Navbar />
+          {/* <DesktopNav /> */}
         </div>
 
         <div className="grid flex-1 place-content-center text-primary">
