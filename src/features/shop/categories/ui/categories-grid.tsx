@@ -1,8 +1,8 @@
-import GridItem from './grid-item'
-import { Heading } from '~/lib/ui/heading'
-import AnimatedBackground from '~/lib/ui/motion/animated-background'
 import { Category } from '@payload-types'
 import Link from 'next/link'
+import { Heading } from '~/lib/ui/heading'
+import AnimatedBackground from '~/lib/ui/motion/animated-background'
+import GridItem from './grid-item'
 
 type Props = {
   categories: Category[]
@@ -28,7 +28,7 @@ export default async function CategoriesGrid({ categories, storeSlug }: Props) {
               <Link
                 data-id={category.id}
                 key={category.id}
-                href={{ pathname: `/shop/${storeSlugNavigation}/${category.slug}` }}
+                href={{ pathname: `/products/${storeSlugNavigation}/${category.slug}` }}
                 className="flex flex-col size-auto rounded-lg"
               >
                 <GridItem

@@ -2,11 +2,11 @@
 
 import Link from 'next/link'
 import React, { memo, useEffect, useState } from 'react'
-import { Skeleton } from '~/lib/ui/components/skeleton'
-import type { Product } from '~/server/payload/payload-types'
-import { cn, formatPrice } from '~/lib/utils'
 import { FastAddButton } from '~/features/products-reel/ui'
+import { Skeleton } from '~/lib/ui/components/skeleton'
 import { ImageSlider } from '~/lib/ui/image-slider'
+import { cn, formatPrice } from '~/lib/utils'
+import type { Product } from '~/server/payload/payload-types'
 
 type Props = {
   product: Product | null
@@ -25,6 +25,8 @@ const ProductsListing = memo(({ product, index }: Props) => {
 
   if (!product || !isVisible) return <ProductPlaceholder />
 
+  console.log(product.price)
+
   const validUrls = product.images
     .map(({ image }) => typeof image !== 'string' && image.url)
     .filter(Boolean) as string[]
@@ -39,17 +41,19 @@ const ProductsListing = memo(({ product, index }: Props) => {
         <div className="flex w-full flex-col">
           <Link
             href={{
-              pathname: `/shop/${product.slug}`,
+              pathname: `/products/${product.slug}`,
             }}
           >
             <ImageSlider urls={validUrls} />
           </Link>
 
-          <h4 className="mt-4 mb-1 overflow-hidden text-ellipsis text-nowrap font-medium text-gray-700 text-sm hover:overflow-visible hover:text-clip">
+          <span className="mt-2 mb-0.5 overflow-hidden text-ellipsis text-nowrap text-primary/90 text-sm font-semibold hover:overflow-visible hover:text-clip">
             {product.title}
-          </h4>
-          <div className="flex items-end justify-between">
-            <h5 className="text-base text-gray-500">{formatPrice(product.price)}</h5>
+          </span>
+          <div className="flex items-center justify-between">
+            <span className="text-base font-semibold text-muted-foreground">
+              {formatPrice(product.price)}
+            </span>
             <FastAddButton product={product} />
           </div>
         </div>

@@ -18,7 +18,7 @@ const CartItemImage = memo(
   ({ image, title, slug }: { image: any; title: string; slug: string }) => {
     if (image && typeof image !== 'string' && image?.url) {
       return (
-        <Link href={`/shop/${slug}`}>
+        <Link href={`/products/${slug}`}>
           <Image
             loading="eager"
             decoding="sync"

@@ -1,8 +1,6 @@
+import { User } from '@payload-types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { getUser } from '~/lib/actions/user'
-import { User } from '@payload-types'
-import { api } from '~/trpc/react'
 
 type State = {
   user: Partial<User> | null

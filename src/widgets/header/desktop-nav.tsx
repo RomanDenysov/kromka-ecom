@@ -1,11 +1,18 @@
-import { ChevronRightIcon } from "lucide-react"
-import { Button, buttonVariants } from "~/lib/ui/components/button"
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "~/lib/ui/components/navigation-menu"
-import { mainNavigation } from "./config"
-import Link from "next/link"
-import { cn } from "~/lib/utils"
+import { ChevronRightIcon } from 'lucide-react'
+import Link from 'next/link'
+import { Button, buttonVariants } from '~/lib/ui/components/button'
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from '~/lib/ui/components/navigation-menu'
+import { cn } from '~/lib/utils'
+import { mainNavigation } from './config'
 
-export const DesktopNav = () => {
+export function DesktopNav() {
   return (
     <div className="hidden flex-row items-center justify-start lg:flex">
       <NavigationMenu className="flex items-start justify-start">
@@ -30,7 +37,10 @@ export const DesktopNav = () => {
                           <p className="text-base">{item.title}</p>
                           <p className="text-muted-foreground text-sm">{item.description}</p>
                         </div>
-                        <Link href={item.href ?? item.items[0].href} className={cn(buttonVariants({size: 'sm'}), "mt-10")}>
+                        <Link
+                          href={item.href ?? item.items[0].href}
+                          className={cn(buttonVariants({ size: 'sm' }), 'mt-10')}
+                        >
                           Test button
                         </Link>
                       </div>

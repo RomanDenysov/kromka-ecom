@@ -1,7 +1,6 @@
 'use client'
 
 import { ChevronRight } from 'lucide-react'
-import { Link } from '~/lib/ui/link'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { ScrollArea } from '~/lib/ui/components/scroll-area'
 import { Separator } from '~/lib/ui/components/separator'
@@ -14,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '~/lib/ui/components/sheet'
+import { Link } from '~/lib/ui/link'
 import { formatPrice } from '~/lib/utils'
 import { useCart } from '~/store/cart/use-cart'
 import { useCartSheet } from '../hooks/use-cart-sheet'
@@ -85,7 +85,7 @@ export const CartSheet = () => {
                 <div className="px-6">
                   <SheetTrigger asChild>
                     <Link
-                      href={'/shop'}
+                      href={'/products'}
                       className={buttonVariants({
                         variant: 'link',
                         size: 'lg',

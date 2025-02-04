@@ -4,6 +4,7 @@ import { BookLockIcon, LogInIcon, SettingsIcon, ShoppingBag, UserIcon } from 'lu
 import Link from 'next/link'
 import { Suspense, useMemo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '~/lib/ui/components/avatar'
+import { buttonVariants } from '~/lib/ui/components/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +14,8 @@ import {
   DropdownMenuTrigger,
 } from '~/lib/ui/components/dropdown-menu'
 import { cn, getNameInitials } from '~/lib/utils'
-import { LogoutButton } from './logout-button'
 import { useUser } from '~/store/user/use-user'
+import { LogoutButton } from './logout-button'
 
 // TODO: move options to config file
 const BUTTON_OPTIONS = [
@@ -35,7 +36,7 @@ const UserButton = () => {
     <>
       {user ? (
         <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-full">
+          <DropdownMenuTrigger className="rounded-full size-9">
             <Avatar>
               <Suspense fallback={null}>
                 <AvatarImage className="rounded-full" src={userImage} />
@@ -77,9 +78,12 @@ const UserButton = () => {
         <Link
           prefetch={true}
           href={'/sign-in'}
-          className={cn('grid size-10 place-content-center rounded-full p-0 md:hover:bg-accent ')}
+          className={cn(
+            buttonVariants({ variant: 'ghost', size: 'icon' }),
+            'rounded-full size-10 [&_svg]:size-5',
+          )}
         >
-          <LogInIcon size={24} />
+          <LogInIcon size={20} />
         </Link>
       )}
     </>

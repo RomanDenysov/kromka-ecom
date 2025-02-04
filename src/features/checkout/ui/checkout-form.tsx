@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import { useCheckoutComplete, useCheckoutStore } from '~/store/checkout/use-checkout-store'
 import { useUser } from '~/store/user/use-user'
-import { useCookieConsentStore } from '~/store/cookie/use-cookie-consent-store'
+import { useCookieConsentStore } from '~/store/cookie/use-cookie-store'
 
 type Props = {
   children: React.ReactNode

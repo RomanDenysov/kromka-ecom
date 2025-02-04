@@ -6,7 +6,7 @@ import { NAV_LINKS } from '~/lib/config/navigation'
 import { buttonVariants } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'
 
-export const Navbar = () => {
+export function Navbar() {
   const pathname = usePathname()
   const isHome = pathname === '/'
 

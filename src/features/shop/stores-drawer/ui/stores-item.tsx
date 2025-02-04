@@ -23,37 +23,35 @@ const StoresItem = ({ store }: Props) => {
 
   const image = typeof store.image !== 'string' ? store.image.url! : store.image
   return (
-    <div className="rounded-lg border sm:border-none relative group transition sm:overflow-hidden size-full flex flex-col items-center justify-center shadow-sm">
-      <div className="relative hidden sm:flex size-full flex-1">
-        <AspectRatio>
+    <div className="aspect-video max-h-40 border shadow-md relative rounded-lg overflow-hidden">
+      <div className="flex-grow flex items-center size-full justify-between">
+        <div className="aspect-square h-40 relative">
           <Image
-            loading="eager"
-            decoding="sync"
             quality={70}
-            src={image}
+            src={'/placeholder.png'}
             alt={store.title}
             fill
-            className="absolute inset-0 rounded-t-lg z-0 group-hover:scale-[1.02] transition brightness-90 object-cover object-center"
+            className="absolute inset-0 rounded transition brightness-90 object-cover object-center"
           />
-        </AspectRatio>
-      </div>
-      <div className="absolute z-10 inset-0 bg-black/20 backdrop-blur-[2px] opacity-0 transition-opacity group-hover:opacity-100 " />
-      <div className="flex flex-col items-center justify-between group-hover:bg-gradient-to-t from-white to-accent z-20 transition border border-border rounded-b-lg size-full p-2 sm:p-4 space-y-2 sm:space-y-4">
-        <h4 className="text-base lg:text-xl font-semibold text-balance sm:font-bold line-clamp-2 text-center text-primary w-[90%]">
-          {store.title}
-        </h4>
-        <a
-          href={store.addressUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex hover:underline hover:text-primary transition items-center justify-center gap-x-1 text-muted-foreground"
-        >
-          <MapPinIcon size={16} />
-          <span className="text-sm text-center text-muted-foreground">{store.address}</span>
-        </a>
-        <Button onClick={handleClick} className="w-full">
-          Vybrať obchod
-        </Button>
+        </div>
+
+        <div className="flex-grow p-2 flex flex-col justify-between size-full">
+          <h4 className="text-base lg:text-xl font-semibold text-balance sm:font-bold line-clamp-2 text-center text-primary w-[90%]">
+            {store.title}
+          </h4>
+          <a
+            href={store.addressUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex hover:underline hover:text-primary transition items-center justify-center gap-x-1 text-muted-foreground"
+          >
+            <MapPinIcon size={16} />
+            <span className="text-sm text-center text-muted-foreground">{store.address}</span>
+          </a>
+          <Button onClick={handleClick} className="w-full" size="sm" variant="outline">
+            Vybrať obchod
+          </Button>
+        </div>
       </div>
     </div>
   )

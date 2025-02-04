@@ -6,56 +6,34 @@ import { bySlugValidator } from '../categories/validator'
 import { byIdValidator, infiniteQueryValidator } from './validator'
 
 export const productsRouter = createTRPCRouter({
-  getInitialProducts: publicProcedure
+  search: publicProcedure
     .input(
       z.object({
-        limit: z.number().min(1).max(100).default(12),
-        categories: z.array(z.string()),
+        searchTerm: z.string(),
+        limit: z.number().optional().default(5),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const { limit, categories } = input
+      const { searchTerm, limit } = input
 
-      const buildWhereClause = async (category: string): Promise<Where> => {
-        const foundCategory = await ctx.payload.find({
-          collection: 'categories',
-          where: {
-            slug: { equals: category },
-          },
-          limit: 1,
-        })
-
-        if (foundCategory.docs.length === 0) {
-          return {}
-        }
-
-        return {
-          category: { equals: foundCategory.docs[0].id },
-        }
-      }
-
-      const productsPromises = categories.map(async (category) => {
-        const whereClause = await buildWhereClause(category)
-        const result = await ctx.payload.find({
-          collection: 'products',
-          where: whereClause,
-          limit: limit,
-          sort: '-createdAt',
-          depth: 1,
-        })
-
-        return {
-          category,
-          products: result.docs,
-        }
+      const products = await ctx.payload.find({
+        collection: 'products',
+        where: {
+          and: [
+            { status: { equals: 'active' } },
+            {
+              or: [{ title: { contains: searchTerm } }, { descr: { contains: searchTerm } }],
+            },
+          ],
+        },
+        limit,
       })
 
-      const productsPerCategory = await Promise.all(productsPromises)
-      const allProducts = productsPerCategory.flatMap(({ products }) => products)
-      const shuffledProducts = allProducts.sort(() => 0.5 - Math.random())
-      const limitedProducts = shuffledProducts.slice(0, limit)
-      return limitedProducts
+      console.log('Products:', products)
+
+      return products.docs
     }),
+
   infiniteProducts: publicProcedure.input(infiniteQueryValidator).query(async ({ input, ctx }) => {
     const { query, cursor } = input
     const { sort, limit, excludeId, category, ...queryOpts } = query

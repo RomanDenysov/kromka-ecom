@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { ProductsReel } from '~/features/products-reel/ui'
+import { CategoriesCarousel } from '~/features/shop/categories/ui'
+import { ProductsList } from '~/features/shop/products-list/ui'
 import { Container } from '~/lib/ui/container'
 import { HydrateClient, api } from '~/trpc/server'
 
@@ -50,10 +52,11 @@ export default async function ShopPage({ searchParams }: Props) {
   })
 
   return (
-    <Container className="py-5 md:py-8 space-y-5">
+    <Container className="py-5 md:py-8">
+      <CategoriesCarousel />
       <HydrateClient>
-        <Suspense>
-          <ProductsReel
+        <Suspense fallback={null}>
+          {/* <ProductsReel
             title={'Naše Produkty'}
             subtitle={'Naše najlepšie Obchody'}
             query={{
@@ -64,7 +67,8 @@ export default async function ShopPage({ searchParams }: Props) {
             total={true}
             className="py-0"
             showLoadMore
-          />
+          /> */}
+          <ProductsList />
         </Suspense>
       </HydrateClient>
     </Container>

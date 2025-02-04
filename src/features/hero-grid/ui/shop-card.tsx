@@ -1,10 +1,10 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
-import { cn } from '~/lib/utils'
-import { TextMorph } from '~/lib/ui/motion/text-morph'
+import Link from 'next/link'
 import { useState } from 'react'
+import { TextMorph } from '~/lib/ui/motion/text-morph'
+import { cn } from '~/lib/utils'
 
 type Props = {
   className?: string
@@ -16,7 +16,7 @@ const ShopCard = ({ className }: Props) => {
     <Link
       onMouseEnter={() => setText('Nakupovať v Kromke')}
       onMouseLeave={() => setText('CHLEBA, LAKOCINKY A KÁVA')}
-      href={'/shop'}
+      href={'/products'}
       prefetch={true}
       className={cn(
         'group relative rounded-lg shadow grid aspect-video size-full sm:content-center justify-items-start content-end overflow-hidden transition-all',

@@ -10,6 +10,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '~/lib/ui/components/drawer'
+import { ScrollArea } from '~/lib/ui/components/scroll-area'
 import { useCurrentStore } from '~/store/store/use-current-store'
 import { api } from '~/trpc/react'
 import { useStoresDrawer } from '../hooks/use-stores-drawer'
@@ -25,9 +26,9 @@ const StoresGridDrawer = () => {
 
   const isLoading = isLoadingStore || isLoadingQuery
 
-  useEffect(() => {
-    if (!store && !isLoading) onOpen()
-  }, [store, onOpen, isLoading])
+  // useEffect(() => {
+  //   if (!store && !isLoading) onOpen()
+  // }, [store, onOpen, isLoading])
 
   if (!stores || !isMounted) return null
 
@@ -35,7 +36,7 @@ const StoresGridDrawer = () => {
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent>
         <div className="mx-auto w-full max-w-5xl text-center">
-          <DrawerHeader>
+          <DrawerHeader className="space-y-0 gap-1">
             <DrawerTitle>Naše Obchody</DrawerTitle>
             <DrawerDescription>
               Vyberte si obchod, v ktorom chcete nakupovať. Môžete ho kedykoľvek zmeniť v dolnej
@@ -43,9 +44,13 @@ const StoresGridDrawer = () => {
             </DrawerDescription>
           </DrawerHeader>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 px-4 pb-2 h-full">
-            {stores?.map((store) => <StoresItem store={store} key={store.id} />)}
-          </div>
+          <ScrollArea>
+            <div className="flex flex-col gap-4 h-full p-2">
+              {stores?.map((store) => (
+                <StoresItem store={store} key={store.id} />
+              ))}
+            </div>
+          </ScrollArea>
         </div>
       </DrawerContent>
     </Drawer>

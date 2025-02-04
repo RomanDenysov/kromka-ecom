@@ -1,7 +1,11 @@
 import { Footer } from '~/widgets/footer'
 import { Header } from '~/widgets/header'
 
-export default async function MainLayout({ children }: { children: React.ReactNode }) {
+type Props = {
+  readonly children: React.ReactNode
+}
+
+export default async function MainLayout({ children }: Props) {
   return (
     <>
       <Header />

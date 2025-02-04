@@ -6,10 +6,10 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useMountedState } from 'react-use'
 import type SwiperType from 'swiper'
 import { Pagination } from 'swiper/modules'
 import { cn } from '~/lib/utils'
-import { useMountedState } from 'react-use'
 
 interface ImageSliderProps {
   urls: string[]
@@ -42,7 +42,7 @@ export const ImageSlider = ({ urls, brightness = true }: ImageSliderProps) => {
 
   if (!isMounted) return null
   return (
-    <div className="group group relative aspect-square overflow-hidden rounded-lg shadow bg-zinc-100 border">
+    <div className="group relative aspect-square overflow-hidden rounded-md shadow-md bg-muted border">
       <div className="absolute inset-0 z-10 opacity-0 transition group-hover:opacity-100">
         <button
           type="button"
@@ -97,7 +97,7 @@ export const ImageSlider = ({ urls, brightness = true }: ImageSliderProps) => {
               width={500}
               height={500}
               className={cn(
-                '-z-10 h-full w-full object-cover object-center transition delay-100 duration-200 group-hover:scale-[1.03]',
+                '-z-10 h-full w-full object-cover object-center md:group-hover:scale-105 transition-all duration-300',
                 brightness && 'group-hover:brightness-90',
               )}
               src={url}

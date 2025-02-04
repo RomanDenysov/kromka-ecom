@@ -1,6 +1,6 @@
 'use client'
 
-import { AlignJustifyIcon } from 'lucide-react'
+import { AlignJustifyIcon, MenuIcon, X } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useMountedState } from 'react-use'
@@ -17,7 +17,7 @@ import {
 import { Icons } from '~/lib/ui/icons'
 import { cn } from '~/lib/utils'
 
-export const MobileNav = () => {
+export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false)
   const isMounted = useMountedState()
   const pathname = usePathname()
@@ -33,9 +33,14 @@ export const MobileNav = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <button className="rounded-full size-10 p-0 md:hidden grid place-content-center">
-          <AlignJustifyIcon size={32} />
-        </button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsOpen(!isOpen)}
+          className="[&_svg]:size-6"
+        >
+          <MenuIcon size={24} />
+        </Button>
       </SheetTrigger>
       <SheetContent side={'left'} className="px-4">
         <SheetHeader className="grid w-full place-content-center">
