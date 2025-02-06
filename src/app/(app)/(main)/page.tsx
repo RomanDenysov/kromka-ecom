@@ -1,10 +1,6 @@
 import { Suspense } from 'react'
 import { CtaSection } from '~/features/cta-section/ui'
-import { EndSellingDialog } from '~/features/end-selling-dialog/ui'
-import { HeroGrid } from '~/features/hero-grid/ui'
 import { HeroSection } from '~/features/hero-section'
-import { HomeActionsSection } from '~/features/home-actions-section/ui'
-import { PostsReel } from '~/features/posts-reel/ui'
 import { ProductsReel } from '~/features/products-reel/ui'
 import { Container } from '~/lib/ui/container'
 import { FeaturesSection } from '~/lib/ui/features-section'
@@ -18,9 +14,12 @@ export default async function HomePage() {
       {/* <HeroGrid /> */}
 
       {/* PRODUCTS REEL */}
+      {/* <Suspense>
+        <ProductsList />
+      </Suspense> */}
       <Suspense>
         <ProductsReel
-          href={'/products'}
+          href
           title={'Náš chlieb a lakocinky'}
           query={{ limit: 8, category: ['Naše pečivo', 'Z našej produkcie'] }}
         />

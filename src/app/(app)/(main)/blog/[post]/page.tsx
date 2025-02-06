@@ -1,9 +1,7 @@
 import { TagIcon } from 'lucide-react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
-import { SubscribeSection } from '~/features/cta-section/ui'
-import { AspectRatio } from '~/lib/ui/components/aspect-ratio'
+import { CtaSection } from '~/features/cta-section/ui'
 import { Badge } from '~/lib/ui/components/badge'
 import { Container } from '~/lib/ui/container'
 import RichText from '~/lib/ui/rich-text'
@@ -77,7 +75,7 @@ export default async function PostPage({ params }: Props) {
           </div>
         )}
       </article>
-      <SubscribeSection />
+      <CtaSection />
     </Container>
   )
 }

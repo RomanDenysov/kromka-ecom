@@ -13,12 +13,12 @@ export const Heading = ({ title, subtitle, className }: Props) => {
     <div className={cn('w-fit', className)}>
       <h2
         key={`heading-${title}`}
-        className=" text-2xl sm:text-3xl lg:text-4xl font-bold text-primary"
+        className="text-left font-bold text-2xl md:text-3xl tracking-tight"
       >
         {title}
       </h2>
       {subtitle && (
-        <p className="lg:mt-1.5 text-sm sm:text-base xl:text-lg lg:text-lg font-medium text-muted-foreground line-clamp-2 text-ellipsis">
+        <p className="lg:mt-1.5 max-w-xl text-left text-base leading-relaxed tracking-tight md:text-lg font-medium text-muted-foreground">
           {subtitle}
         </p>
       )}

@@ -1,9 +1,10 @@
 'use client'
 
-import { ChevronRightIcon, Loader2Icon } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 import Link from 'next/link'
-import React, { useMemo } from 'react'
-import { ProductsListing } from '~/features/products-reel/ui'
+import React, { memo, useMemo } from 'react'
+import { ProductCard, ProductCardSkeleton } from '~/features/shop/products-list/ui/product-card'
+import { Skeleton } from '~/lib/ui/components/skeleton'
 import { Heading } from '~/lib/ui/heading'
 import { LoaderButton } from '~/lib/ui/loader-button'
 import { cn, generateProductQuantityStr } from '~/lib/utils'
@@ -12,7 +13,7 @@ import type { ProductsQueryType } from '../types'
 
 type Props = {
   className?: string
-  href?: string
+  href?: boolean
   title?: string
   subtitle?: string
   total?: boolean
@@ -20,9 +21,9 @@ type Props = {
   showLoadMore?: boolean
 }
 
-const ProductsReel = ({
+const ProductsReel = memo(({
   className,
-  href,
+  href = false,
   title,
   subtitle,
   query,
@@ -51,9 +52,20 @@ const ProductsReel = ({
 
   if (isLoading) {
     return (
-      <div className="size-full grid place-content-center py-40">
-        <Loader2Icon className="animate-spin size-10 text-muted-foreground/70" />
-      </div>
+      <article className={cn('py-10', className)} aria-label="Product showcase loading state">
+        <div className="mb-4 md:flex md:flex-grow md:items-center md:justify-between">
+          <Skeleton className="h-10 w-1/3" />
+        </div>
+        <div className="relative">
+          <div className="mt-6 flex w-full items-center">
+            <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
+              {Array.from({ length: query.limit ?? 12 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </article>
     )
   }
 
@@ -76,8 +88,8 @@ const ProductsReel = ({
         )}
         {href ? (
           <Link
-            href={href}
-            className="hidden items-center justify-end gap-x-1 font-medium text-red-600 text-sm hover:text-red-500 hover:underline md:inline-flex"
+            href={'/products'}
+            className="hidden items-center justify-end gap-x-1 font-medium text-sm hover:text-muted-foreground hover:underline md:inline-flex"
             aria-label="Načítať produkty"
           >
             Nakupovat
@@ -93,7 +105,7 @@ const ProductsReel = ({
         <div className="mt-6 flex w-full items-center">
           <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
             {products.map((product, index) => (
-              <ProductsListing
+              <ProductCard
                 key={`product-${product?.id || index.toFixed()}`}
                 index={index}
                 product={product}
@@ -120,6 +132,6 @@ const ProductsReel = ({
       )}
     </article>
   )
-}
+})
 
 export default ProductsReel

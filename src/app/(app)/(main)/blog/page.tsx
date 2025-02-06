@@ -1,5 +1,5 @@
 import { BlogCarousel } from '~/features/blog-carousel/ui'
-import { SubscribeSection } from '~/features/cta-section/ui'
+import { CtaSection } from '~/features/cta-section/ui'
 import { PostsGrid } from '~/features/posts-grid/ui'
 import { TagsFilter } from '~/features/tags-filter/ui'
 import { Container } from '~/lib/ui/container'
@@ -18,7 +18,7 @@ export default async function BlogPage() {
       {/* Blog Posts Grid */}
       <PostsGrid posts={posts} />
 
-      <SubscribeSection />
+      <CtaSection />
     </Container>
   )
 }
