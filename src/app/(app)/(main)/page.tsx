@@ -11,7 +11,7 @@ import { FeaturesSection } from '~/lib/ui/features-section'
 
 export default async function HomePage() {
   return (
-    <Container className="py-5 md:py-8 space-y-5 md:space-y-10">
+    <Container className="py-5 md:py-8 z-10 space-y-5 md:space-y-10">
       {/* <EndSellingDialog /> */}
       <HeroSection />
       <FeaturesSection />

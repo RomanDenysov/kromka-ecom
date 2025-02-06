@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { ProductsReel } from '~/features/products-reel/ui'
-import { CategoriesCarousel } from '~/features/shop/categories/ui'
+import CategoriesFilter from '~/features/shop/categories/ui/categories-filter'
 import { ProductsList } from '~/features/shop/products-list/ui'
 import { Container } from '~/lib/ui/container'
 import { HydrateClient, api } from '~/trpc/server'
@@ -13,17 +12,18 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
+  // TODO: update metadata for products page
   return {
     title: 'Naše Produkty',
-    description: 'Naše najlepšie Obchody',
+    description: '',
     openGraph: {
       title: 'Naše Produkty',
-      description: 'Naše vybrate produkty',
+      description: '',
     },
     twitter: {
       card: 'summary_large_image',
       title: 'Naše Produkty',
-      description: 'Naše najlepšie Obchody',
+      description: '',
       images: [
         {
           url: '/images/og-image.png',
@@ -39,38 +39,46 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ShopPage({ searchParams }: Props) {
   const categorySlug = (await searchParams).category as string | undefined
 
-  console.log('CATEGORY', categorySlug)
-
   const selectedCategoriesSlug = categorySlug
     ? categorySlug
-        .split(',')
-        .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
+      .split(',')
+      .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
     : []
 
   void api.products.infiniteProducts.prefetchInfinite({
-    query: { limit: 12, category: selectedCategoriesSlug },
+    query: { limit: 12, sort: ['-order'], category: selectedCategoriesSlug },
   })
 
   return (
-    <Container className="py-5 md:py-8">
-      <CategoriesCarousel />
-      <HydrateClient>
-        <Suspense fallback={null}>
-          {/* <ProductsReel
+    <>
+      <Container className='pt-4 mb-4 flex items-center justify-between'>
+        <div>
+          <h1 className="text-left font-bold text-2xl md:text-3xl tracking-tight">
+            {'Naše Produkty'}
+          </h1>
+        </div>
+      </Container>
+      <CategoriesFilter />
+      <Container className="py-5">
+        <HydrateClient>
+          <Suspense fallback={null}>
+            {/* <ProductsReel
             title={'Naše Produkty'}
             subtitle={'Naše najlepšie Obchody'}
             query={{
               limit: 12,
               sort: ['-order'],
               category: selectedCategoriesSlug,
-            }}
-            total={true}
-            className="py-0"
-            showLoadMore
-          /> */}
-          <ProductsList />
-        </Suspense>
-      </HydrateClient>
-    </Container>
+              }}
+              total={true}
+              className="py-0"
+              showLoadMore
+              /> */}
+            <ProductsList />
+          </Suspense>
+        </HydrateClient>
+      </Container>
+    </>
+
   )
 }

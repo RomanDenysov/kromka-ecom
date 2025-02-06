@@ -3,6 +3,7 @@
 import type { Media, Product } from '@payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { FastAddButton } from '~/features/products-reel/ui'
@@ -11,12 +12,22 @@ import { cn, formatPrice } from '~/lib/utils'
 import { api } from '~/trpc/react'
 
 export function ProductsList() {
+  const searchParams = useSearchParams()
+  const categorySlug = searchParams.get('category')
+
+  const selectedCategoriesSlug = categorySlug
+    ? categorySlug
+      .split(',')
+      .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
+    : []
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     api.products.infiniteProducts.useInfiniteQuery(
       {
         query: {
           limit: 12,
           sort: ['-order'],
+          category: selectedCategoriesSlug
         },
       },
       {
@@ -41,7 +52,7 @@ export function ProductsList() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 py-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 pt-5 pb-20">
         {Array.from({ length: 8 }).map((_, index) => (
           <ProductCardSkeleton key={index} />
         ))}
@@ -50,7 +61,7 @@ export function ProductsList() {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 py-10">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 pt-5 pb-20">
       {products?.map((product, index) => (
         <ProductCard key={product.id} product={product} index={index} />
       ))}
@@ -58,8 +69,8 @@ export function ProductsList() {
         Array.from({ length: 4 }).map((_, index) => <ProductCardSkeleton key={index} />)}
       <div ref={ref} className="h-8" />
       {!hasNextPage && (
-        <p className="col-span-full text-center text-muted-foreground py-4">
-          No more products to load
+        <p className="col-span-full text-center text-muted-foreground pt-8">
+          {'Už žiadne produkty'}
         </p>
       )}
     </div>
@@ -93,7 +104,7 @@ const ProductCard = memo((props: { product: Product; index: number }) => {
       )}
       aria-label={`View ${product.title}`}
     >
-      <div className="aspect-square bg-muted rounded-md p-3 shadow-md border relative overflow-hidden">
+      <div className="aspect-square bg-muted rounded-md p-3 shadow-md border size-full relative overflow-hidden">
         <Image
           src={productImageUrl ?? '/placeholder.png'}
           alt={`${product.title} - Product Image`}

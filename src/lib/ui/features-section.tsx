@@ -1,14 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { cn } from '../utils'
+import { cn } from '~/lib/utils'
 
 export function FeaturesSection() {
   return (
     <section>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-6 md:gap-10">
         <div>
-          <h2 className="text-left font-bold text-3xl tracking-tight">{'Čo pre vás mame'}</h2>
-          <p className="max-w-xl text-left text-lg leading-relaxed tracking-tight md:text-xl font-medium text-muted-foreground">
+          <h2 className="text-left font-bold text-2xl md:text-3xl tracking-tight">{'Čo pre vás mame'}</h2>
+          <p className="max-w-xl text-left text-base leading-relaxed tracking-tight md:text-lg font-medium text-muted-foreground">
             {'Vytvorte si svoje Kromka konto a objavte všetky naše chutné produkty'}
           </p>
         </div>

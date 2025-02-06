@@ -8,7 +8,7 @@ import { useSearchModal } from '../search-modal/hooks/use-searh-modal'
 export function SearchInput() {
   const onOpen = useSearchModal((state) => state.onOpen)
   return (
-    <div className="relative w-full max-w-sm">
+    <div className="relative w-full max-w-sm bg-card">
       <Input
         type="search"
         placeholder="Hľadať"

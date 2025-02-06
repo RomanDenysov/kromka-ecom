@@ -45,7 +45,7 @@ async function updateOrderStatus(orderId: string, paymentStatus: 'paid' | 'faile
 
     await EmailService.sendReceiptEmail({
       email: profileEmail!,
-      date: new Date(orderDetails.createdAt),
+      date: new Date(orderDetails.createdAt).toISOString(),
       status: 'Zaplatené',
       orderId: orderDetails.id,
       method: orderDetails.method,

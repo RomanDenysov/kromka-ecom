@@ -45,8 +45,8 @@ export function CookieBanner() {
       className={cn(
         'fixed bottom-4 left-4 z-[200] max-w-xs space-y-0 shadow-2xl md:max-w-md',
         isVisible
-          ? 'translate-y-0 opacity-100 transition-[opacity,transform]'
-          : 'translate-y-8 opacity-0 transition-[opacity,transform]',
+          ? 'scale-100 translate-y-0 opacity-100 transition-[opacity,transform]'
+          : 'scale-0 translate-y-8 opacity-0 transition-[opacity,transform]',
       )}
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
