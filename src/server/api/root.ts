@@ -1,12 +1,12 @@
 import {
   categoriesRouter,
   checkoutRouter,
+  ordersRouter,
+  postsRouter,
   productsRouter,
+  profilesRouter,
   storesRouter,
   usersRouter,
-  profilesRouter,
-  postsRouter,
-  ordersRouter,
 } from './routes'
 import { createCallerFactory, createTRPCRouter } from './trpc'
 

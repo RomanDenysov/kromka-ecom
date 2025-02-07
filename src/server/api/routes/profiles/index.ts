@@ -1,7 +1,7 @@
 import { COLLECTIONS } from '~/server/payload/config'
 import { createTRPCRouter, publicProcedure } from '../../trpc'
-import { updateProfileSchema } from './validator'
 import { getProfileById } from './service'
+import { updateProfileSchema } from './validator'
 
 export const profilesRouter = createTRPCRouter({
   me: publicProcedure.query(async ({ ctx }) => {

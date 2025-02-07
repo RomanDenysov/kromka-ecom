@@ -11,8 +11,20 @@
   - [ ] Add pagination for the posts or infinite scroll
 - [ ] Remove 'card' option from checkout form
 - [ ] Add QR code generation for the orders
+- [ ] Add option to search in blog posts
+- [ ] Update templates for emails
+- [ ] Add special mail for registration by email
+- [ ] Handle visitors by visitorId in local storage and pass those properties to order details
+- [ ] Improve checkout flow by fixind bugs in checkout service
+- [ ] Implement better CI proccess for finding issues on development side faster
+- [ ] Implement SEO for product pages
+- [ ] Implement SEO for blog pages
+- [ ] Improve SHARING for posts and products (make dropdown with sharing options with preselected options)
 
 ### BUGS
+
+- [ ] SEARCH doesn't work for special characters (e.g. č ň)
+- [ ] fix blur and darkness on blog cards
 
 ### CHECKLIST
 

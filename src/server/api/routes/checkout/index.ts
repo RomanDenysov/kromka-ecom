@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from '../../trpc'
-import { checkoutValidator, orderIdValidator } from './validator'
 import { CheckoutService } from './service'
+import { checkoutValidator, orderIdValidator } from './validator'
 
 export const checkoutRouter = createTRPCRouter({
   checkout: publicProcedure.input(checkoutValidator).mutation(async ({ input, ctx }) => {

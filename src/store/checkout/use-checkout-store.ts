@@ -1,7 +1,7 @@
+import { useCallback } from 'react'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { useCart } from '../cart/use-cart'
-import { useCallback } from 'react'
 
 interface CheckoutState {
   isLoading: boolean

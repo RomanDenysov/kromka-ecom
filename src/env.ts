@@ -1,5 +1,5 @@
 import { createEnv } from '@t3-oss/env-nextjs'
-import { z, type ZodError } from 'zod'
+import { type ZodError, z } from 'zod'
 
 export const env = createEnv({
   // extends: [vercel()],

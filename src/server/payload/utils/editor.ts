@@ -6,13 +6,13 @@ import {
   HorizontalRuleFeature,
   InlineToolbarFeature,
   ItalicFeature,
-  lexicalEditor,
   LinkFeature,
   OrderedListFeature,
   ParagraphFeature,
   UnderlineFeature,
   UnorderedListFeature,
   UploadFeature,
+  lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import type { Config } from 'payload'
 

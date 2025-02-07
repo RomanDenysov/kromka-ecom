@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import { AspectRatio } from '~/lib/ui/components/aspect-ratio'
 import Link from 'next/link'
+import { AspectRatio } from '~/lib/ui/components/aspect-ratio'
 import { cn } from '~/lib/utils'
 
 type Props = {

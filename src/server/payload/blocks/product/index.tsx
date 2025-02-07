@@ -1,5 +1,5 @@
+import { Media, Product } from '@payload-types'
 import React from 'react'
-import { Product, Media } from '@payload-types'
 
 type LayoutType = 'card' | 'inline' | 'featured'
 

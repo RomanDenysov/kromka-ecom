@@ -1,32 +1,13 @@
 'use client'
 
-import { z } from 'zod'
-import { Profile, User } from '@payload-types'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from 'sonner'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '~/lib/ui/components/card'
-import { LoaderButton } from '~/lib/ui/loader-button'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '~/lib/ui/components/form'
-import { Input } from '~/lib/ui/components/input'
-import { useUser } from '~/store/user/use-user'
-import { api } from '~/trpc/react'
+import { Profile, User } from '@payload-types'
+import { Loader2Icon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,8 +19,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '~/lib/ui/components/alert-dialog'
-import { Loader2Icon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/lib/ui/components/card'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '~/lib/ui/components/form'
+import { Input } from '~/lib/ui/components/input'
+import { LoaderButton } from '~/lib/ui/loader-button'
+import { useUser } from '~/store/user/use-user'
+import { api } from '~/trpc/react'
 
 const profileFormSchema = z.object({
   name: z.string().min(2, {

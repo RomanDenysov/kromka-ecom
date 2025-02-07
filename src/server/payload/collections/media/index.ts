@@ -1,10 +1,10 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import {
   FixedToolbarFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import type { CollectionConfig } from 'payload'
 import { env } from '~/env'
 import { COLLECTIONS, COLLECTIONS_GROUPS } from '../../config'

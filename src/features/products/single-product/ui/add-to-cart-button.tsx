@@ -2,10 +2,10 @@
 
 import { MinusIcon, PlusIcon } from 'lucide-react'
 import { useMountedState, useToggle, useVibrate } from 'react-use'
-import { useCart } from '~/store/cart/use-cart'
-import type { Product } from '~/server/payload/payload-types'
-import { cn } from '~/lib/utils'
 import { Button } from '~/lib/ui/components/button'
+import { cn } from '~/lib/utils'
+import type { Product } from '~/server/payload/payload-types'
+import { useCart } from '~/store/cart/use-cart'
 
 type Props = {
   product: Product

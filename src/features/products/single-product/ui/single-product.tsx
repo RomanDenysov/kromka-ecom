@@ -3,20 +3,20 @@
 import { CheckIcon, ClockIcon, HandCoinsIcon, InfoIcon, StoreIcon, TruckIcon } from 'lucide-react'
 import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { useIntersection, useMedia, useMountedState } from 'react-use'
-import type { Product } from '~/server/payload/payload-types'
-import { cn, formatPrice } from '~/lib/utils'
 import { Badge } from '~/lib/ui/components/badge'
-import { ImageSlider } from '~/lib/ui/image-slider'
-import AddToCartButton from './add-to-cart-button'
-import SingleProductPlaceholder from './single-product-placeholder'
 import { Separator } from '~/lib/ui/components/separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/lib/ui/components/tabs'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '~/lib/ui/components/tooltip'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/lib/ui/components/tabs'
+import { ImageSlider } from '~/lib/ui/image-slider'
+import { cn, formatPrice } from '~/lib/utils'
+import type { Product } from '~/server/payload/payload-types'
+import AddToCartButton from './add-to-cart-button'
+import SingleProductPlaceholder from './single-product-placeholder'
 
 type Props = {
   product: Product

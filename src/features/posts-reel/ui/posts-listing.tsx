@@ -1,10 +1,10 @@
 'use client'
 
-import Link from 'next/link'
 import { Post } from '@payload-types'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Skeleton } from '~/lib/ui/components/skeleton'
-import Image from 'next/image'
 
 type Props = {
   post: Post | null

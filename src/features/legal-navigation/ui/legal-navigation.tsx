@@ -1,9 +1,9 @@
 'use client'
 
 import { ChevronRightIcon } from 'lucide-react'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { buttonVariants } from '~/lib/ui/components/button'
-import Link from 'next/link'
 import { cn } from '~/lib/utils'
 
 const policyNav = [

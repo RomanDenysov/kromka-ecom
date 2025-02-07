@@ -1,9 +1,9 @@
 'use client'
 
 import { ChevronRightIcon } from 'lucide-react'
+import Link from 'next/link'
 import { useCallback } from 'react'
 import { Heading } from '~/lib/ui/heading'
-import Link from 'next/link'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import PostsListing from './posts-listing'

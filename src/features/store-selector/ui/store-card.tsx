@@ -1,13 +1,13 @@
 'use client'
 
-import { Card, CardContent, CardFooter, CardHeader } from '~/lib/ui/components/card'
-import { StoreSelector } from '~/features/store-selector/ui'
-import { useCurrentStore } from '~/store/store/use-current-store'
-import { Separator } from '~/lib/ui/components/separator'
-import { buttonVariants } from '~/lib/ui/components/button'
 import { MailIcon, MapPinIcon, PhoneIcon } from 'lucide-react'
 import Link from 'next/link'
+import { StoreSelector } from '~/features/store-selector/ui'
+import { buttonVariants } from '~/lib/ui/components/button'
+import { Card, CardContent, CardFooter, CardHeader } from '~/lib/ui/components/card'
+import { Separator } from '~/lib/ui/components/separator'
 import { cn } from '~/lib/utils'
+import { useCurrentStore } from '~/store/store/use-current-store'
 
 const StoreCard = () => {
   const store = useCurrentStore((state) => state.store)

@@ -1,11 +1,11 @@
 'use client'
 
+import { User } from '@payload-types'
 import { User2Icon } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Container } from '~/lib/ui/container'
 import AnimatedBackground from '~/lib/ui/motion/animated-background'
-import { User } from '@payload-types'
-import { usePathname } from 'next/navigation'
 
 const PROFILE_NAVIGATION = [
   { label: 'Profile', href: '/profile' },
