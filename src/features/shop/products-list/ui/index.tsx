@@ -13,8 +13,8 @@ export function ProductsList() {
 
   const selectedCategoriesSlug = categorySlug
     ? categorySlug
-      .split(',')
-      .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
+        .split(',')
+        .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
     : []
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -23,7 +23,7 @@ export function ProductsList() {
         query: {
           limit: 12,
           sort: ['-order'],
-          category: selectedCategoriesSlug
+          category: selectedCategoriesSlug,
         },
       },
       {
@@ -72,4 +72,3 @@ export function ProductsList() {
     </div>
   )
 }
-

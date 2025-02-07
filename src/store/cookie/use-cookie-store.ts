@@ -18,4 +18,3 @@ export const useCookieConsentStore = create<CookieConsentState>()(
     },
   ),
 )
-

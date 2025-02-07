@@ -8,941 +8,942 @@
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
-  };
+    users: UserAuthOperations
+  }
   collections: {
-    users: User;
-    products: Product;
-    orders: Order;
-    carts: Cart;
-    likes: Like;
-    media: Media;
-    posts: Post;
-    comments: Comment;
-    profiles: Profile;
-    supports: Support;
-    tags: Tag;
-    categories: Category;
-    stores: Store;
-    'payload-locked-documents': PayloadLockedDocument;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
-  };
+    users: User
+    products: Product
+    orders: Order
+    carts: Cart
+    likes: Like
+    media: Media
+    posts: Post
+    comments: Comment
+    profiles: Profile
+    supports: Support
+    tags: Tag
+    categories: Category
+    stores: Store
+    'payload-locked-documents': PayloadLockedDocument
+    'payload-preferences': PayloadPreference
+    'payload-migrations': PayloadMigration
+  }
   collectionsJoins: {
     categories: {
-      products: 'products';
-    };
-  };
+      products: 'products'
+    }
+  }
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    products: ProductsSelect<false> | ProductsSelect<true>;
-    orders: OrdersSelect<false> | OrdersSelect<true>;
-    carts: CartsSelect<false> | CartsSelect<true>;
-    likes: LikesSelect<false> | LikesSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
-    comments: CommentsSelect<false> | CommentsSelect<true>;
-    profiles: ProfilesSelect<false> | ProfilesSelect<true>;
-    supports: SupportsSelect<false> | SupportsSelect<true>;
-    tags: TagsSelect<false> | TagsSelect<true>;
-    categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    stores: StoresSelect<false> | StoresSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
-  };
+    users: UsersSelect<false> | UsersSelect<true>
+    products: ProductsSelect<false> | ProductsSelect<true>
+    orders: OrdersSelect<false> | OrdersSelect<true>
+    carts: CartsSelect<false> | CartsSelect<true>
+    likes: LikesSelect<false> | LikesSelect<true>
+    media: MediaSelect<false> | MediaSelect<true>
+    posts: PostsSelect<false> | PostsSelect<true>
+    comments: CommentsSelect<false> | CommentsSelect<true>
+    profiles: ProfilesSelect<false> | ProfilesSelect<true>
+    supports: SupportsSelect<false> | SupportsSelect<true>
+    tags: TagsSelect<false> | TagsSelect<true>
+    categories: CategoriesSelect<false> | CategoriesSelect<true>
+    stores: StoresSelect<false> | StoresSelect<true>
+    'payload-locked-documents':
+      | PayloadLockedDocumentsSelect<false>
+      | PayloadLockedDocumentsSelect<true>
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
+  }
   db: {
-    defaultIDType: string;
-  };
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+    defaultIDType: string
+  }
+  globals: {}
+  globalsSelect: {}
+  locale: null
   user: User & {
-    collection: 'users';
-  };
+    collection: 'users'
+  }
   jobs: {
-    tasks: unknown;
-    workflows: unknown;
-  };
+    tasks: unknown
+    workflows: unknown
+  }
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   login: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   registerFirstUser: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   unlock: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  role: 'admin' | 'user' | 'manager' | 'author' | 'partner';
-  id: string;
-  email: string;
-  name?: string | null;
-  image?: string | null;
-  emailVerified?: string | null;
+  role: 'admin' | 'user' | 'manager' | 'author' | 'partner'
+  id: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: string | null
   accounts?:
     | {
-        id?: string | null;
-        provider: string;
-        providerAccountId: string;
-        type: string;
+        id?: string | null
+        provider: string
+        providerAccountId: string
+        type: string
       }[]
-    | null;
+    | null
   sessions?:
     | {
-        id?: string | null;
-        sessionToken: string;
-        expires: string;
+        id?: string | null
+        sessionToken: string
+        expires: string
       }[]
-    | null;
+    | null
   verificationTokens?:
     | {
-        id?: string | null;
-        token: string;
-        expires: string;
+        id?: string | null
+        token: string
+        expires: string
       }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
  */
 export interface Product {
-  id: string;
-  title: string;
-  slug?: string | null;
-  descr: string;
-  opts?: string | null;
-  status: 'draft' | 'active' | 'archived' | 'sold';
-  category: string | Category;
-  price: number;
-  optsPrice?: number | null;
+  id: string
+  title: string
+  slug?: string | null
+  descr: string
+  opts?: string | null
+  status: 'draft' | 'active' | 'archived' | 'sold'
+  category: string | Category
+  price: number
+  optsPrice?: number | null
   images: {
-    image: string | Media;
-    id?: string | null;
-  }[];
-  order?: number | null;
-  isFeatured?: boolean | null;
-  priceId?: string | null;
-  stripeId?: string | null;
-  createdBy?: (string | null) | User;
-  updatedAt: string;
-  createdAt: string;
+    image: string | Media
+    id?: string | null
+  }[]
+  order?: number | null
+  isFeatured?: boolean | null
+  priceId?: string | null
+  stripeId?: string | null
+  createdBy?: (string | null) | User
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
-  id: string;
-  title: string;
-  slug?: string | null;
-  order?: number | null;
-  image: string | Media;
-  isVisible?: boolean | null;
+  id: string
+  title: string
+  slug?: string | null
+  order?: number | null
+  image: string | Media
+  isVisible?: boolean | null
   products?: {
-    docs?: (string | Product)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
+    docs?: (string | Product)[] | null
+    hasNextPage?: boolean | null
+  } | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
-  alt: string;
+  id: string
+  alt: string
   caption?: {
     root: {
-      type: string;
+      type: string
       children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
+  updatedAt: string
+  createdAt: string
+  url?: string | null
+  thumbnailURL?: string | null
+  filename?: string | null
+  mimeType?: string | null
+  filesize?: number | null
+  width?: number | null
+  height?: number | null
+  focalX?: number | null
+  focalY?: number | null
   sizes?: {
     thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     square?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     small?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     medium?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     large?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     xlarge?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders".
  */
 export interface Order {
-  id: string;
-  user?: (string | null) | User;
-  profile?: (string | null) | Profile;
-  pickupStore: string | Store;
+  id: string
+  user?: (string | null) | User
+  profile?: (string | null) | Profile
+  pickupStore: string | Store
   productItems?:
     | {
-        product: string | Product;
-        quantity: number;
-        id?: string | null;
+        product: string | Product
+        quantity: number
+        id?: string | null
       }[]
-    | null;
-  pickupDate: string;
-  method: 'store' | 'card';
-  paymentStatus: 'pending' | 'progress' | 'completed' | 'cancelled';
-  status: 'new' | 'processing' | 'ready' | 'complete' | 'cancelled';
-  optionalPrice?: number | null;
-  total: number;
-  _isPaid: boolean;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  pickupDate: string
+  method: 'store' | 'card'
+  paymentStatus: 'pending' | 'progress' | 'completed' | 'cancelled'
+  status: 'new' | 'processing' | 'ready' | 'complete' | 'cancelled'
+  optionalPrice?: number | null
+  total: number
+  _isPaid: boolean
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "profiles".
  */
 export interface Profile {
-  id: string;
-  contactDisplay?: string | null;
-  user?: (string | null) | User;
+  id: string
+  contactDisplay?: string | null
+  user?: (string | null) | User
   contacts?: {
-    name?: string | null;
-    phone?: string | null;
-    email?: string | null;
-  };
+    name?: string | null
+    phone?: string | null
+    email?: string | null
+  }
   customerOptions?: {
-    store?: (string | null) | Store;
-    method?: ('store' | 'card') | null;
-  };
+    store?: (string | null) | Store
+    method?: ('store' | 'card') | null
+  }
   options: {
-    terms: boolean;
-    privacy: boolean;
-    cookie: boolean;
-  };
-  isRegistered?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+    terms: boolean
+    privacy: boolean
+    cookie: boolean
+  }
+  isRegistered?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stores".
  */
 export interface Store {
-  id: string;
-  title: string;
-  slug?: string | null;
+  id: string
+  title: string
+  slug?: string | null
   contacts: {
-    phone: string;
-    email?: string | null;
-  };
+    phone: string
+    email?: string | null
+  }
   workingHours: {
-    week: string;
-    saturday?: string | null;
-    sunday?: string | null;
-  };
+    week: string
+    saturday?: string | null
+    sunday?: string | null
+  }
   inventory?:
     | {
-        product: string | Product;
-        quantity: number;
-        isAvailable?: boolean | null;
-        stockAlert?: number | null;
-        id?: string | null;
+        product: string | Product
+        quantity: number
+        isAvailable?: boolean | null
+        stockAlert?: number | null
+        id?: string | null
       }[]
-    | null;
-  image: string | Media;
-  address: string;
-  addressUrl: string;
-  managers: (string | User)[];
-  isVisible?: boolean | null;
-  isOpen?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  image: string | Media
+  address: string
+  addressUrl: string
+  managers: (string | User)[]
+  isVisible?: boolean | null
+  isOpen?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "carts".
  */
 export interface Cart {
-  id: string;
-  user: string | User;
+  id: string
+  user: string | User
   productItems?:
     | {
-        product: string | Product;
-        quantity: number;
-        id?: string | null;
+        product: string | Product
+        quantity: number
+        id?: string | null
       }[]
-    | null;
-  total: number;
-  profile?: (string | null) | Profile;
-  link?: string | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  total: number
+  profile?: (string | null) | Profile
+  link?: string | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "likes".
  */
 export interface Like {
-  id: string;
-  user: string | User;
+  id: string
+  user: string | User
   item:
     | {
-        relationTo: 'products';
-        value: string | Product;
+        relationTo: 'products'
+        value: string | Product
       }
     | {
-        relationTo: 'posts';
-        value: string | Post;
-      };
-  updatedAt: string;
-  createdAt: string;
+        relationTo: 'posts'
+        value: string | Post
+      }
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
-  id: string;
-  title: string;
-  slug?: string | null;
+  id: string
+  title: string
+  slug?: string | null
   content: {
     root: {
-      type: string;
+      type: string
       children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  status?: ('published' | 'draft' | 'archived') | null;
-  tags?: (string | Tag)[] | null;
-  relatedPosts?: (string | Post)[] | null;
-  authors?: (string | User)[] | null;
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  }
+  status?: ('published' | 'draft' | 'archived') | null
+  tags?: (string | Tag)[] | null
+  relatedPosts?: (string | Post)[] | null
+  authors?: (string | User)[] | null
   populatedAuthors?:
     | {
-        id?: string | null;
-        name?: string | null;
+        id?: string | null
+        name?: string | null
       }[]
-    | null;
-  banner: string | Media;
-  isFeatured?: boolean | null;
-  readingTime?: number | null;
-  publishedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  banner: string | Media
+  isFeatured?: boolean | null
+  readingTime?: number | null
+  publishedAt?: string | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tags".
  */
 export interface Tag {
-  id: string;
-  title: string;
-  slug?: string | null;
-  isSearchable?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+  id: string
+  title: string
+  slug?: string | null
+  isSearchable?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "comments".
  */
 export interface Comment {
-  id: string;
-  user: string | User;
-  comment: string;
-  updatedAt: string;
-  createdAt: string;
+  id: string
+  user: string | User
+  comment: string
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "supports".
  */
 export interface Support {
-  id: string;
-  user?: (string | null) | User;
-  case: 'shop' | 'blog' | 'b2b' | 'weather' | 'website' | 'other';
-  status?: ('new' | 'processing' | 'ready' | 'complete' | 'cancelled') | null;
-  comment: string;
+  id: string
+  user?: (string | null) | User
+  case: 'shop' | 'blog' | 'b2b' | 'weather' | 'website' | 'other'
+  status?: ('new' | 'processing' | 'ready' | 'complete' | 'cancelled') | null
+  comment: string
   contacts: {
-    phone?: string | null;
-    email: string;
-  };
-  isResolved: boolean;
-  updatedAt: string;
-  createdAt: string;
+    phone?: string | null
+    email: string
+  }
+  isResolved: boolean
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: string
   document?:
     | ({
-        relationTo: 'users';
-        value: string | User;
+        relationTo: 'users'
+        value: string | User
       } | null)
     | ({
-        relationTo: 'products';
-        value: string | Product;
+        relationTo: 'products'
+        value: string | Product
       } | null)
     | ({
-        relationTo: 'orders';
-        value: string | Order;
+        relationTo: 'orders'
+        value: string | Order
       } | null)
     | ({
-        relationTo: 'carts';
-        value: string | Cart;
+        relationTo: 'carts'
+        value: string | Cart
       } | null)
     | ({
-        relationTo: 'likes';
-        value: string | Like;
+        relationTo: 'likes'
+        value: string | Like
       } | null)
     | ({
-        relationTo: 'media';
-        value: string | Media;
+        relationTo: 'media'
+        value: string | Media
       } | null)
     | ({
-        relationTo: 'posts';
-        value: string | Post;
+        relationTo: 'posts'
+        value: string | Post
       } | null)
     | ({
-        relationTo: 'comments';
-        value: string | Comment;
+        relationTo: 'comments'
+        value: string | Comment
       } | null)
     | ({
-        relationTo: 'profiles';
-        value: string | Profile;
+        relationTo: 'profiles'
+        value: string | Profile
       } | null)
     | ({
-        relationTo: 'supports';
-        value: string | Support;
+        relationTo: 'supports'
+        value: string | Support
       } | null)
     | ({
-        relationTo: 'tags';
-        value: string | Tag;
+        relationTo: 'tags'
+        value: string | Tag
       } | null)
     | ({
-        relationTo: 'categories';
-        value: string | Category;
+        relationTo: 'categories'
+        value: string | Category
       } | null)
     | ({
-        relationTo: 'stores';
-        value: string | Store;
-      } | null);
-  globalSlug?: string | null;
+        relationTo: 'stores'
+        value: string | Store
+      } | null)
+  globalSlug?: string | null
   user: {
-    relationTo: 'users';
-    value: string | User;
-  };
-  updatedAt: string;
-  createdAt: string;
+    relationTo: 'users'
+    value: string | User
+  }
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: string
   user: {
-    relationTo: 'users';
-    value: string | User;
-  };
-  key?: string | null;
+    relationTo: 'users'
+    value: string | User
+  }
+  key?: string | null
   value?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
-  name?: string | null;
-  batch?: number | null;
-  updatedAt: string;
-  createdAt: string;
+  id: string
+  name?: string | null
+  batch?: number | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  role?: T;
-  id?: T;
-  email?: T;
-  name?: T;
-  image?: T;
-  emailVerified?: T;
+  role?: T
+  id?: T
+  email?: T
+  name?: T
+  image?: T
+  emailVerified?: T
   accounts?:
     | T
     | {
-        id?: T;
-        provider?: T;
-        providerAccountId?: T;
-        type?: T;
-      };
+        id?: T
+        provider?: T
+        providerAccountId?: T
+        type?: T
+      }
   sessions?:
     | T
     | {
-        id?: T;
-        sessionToken?: T;
-        expires?: T;
-      };
+        id?: T
+        sessionToken?: T
+        expires?: T
+      }
   verificationTokens?:
     | T
     | {
-        id?: T;
-        token?: T;
-        expires?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
+        id?: T
+        token?: T
+        expires?: T
+      }
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  descr?: T;
-  opts?: T;
-  status?: T;
-  category?: T;
-  price?: T;
-  optsPrice?: T;
+  title?: T
+  slug?: T
+  descr?: T
+  opts?: T
+  status?: T
+  category?: T
+  price?: T
+  optsPrice?: T
   images?:
     | T
     | {
-        image?: T;
-        id?: T;
-      };
-  order?: T;
-  isFeatured?: T;
-  priceId?: T;
-  stripeId?: T;
-  createdBy?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        image?: T
+        id?: T
+      }
+  order?: T
+  isFeatured?: T
+  priceId?: T
+  stripeId?: T
+  createdBy?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
-  user?: T;
-  profile?: T;
-  pickupStore?: T;
+  user?: T
+  profile?: T
+  pickupStore?: T
   productItems?:
     | T
     | {
-        product?: T;
-        quantity?: T;
-        id?: T;
-      };
-  pickupDate?: T;
-  method?: T;
-  paymentStatus?: T;
-  status?: T;
-  optionalPrice?: T;
-  total?: T;
-  _isPaid?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        product?: T
+        quantity?: T
+        id?: T
+      }
+  pickupDate?: T
+  method?: T
+  paymentStatus?: T
+  status?: T
+  optionalPrice?: T
+  total?: T
+  _isPaid?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "carts_select".
  */
 export interface CartsSelect<T extends boolean = true> {
-  user?: T;
+  user?: T
   productItems?:
     | T
     | {
-        product?: T;
-        quantity?: T;
-        id?: T;
-      };
-  total?: T;
-  profile?: T;
-  link?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        product?: T
+        quantity?: T
+        id?: T
+      }
+  total?: T
+  profile?: T
+  link?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "likes_select".
  */
 export interface LikesSelect<T extends boolean = true> {
-  user?: T;
-  item?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  item?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  caption?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
+  alt?: T
+  caption?: T
+  updatedAt?: T
+  createdAt?: T
+  url?: T
+  thumbnailURL?: T
+  filename?: T
+  mimeType?: T
+  filesize?: T
+  width?: T
+  height?: T
+  focalX?: T
+  focalY?: T
   sizes?:
     | T
     | {
         thumbnail?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         square?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         small?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         medium?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         large?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         xlarge?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
+      }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  content?: T;
-  status?: T;
-  tags?: T;
-  relatedPosts?: T;
-  authors?: T;
+  title?: T
+  slug?: T
+  content?: T
+  status?: T
+  tags?: T
+  relatedPosts?: T
+  authors?: T
   populatedAuthors?:
     | T
     | {
-        id?: T;
-        name?: T;
-      };
-  banner?: T;
-  isFeatured?: T;
-  readingTime?: T;
-  publishedAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        id?: T
+        name?: T
+      }
+  banner?: T
+  isFeatured?: T
+  readingTime?: T
+  publishedAt?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "comments_select".
  */
 export interface CommentsSelect<T extends boolean = true> {
-  user?: T;
-  comment?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  comment?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "profiles_select".
  */
 export interface ProfilesSelect<T extends boolean = true> {
-  contactDisplay?: T;
-  user?: T;
+  contactDisplay?: T
+  user?: T
   contacts?:
     | T
     | {
-        name?: T;
-        phone?: T;
-        email?: T;
-      };
+        name?: T
+        phone?: T
+        email?: T
+      }
   customerOptions?:
     | T
     | {
-        store?: T;
-        method?: T;
-      };
+        store?: T
+        method?: T
+      }
   options?:
     | T
     | {
-        terms?: T;
-        privacy?: T;
-        cookie?: T;
-      };
-  isRegistered?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        terms?: T
+        privacy?: T
+        cookie?: T
+      }
+  isRegistered?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "supports_select".
  */
 export interface SupportsSelect<T extends boolean = true> {
-  user?: T;
-  case?: T;
-  status?: T;
-  comment?: T;
+  user?: T
+  case?: T
+  status?: T
+  comment?: T
   contacts?:
     | T
     | {
-        phone?: T;
-        email?: T;
-      };
-  isResolved?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        phone?: T
+        email?: T
+      }
+  isResolved?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tags_select".
  */
 export interface TagsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  isSearchable?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  title?: T
+  slug?: T
+  isSearchable?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  order?: T;
-  image?: T;
-  isVisible?: T;
-  products?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  title?: T
+  slug?: T
+  order?: T
+  image?: T
+  isVisible?: T
+  products?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stores_select".
  */
 export interface StoresSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
+  title?: T
+  slug?: T
   contacts?:
     | T
     | {
-        phone?: T;
-        email?: T;
-      };
+        phone?: T
+        email?: T
+      }
   workingHours?:
     | T
     | {
-        week?: T;
-        saturday?: T;
-        sunday?: T;
-      };
+        week?: T
+        saturday?: T
+        sunday?: T
+      }
   inventory?:
     | T
     | {
-        product?: T;
-        quantity?: T;
-        isAvailable?: T;
-        stockAlert?: T;
-        id?: T;
-      };
-  image?: T;
-  address?: T;
-  addressUrl?: T;
-  managers?: T;
-  isVisible?: T;
-  isOpen?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        product?: T
+        quantity?: T
+        isAvailable?: T
+        stockAlert?: T
+        id?: T
+      }
+  image?: T
+  address?: T
+  addressUrl?: T
+  managers?: T
+  isVisible?: T
+  isOpen?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T;
-  globalSlug?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  document?: T
+  globalSlug?: T
+  user?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T;
-  key?: T;
-  value?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  key?: T
+  value?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T;
-  batch?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  name?: T
+  batch?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown;
+  [k: string]: unknown
 }
-
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}

@@ -41,8 +41,8 @@ export default async function ShopPage({ searchParams }: Props) {
 
   const selectedCategoriesSlug = categorySlug
     ? categorySlug
-      .split(',')
-      .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
+        .split(',')
+        .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
     : []
 
   void api.products.infiniteProducts.prefetchInfinite({
@@ -51,7 +51,7 @@ export default async function ShopPage({ searchParams }: Props) {
 
   return (
     <>
-      <Container className='pt-4 mb-4 flex items-center justify-between'>
+      <Container className="pt-4 mb-4 flex items-center justify-between">
         <div>
           <h1 className="text-left font-bold text-2xl md:text-3xl tracking-tight">
             {'Naše Produkty'}
@@ -79,6 +79,5 @@ export default async function ShopPage({ searchParams }: Props) {
         </HydrateClient>
       </Container>
     </>
-
   )
 }

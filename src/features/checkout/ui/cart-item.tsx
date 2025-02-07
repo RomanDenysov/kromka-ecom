@@ -14,7 +14,6 @@ type Props = {
 }
 
 const CartItemImage = memo(
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   ({ image, title, slug }: { image: any; title: string; slug: string }) => {
     if (image && typeof image !== 'string' && image?.url) {
       return (

@@ -90,10 +90,8 @@ export function SearchModal() {
                   className="rounded-md aspect-square object-cover object-center"
                 />
 
-                <span className="ml-2 text-base font-medium">
-                  {product.title}
-                </span>
-                <span className='ml-auto mr-2 font-mono text-base font-semibold'>
+                <span className="ml-2 text-base font-medium">{product.title}</span>
+                <span className="ml-auto mr-2 font-mono text-base font-semibold">
                   {formatPrice(product.price)}
                 </span>
                 {/* <div className="flex flex-1 items-center gap-2">
@@ -117,4 +115,3 @@ export function SearchModal() {
     </CommandDialog>
   )
 }
-

@@ -75,7 +75,6 @@ export default async function PostPage({ params }: Props) {
           </div>
         )}
       </article>
-      <CtaSection />
     </Container>
   )
 }

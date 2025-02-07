@@ -2,7 +2,7 @@
 
 import { BookLockIcon, LogInIcon, SettingsIcon, ShoppingBag, UserIcon } from 'lucide-react'
 import Link from 'next/link'
-import { Suspense, useMemo } from 'react'
+import { Suspense, memo, useMemo } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '~/lib/ui/components/avatar'
 import { buttonVariants } from '~/lib/ui/components/button'
 import {
@@ -24,7 +24,7 @@ const BUTTON_OPTIONS = [
   { label: 'Settings', href: '/settings', icon: SettingsIcon },
 ]
 
-const UserButton = () => {
+const UserButton = memo(() => {
   const user = useUser((state) => state.user)
   const isAdmin = useMemo(() => user?.role === 'admin', [user])
 
@@ -88,6 +88,6 @@ const UserButton = () => {
       )}
     </>
   )
-}
+})
 
 export default UserButton

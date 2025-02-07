@@ -33,79 +33,77 @@ export default async function Image(props: {
       : product.images[0].image
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        backgroundColor: '#fff',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <div
         style={{
-          width: '100%',
-          height: '100%',
           display: 'flex',
-          backgroundColor: '#fff',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          marginBottom: '20px',
         }}
       >
         <div
           style={{
+            width: '200px',
+            height: '200px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: '20px',
           }}
         >
-          <div
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             style={{
-              width: '200px',
-              height: '200px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: '300px',
+              marginBottom: '30px',
             }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              style={{
-                width: '300px',
-                marginBottom: '30px',
-              }}
-              src={productImage ?? '/placeholder.svg'}
-              alt={product.title}
-            />
-          </div>
-        </div>
-        <h1
-          style={{
-            fontSize: '64px',
-            fontWeight: 'bold',
-            color: '#333',
-            marginBottom: '20px',
-          }}
-        >
-          {product.title}
-        </h1>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            width: '100%',
-          }}
-        >
-          <div style={{ textAlign: 'center', display: 'flex', fontSize: '24px' }}>
-            {product.descr}
-          </div>
-        </div>
-        <div
-          style={{
-            textAlign: 'center',
-            display: 'flex',
-            fontSize: '24px',
-            marginTop: '10px',
-          }}
-        >
-          ${formatPrice(product.price)}
+            src={productImage ?? '/placeholder.svg'}
+            alt={product.title}
+          />
         </div>
       </div>
-    ),
+      <h1
+        style={{
+          fontSize: '64px',
+          fontWeight: 'bold',
+          color: '#333',
+          marginBottom: '20px',
+        }}
+      >
+        {product.title}
+      </h1>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          width: '100%',
+        }}
+      >
+        <div style={{ textAlign: 'center', display: 'flex', fontSize: '24px' }}>
+          {product.descr}
+        </div>
+      </div>
+      <div
+        style={{
+          textAlign: 'center',
+          display: 'flex',
+          fontSize: '24px',
+          marginTop: '10px',
+        }}
+      >
+        ${formatPrice(product.price)}
+      </div>
+    </div>,
     {
       width: 1200,
       height: 630,

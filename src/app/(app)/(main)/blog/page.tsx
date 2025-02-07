@@ -1,4 +1,4 @@
-import { BlogCarousel } from '~/features/blog-carousel/ui'
+import { Suspense } from 'react'
 import { CtaSection } from '~/features/cta-section/ui'
 import { PostsGrid } from '~/features/posts-grid/ui'
 import { TagsFilter } from '~/features/tags-filter/ui'
@@ -10,15 +10,22 @@ export default async function BlogPage() {
   const tags = await api.posts.getTags()
 
   return (
-    <Container className="py-8 md:py-16 max-w-5xl mx-auto space-y-12">
-      {/* Carousel section */}
-      <BlogCarousel posts={posts.slice(0, 4)} />
-      {/* Tags Filter */}
-      <TagsFilter tags={tags} />
-      {/* Blog Posts Grid */}
-      <PostsGrid posts={posts} />
-
-      <CtaSection />
-    </Container>
+    <>
+      <Container className="pt-4 mb-4 flex items-center justify-between">
+        <h1 className="text-left font-bold text-2xl md:text-3xl tracking-tight">
+          {'Náš Kromka blog'}
+        </h1>
+      </Container>
+      {/* <BlogCarousel posts={posts.slice(0, 4)} /> */}
+      <Suspense fallback={null}>
+        <TagsFilter tags={tags} />
+      </Suspense>
+      <Container className="py-5">
+        <Suspense fallback={null}>
+          <PostsGrid posts={posts} />
+        </Suspense>
+        {/* <CtaSection /> */}
+      </Container>
+    </>
   )
 }

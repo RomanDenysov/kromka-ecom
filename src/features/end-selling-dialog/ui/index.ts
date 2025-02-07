@@ -1,2 +1,1 @@
-export { default as EndSellingDialog } from './end-selling-dialog';
-
+export { default as EndSellingDialog } from './end-selling-dialog'

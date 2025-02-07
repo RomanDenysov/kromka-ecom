@@ -1,12 +1,12 @@
 'use client'
 
+import { Post } from '@payload-types'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
 import { ChevronLeftIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { Button } from '~/lib/ui/components/button'
 import { cn } from '~/lib/utils'
-import { Post } from '@payload-types'
 
 const carouselItems = [
   { title: 'Nové sezónne pečivo', image: '/images/asset-2.webp' },

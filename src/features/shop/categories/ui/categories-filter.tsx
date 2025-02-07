@@ -27,9 +27,11 @@ const CategoriesFilter = () => {
     [searchParams],
   )
 
+  const isCategorySelected = activeCategory.length > 0
+
   useDebounce(
     () => {
-      if (activeCategory.length > 0) {
+      if (isCategorySelected) {
         router.push(`${pathname}?${createQueryString('category', activeCategory.join(','))}`)
       } else {
         router.push(pathname)
@@ -47,11 +49,9 @@ const CategoriesFilter = () => {
     }
   }
 
-  const isCategorySelected = activeCategory.length > 0
-
   return (
     <div className="sticky top-16 py-2 z-40 bg-background size-full">
-      <Container className="flex rounded-lg px-1 gap-2 items-center justify-start">
+      <Container className="flex rounded-md px-1 gap-2 items-center justify-start">
         <Hint tooltip={isCategorySelected ? 'Resetovať kategorie' : 'Vybrat kategorie'}>
           <Button
             type="button"
@@ -61,11 +61,7 @@ const CategoriesFilter = () => {
             aria-label={isCategorySelected ? 'Resetovať kategorie' : 'Vybrat kategorie'}
             className="text-primary font-semibold [&_svg]:size-5"
           >
-            {isCategorySelected ? (
-              <XIcon />
-            ) : (
-              <TagIcon size={20} className="text-muted-foreground hidden sm:block" />
-            )}
+            {isCategorySelected ? <XIcon /> : <TagIcon />}
           </Button>
         </Hint>
         <ScrollArea className="w-full whitespace-nowrap flex-grow py-1">
