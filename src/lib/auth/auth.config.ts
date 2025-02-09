@@ -27,6 +27,13 @@ const providers: Provider[] = [
     clientId: env.AUTH_GOOGLE_ID,
     clientSecret: env.AUTH_GOOGLE_SECRET,
     allowDangerousEmailAccountLinking: true,
+    authorization: {
+      params: {
+        prompt: 'consent',
+        access_type: 'offline',
+        response_type: 'code',
+      },
+    },
     profile(profile) {
       return {
         id: profile.sub,
@@ -50,6 +57,18 @@ export default {
     maxAge: 5 * 24 * 60 * 60, // 5 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
+  cookies: {
+    pkceCodeVerifier: {
+      name: 'next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+  },
+  trustHost: true,
   jwt: {
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
@@ -85,9 +104,7 @@ export default {
   },
   events: {
     async signIn({ user, account, profile }) {
-      const { auth } = useAuth()
       console.log('Signing in', { user, account, profile })
-      auth()
     },
   },
 } satisfies NextAuthConfig

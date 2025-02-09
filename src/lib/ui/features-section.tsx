@@ -8,7 +8,7 @@ export function FeaturesSection() {
       <div className="flex flex-col gap-6 md:gap-10">
         <div>
           <h2 className="text-left font-bold text-2xl md:text-3xl tracking-tight">
-            {'Čo pre vás mame'}
+            {'Vitajte v online-Kromke!'}
           </h2>
           <p className="max-w-xl text-left text-base leading-relaxed tracking-tight md:text-lg font-medium text-muted-foreground">
             {'Vytvorte si svoje Kromka konto a objavte všetky naše chutné produkty'}
@@ -20,26 +20,26 @@ export function FeaturesSection() {
             image="/images/asset-1.webp"
             href="/products"
             title="E-shop"
-            description="Prehliadajte si náš široký sortiment produktov online"
+            description="Chlieb, lakocinky a káva. Nami upečené, pripravené alebo starostlivo vybraté produkty."
             className="lg:col-span-2 lg:aspect-auto"
           />
           <FeatureCard
             image="/images/asset-2.webp"
             href="/blog"
             title="Blog"
-            description="Články, novinky a zaujímavosti zo sveta pekárstva"
+            description="Píšeme o jedle a rozprávame sa o radosti, ktorú dobré jedlo prináša."
           />
           <FeatureCard
             image="/images/asset-3.webp"
             href="/b2b"
             title="B2B Riešenia"
-            description="Špeciálne ponuky a služby pre firmy a podnikateľov"
+            description="Ak váš biznis hľadá niekoho, kto vám upečie kváskový chlebík a sprostredkuje ďalšie lakocinky, ozvite sa nám."
           />
           <FeatureCard
             image="/images/asset-4.webp"
             href="/spolupraca"
             title="Spolupráca"
-            description="Staňte sa naším obchodným partnerom alebo dodávateľom"
+            description="Ak by ste svoje výrobky chceli ponúkať aj u nás v Kromke, dajte nám vedieť."
             className="lg:col-span-2 lg:aspect-auto"
           />
         </div>
