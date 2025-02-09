@@ -24,7 +24,7 @@ const AvatarStack = ({
                     <Avatar className="size-9 bg-secondary ring-1 ring-background">
                         {avatar && <AvatarImage src={avatar} alt={name ?? ''} />}
                         <AvatarFallback delayMs={600} className="text-xs font-medium">
-                            {name ? getNameInitials(name) : 'No name'}
+                            {name ? getNameInitials(name) : getNameInitials(email)}
                         </AvatarFallback>
                     </Avatar>
                 </TooltipTrigger>

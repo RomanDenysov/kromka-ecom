@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/lib/ui/components/dropdown-menu'
+import { Skeleton } from '~/lib/ui/components/skeleton'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/server'
 import { LogoutButton } from './logout-button'
@@ -43,11 +44,13 @@ export async function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="size-fit rounded-full focus:hidden">
-        <AvatarStack
-          avatar={user.image}
-          name={user?.name ?? ''}
-          email={user?.email ?? ''}
-        />
+        <Suspense fallback={<Skeleton className="size-9 rounded-full" />}>
+          <AvatarStack
+            avatar={user.image}
+            name={user?.name ?? ''}
+            email={user?.email ?? ''}
+          />
+        </Suspense>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={5}>
         <DropdownMenuGroup>

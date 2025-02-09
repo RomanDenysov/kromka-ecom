@@ -14,7 +14,7 @@ export default function CheckoutPage() {
           <CartList />
         </section>
         <Suspense fallback={null}>
-          <CheckoutForm />
+          <CheckoutForm className="lg:col-span-5 space-y-5 size-full" />
         </Suspense>
       </div>
     </Container>

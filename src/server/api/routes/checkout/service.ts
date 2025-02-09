@@ -22,8 +22,8 @@ interface CheckoutUser {
   phone: string
 }
 
-// const ADMIN_EMAILS = ['romandenysovsk@gmail.com', 'kromka@kavejo.sk']
-const ADMIN_EMAILS = ['romandenysovsk@gmail.com']
+const ADMIN_EMAILS = ['romandenysovsk@gmail.com', 'kromka@kavejo.sk']
+// const ADMIN_EMAILS = ['romandenysovsk@gmail.com']
 
 const BASE_URL = `${env.NEXT_PUBLIC_SERVER_URL}/checkout`
 
