@@ -29,6 +29,18 @@ const nextConfig = {
           pathname: '/**',
         }
       }),
+      {
+        protocol: 'https',
+        hostname: 'minio.pekarenkromka.sk',
+        port: '',
+        search: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        search: '',
+      },
     ],
   },
   async headers() {

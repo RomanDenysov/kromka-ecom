@@ -1,8 +1,8 @@
 'use client'
 
 import { memo } from 'react'
-import { CartItem } from '~/features/checkout/ui'
 import { useCart } from '~/store/cart/use-cart'
+import { CartItem } from './cart-item'
 
 const CartList = memo(() => {
   const items = useCart((state) => state.items)

@@ -1,4 +1,3 @@
-import { SessionProvider } from 'next-auth/react'
 import { Suspense } from 'react'
 import { Provider as WBProvider } from 'react-wrap-balancer'
 import { SearchModal } from '~/features/search-modal/ui'
@@ -8,34 +7,32 @@ import { CookieBanner } from '~/widgets/cookie-banner/cookie-banner'
 import SheetsProvider from './sheet-provider'
 import { ThemeProvider } from './theme-provider'
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
+export const Providers = ({ children }: { children: Readonly<React.ReactNode> }) => {
   return (
     <TRPCReactProvider>
-      <SessionProvider>
-        <WBProvider>
-          <ThemeProvider
-            attribute="class"
-            disableTransitionOnChange
-            defaultTheme="light"
-            enableSystem
-          >
-            <Suspense fallback={null}>
-              <SheetsProvider />
-            </Suspense>
+      <WBProvider>
+        <ThemeProvider
+          attribute="class"
+          disableTransitionOnChange
+          defaultTheme="light"
+          enableSystem
+        >
+          <Suspense fallback={null}>
+            <SheetsProvider />
+          </Suspense>
 
-            <Suspense fallback={null}>
-              <SearchModal />
-            </Suspense>
+          <Suspense fallback={null}>
+            <SearchModal />
+          </Suspense>
 
-            <Suspense fallback={null}>
-              <CookieBanner />
-            </Suspense>
+          <Suspense fallback={null}>
+            <CookieBanner />
+          </Suspense>
 
-            <Toaster position="top-center" richColors />
-            {children}
-          </ThemeProvider>
-        </WBProvider>
-      </SessionProvider>
+          <Toaster position="top-center" richColors />
+          {children}
+        </ThemeProvider>
+      </WBProvider>
     </TRPCReactProvider>
   )
 }

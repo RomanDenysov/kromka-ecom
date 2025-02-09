@@ -11,20 +11,13 @@ import {
   Section,
   Text,
 } from '@react-email/components'
+import { OrderConfirmationData } from '..'
 import { getEmailAssetUrl } from '../utils'
 
-interface OrderConfirmationEmailProps {
-  email: string
-  orderId: string
-  pickupPlace: string
-  pickupPlaceUrl: string
-}
-
 export const OrderConfirmationEmail = ({
-  orderId,
   pickupPlace,
   pickupPlaceUrl,
-}: OrderConfirmationEmailProps) => {
+}: OrderConfirmationData) => {
   return (
     <Html>
       <Head />

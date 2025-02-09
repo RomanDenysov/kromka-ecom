@@ -13,12 +13,10 @@ import {
 import { getEmailAssetUrl } from '../utils'
 
 type OrderReadyProps = {
-  email: string
-  orderId: string
   pickupPlace: string
 }
 
-export const OrderReadyEmail = ({ orderId, pickupPlace }: OrderReadyProps) => {
+export const OrderReadyEmail = ({ pickupPlace }: OrderReadyProps) => {
   return (
     <Html>
       <Head />

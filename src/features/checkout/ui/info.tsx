@@ -1,46 +1,41 @@
 'use client'
 
 import Link from 'next/link'
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/lib/ui/components/card'
 import { Checkbox } from '~/lib/ui/components/checkbox'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/lib/ui/components/form'
 import { Input } from '~/lib/ui/components/input'
 import { Separator } from '~/lib/ui/components/separator'
-import { useUser } from '~/store/user/use-user'
+
+const formFields = [
+  {
+    name: 'name' as const,
+    label: 'Meno',
+    type: 'text',
+    placeholder: 'Zadajte vaše meno',
+    autoComplete: 'name',
+  },
+  {
+    name: 'email' as const,
+    label: 'Email',
+    type: 'email',
+    placeholder: 'Zadajte váš e-mail',
+    autoComplete: 'email',
+  },
+  {
+    name: 'phone' as const,
+    label: 'Telefónne číslo',
+    type: 'text',
+    placeholder: 'Zadajte vaše telefónne číslo',
+    autoComplete: 'phone',
+  },
+]
+
 
 const Info = () => {
   const { control } = useFormContext()
-
-  const user = useUser((state) => state.user)
-
-  const formFields = useMemo(
-    () => [
-      {
-        name: 'name',
-        label: 'Meno',
-        type: 'text',
-        placeholder: 'Zadajte vaše meno',
-        autoComplete: 'name',
-      },
-      {
-        name: 'email',
-        label: 'Email',
-        type: 'email',
-        placeholder: 'Zadajte váš e-mail',
-        autoComplete: 'email',
-      },
-      {
-        name: 'phone',
-        label: 'Telefónne číslo',
-        type: 'text',
-        placeholder: 'Zadajte vaše telefónne číslo',
-        autoComplete: 'phone',
-      },
-    ],
-    [],
-  )
 
   return (
     <Card className="border-none bg-accent">
@@ -96,18 +91,18 @@ const Info = () => {
           />
         </div>
       </CardContent>
-      {!user && (
-        <CardFooter className="flex flex-col justify-between gap-4 ">
-          <Separator />
-          <p className="text-base text-muted-foreground tracking-tight">
-            alebo{' '}
-            <Link className="underline" href={{ pathname: '/sign-in' }}>
-              prihláste sa
-            </Link>{' '}
-            do vášho účtu
-          </p>
-        </CardFooter>
-      )}
+      {/* {!user && ( */}
+      <CardFooter className="flex flex-col justify-between gap-4">
+        <Separator />
+        <p className="text-base text-muted-foreground tracking-tight">
+          alebo{' '}
+          <Link className="underline" href={{ pathname: '/sign-in' }}>
+            prihláste sa
+          </Link>{' '}
+          do vášho účtu
+        </p>
+      </CardFooter>
+      {/* )} */}
     </Card>
   )
 }

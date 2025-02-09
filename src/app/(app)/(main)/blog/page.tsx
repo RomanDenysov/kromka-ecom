@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import { CtaSection } from '~/features/cta-section/ui'
 import { PostsGrid } from '~/features/posts-grid/ui'
 import { TagsFilter } from '~/features/tags-filter/ui'
 import { Container } from '~/lib/ui/container'

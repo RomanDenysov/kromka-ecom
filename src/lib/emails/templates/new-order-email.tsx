@@ -13,26 +13,8 @@ import {
 } from '@react-email/components'
 import { formatDate } from 'date-fns'
 import { orderIdFormatter } from '~/lib/utils'
+import { NewOrderEmailData } from '..'
 import { getEmailAssetUrl } from '../utils'
-
-type OrderProduct = {
-  product: Product
-  quantity: number
-}
-
-interface NewOrderEmailProps {
-  orderId: string
-  pickupPlace: string
-  products: OrderProduct[]
-  customerNote?: string
-  paymentMethod: 'card' | 'store'
-  pickupTime: string
-  customer: {
-    name: string
-    email: string
-    phone: string
-  }
-}
 
 export const NewOrderEmail = ({
   orderId,
@@ -41,7 +23,7 @@ export const NewOrderEmail = ({
   paymentMethod,
   pickupTime,
   customer,
-}: NewOrderEmailProps) => {
+}: NewOrderEmailData) => {
   const receiptOrderId = orderIdFormatter(orderId)
 
   return (
@@ -93,9 +75,9 @@ export const NewOrderEmail = ({
 
             <Section style={productsSection}>
               <Text style={sectionTitle}>Produkty:</Text>
-              {products.map(({ product, quantity }) => (
-                <Text key={product.id} style={productText}>
-                  • {product.title} - {quantity}ks
+              {products.map(({ title, quantity }) => (
+                <Text key={title} style={productText}>
+                  • {title} - {quantity}ks
                 </Text>
               ))}
             </Section>

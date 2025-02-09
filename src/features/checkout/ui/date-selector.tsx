@@ -6,13 +6,12 @@ import { Label } from '~/lib/ui/components/label'
 import { RadioGroup, RadioGroupItem } from '~/lib/ui/components/radio-group'
 import { cn } from '~/lib/utils'
 
-type Props = {
+export function DateSelector(props: {
   value?: Date
   onChange: (date: Date) => void
   availableDates: string[]
-}
-
-const DateSelector: React.FC<Props> = ({ value, onChange, availableDates }) => {
+}) {
+  const { value, onChange, availableDates } = props
   return (
     <RadioGroup
       value={value ? format(value, 'yyyy-MM-dd') : undefined}
@@ -44,5 +43,3 @@ const DateSelector: React.FC<Props> = ({ value, onChange, availableDates }) => {
     </RadioGroup>
   )
 }
-
-export default DateSelector

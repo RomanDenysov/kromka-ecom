@@ -1,6 +1,7 @@
 'use client'
 
 import { addDays, format, isAfter, isBefore, isSameDay, isSunday, startOfToday } from 'date-fns'
+import { sk } from 'date-fns/locale'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import * as React from 'react'
 
@@ -13,7 +14,7 @@ type Props = {
   onDateSelect?: (date: Date | undefined) => void
 }
 
-const DatePicker = ({ onDateSelect }: Props) => {
+export function DatePicker({ onDateSelect }: Props) {
   const [date, setDate] = React.useState<Date>()
 
   const isBeforeNoon = React.useMemo(() => {
@@ -75,13 +76,14 @@ const DatePicker = ({ onDateSelect }: Props) => {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, 'PP') : <span>Zvoľte si dátum pre odber</span>}
+          {date ? format(date, 'PP', { locale: sk }) : <span>Zvoľte si dátum pre odber</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
           weekStartsOn={1}
+          locale={sk}
           selected={date}
           onSelect={handleSelectDate}
           disabled={disabledDays}
@@ -92,5 +94,3 @@ const DatePicker = ({ onDateSelect }: Props) => {
     </Popover>
   )
 }
-
-export default DatePicker

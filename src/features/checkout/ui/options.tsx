@@ -1,7 +1,6 @@
 'use client'
 
 import { useFormContext } from 'react-hook-form'
-import { DatePicker, PaymentMethod } from '~/features/checkout/ui'
 import { StoreSelector } from '~/features/store-selector/ui'
 import { Card, CardContent, CardHeader, CardTitle } from '~/lib/ui/components/card'
 import {
@@ -13,7 +12,8 @@ import {
   FormMessage,
 } from '~/lib/ui/components/form'
 import { availableDates } from '../hooks/use-checkout-form'
-import DateSelector from './date-selector'
+import { DatePicker } from './date-picker'
+import { DateSelector } from './date-selector'
 
 const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = false
 
@@ -29,8 +29,8 @@ const Options = () => {
           control={control}
           name="date"
           render={({ field }) => (
-            <FormItem className="space-y-4">
-              <FormLabel className="text-lg leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <FormItem>
+              <FormLabel>
                 Dátum
               </FormLabel>
               <FormControl>
@@ -53,8 +53,8 @@ const Options = () => {
           control={control}
           name="store"
           render={({ field }) => (
-            <FormItem className="space-y-4 flex flex-col">
-              <FormLabel className="text-lg leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <FormItem>
+              <FormLabel>
                 Predajňa
               </FormLabel>
               <FormControl>
@@ -65,7 +65,7 @@ const Options = () => {
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={control}
           name="method"
           render={({ field }) => (
@@ -82,7 +82,7 @@ const Options = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
       </CardContent>
     </Card>
   )

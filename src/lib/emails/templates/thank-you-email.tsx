@@ -11,14 +11,11 @@ import {
   Section,
   Text,
 } from '@react-email/components'
+
+import { ThankYouData } from '..'
 import { getEmailAssetUrl } from '../utils'
 
-interface ThankYouEmailProps {
-  email: string
-  orderId: string
-}
-
-export const ThankYouEmail = ({ orderId }: ThankYouEmailProps) => {
+export const ThankYouEmail = ({ orderId }: ThankYouData) => {
   return (
     <Html>
       <Head />

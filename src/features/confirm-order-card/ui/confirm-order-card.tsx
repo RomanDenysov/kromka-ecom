@@ -1,15 +1,14 @@
 'use client'
 
-import { formatDate } from 'date-fns/format'
+import { format } from 'date-fns/format'
+import { sk } from 'date-fns/locale'
 import {
   ChevronDownIcon,
   ChevronRightIcon,
   ClockIcon,
   HomeIcon,
   Loader2,
-  StarIcon,
 } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment, useState } from 'react'
 import { Button, buttonVariants } from '~/lib/ui/components/button'
@@ -24,7 +23,6 @@ import { Separator } from '~/lib/ui/components/separator'
 import { Icons } from '~/lib/ui/icons'
 import { cn, formatPrice } from '~/lib/utils'
 import type { Order } from '~/server/payload/payload-types'
-import { useUser } from '~/store/user/use-user'
 import { api } from '~/trpc/react'
 
 type Props = {
@@ -35,7 +33,7 @@ type Props = {
 const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
   const { data: orderData, isLoading } = api.orders.byId.useQuery({ id: orderId }, { initialData })
   const [isOpen, setIsOpen] = useState(false)
-  const user = useUser((state) => state.user)
+  const { data: userData } = api.users.me.useQuery()
 
   if (isLoading) return <Loader2 size={32} className="animate-spin text-muted-foreground" />
 
@@ -95,13 +93,13 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
               </div>
               <div>
                 <div className="text-sm font-medium text-gray-500">SPÔSOB PLATBY</div>
-                <div>{orderData.method === 'card' ? 'Platba kartou' : 'Platba v obchode'}</div>
+                <div>{'Platba pri vyzdvihnutí v predajní'}</div>
               </div>
               <div>
                 <div className="text-sm font-medium text-gray-500">
                   DÁTUM VYZDVIHNUTIA OBJEDNÁVKY
                 </div>
-                <div>{formatDate(orderData.pickupDate, 'dd MM yyyy')}</div>
+                <div>{format(orderData.pickupDate, 'PP', { locale: sk })}</div>
               </div>
               <div>
                 <div className="text-sm font-medium text-gray-500">ČÍSLO OBJEDNÁVKY</div>
@@ -142,39 +140,17 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <ScrollArea className="h-[250px] pr-4 mt-4">
-                    {orderData?.productItems?.map(({ product, quantity }, index) => {
-                      const productData = typeof product !== 'string' ? product : null
-
-                      if (!productData) return null
-
-                      const productImageUrl =
-                        typeof productData.images[0].image !== 'string'
-                          ? productData.images[0].image.url
-                          : productData.images[0].image
-
-                      const productCategory =
-                        typeof productData.category !== 'string'
-                          ? productData.category.title
-                          : productData.category
-
+                    {orderData?.productItems?.map(({ title, price, quantity }, index) => {
                       return (
                         <Fragment key={index.toString()}>
                           <div className="flex items-center gap-4 py-4">
-                            <Image
-                              src={productImageUrl || '/images/asset-1.webp'}
-                              width={64}
-                              height={64}
-                              alt={productData.title}
-                              className="rounded-md object-cover"
-                            />
                             <div className="flex-1 space-y-1">
-                              <div className="font-medium">
-                                {productData.title} x {quantity}ks
+                              <div className="text-base font-medium">
+                                {title} x {quantity}ks
                               </div>
-                              <div className="text-sm text-gray-500">{productCategory}</div>
                             </div>
                             <div className="font-medium">
-                              {formatPrice(productData.price * quantity)}
+                              {formatPrice(price * quantity)}
                             </div>
                           </div>
                           <Separator />
@@ -189,7 +165,7 @@ const ConfirmOrderCard = ({ orderId, initialData }: Props) => {
 
           {/* Action Buttons */}
           <CardFooter className="flex flex-col gap-4 px-0">
-            {!user && (
+            {!userData && (
               <Link
                 href={'/sign-in'}
                 className={cn(buttonVariants({ variant: 'link' }), 'w-full items-center gap-x-0.5')}

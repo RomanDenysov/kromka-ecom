@@ -38,7 +38,6 @@ import {
 } from '~/lib/ui/components/form'
 import { Input } from '~/lib/ui/components/input'
 import { LoaderButton } from '~/lib/ui/loader-button'
-import { useUser } from '~/store/user/use-user'
 import { api } from '~/trpc/react'
 
 const profileFormSchema = z.object({
@@ -65,7 +64,6 @@ const UserProfileForm = ({
   profile?: Partial<Profile> | null
 }) => {
   const router = useRouter()
-  const stateUser = useUser((state) => state.user)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const updateUserMutation = api.users.update.useMutation({
     onSuccess: () => {
@@ -90,8 +88,7 @@ const UserProfileForm = ({
     },
   })
 
-  const user = apiUser || stateUser
-
+  const user = apiUser
   const defaultValues: ProfileFormData = {
     name: user?.name || profile?.contacts?.name || '',
     phone: profile?.contacts?.phone || '',

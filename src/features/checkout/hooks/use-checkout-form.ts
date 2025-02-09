@@ -28,7 +28,7 @@ const checkoutSchema = z.object({
     invalid_type_error: 'Toto nie je dátum!',
   }),
   // .min(new Date()),
-  method: z.enum(['store', 'card']).default('store'),
+  // method: z.enum(['store', 'card']).default('store'),
 })
 
 export type CheckoutFormData = z.infer<typeof checkoutSchema>
@@ -64,7 +64,7 @@ export default function useCheckoutForm({ user, profile }: CheckoutFormProps) {
       terms: false,
       // date: parse(validDates[0], 'yyyy-MM-dd', new Date()),
       date: undefined,
-      method: 'store' as const,
+      // method: 'store' as const,
     },
   })
 
@@ -76,7 +76,7 @@ export default function useCheckoutForm({ user, profile }: CheckoutFormProps) {
         phone: profile?.contacts?.phone || '',
         store: currentStore?.id || '',
         terms: profile?.options?.terms || false,
-        method: 'store' as const,
+        // method: 'store' as const,
       })
     }
   }, [user, profile, currentStore?.id, form])

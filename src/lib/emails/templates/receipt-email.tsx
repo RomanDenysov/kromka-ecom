@@ -1,4 +1,3 @@
-import type { Product } from '@payload-types'
 import {
   Body,
   Column,
@@ -13,32 +12,13 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import { formatDate } from 'date-fns'
 import { env } from '~/env'
 import { formatPrice } from '~/lib/utils'
 import { orderIdFormatter } from '~/lib/utils'
-import { getEmailAssetUrl, getProductImageUrl } from '../utils'
-
-type ReceiptProduct = {
-  product: Product
-  quantity: number
-}
-
-interface ReceiptEmailProps {
-  email: string
-  date: string
-  status: string
-  orderId: string
-  method: 'card' | 'store'
-  pickupPlace: string
-  pickupPlaceUrl: string
-  products: ReceiptProduct[]
-  pickupDate: string
-  total: number
-}
+import { ReceiptEmailData } from '..'
+import { getEmailAssetUrl } from '../utils'
 
 export const ReceiptEmail = ({
-  email,
   date,
   orderId,
   status,
@@ -48,7 +28,7 @@ export const ReceiptEmail = ({
   pickupPlace,
   pickupDate,
   total,
-}: ReceiptEmailProps) => {
+}: ReceiptEmailData) => {
   const receiptOrderId = orderIdFormatter(orderId)
 
   return (
@@ -141,44 +121,26 @@ export const ReceiptEmail = ({
             <Text style={productsTitle}>Produkty</Text>
           </Section>
           <Section>
-            {products.map(({ product, quantity }) => {
-              const productImageUrl =
-                typeof product.images[0].image !== 'string'
-                  ? getProductImageUrl(product.images[0].image.url as string)
-                  : getProductImageUrl(product.images[0].image)
-
-              const productCategory =
-                typeof product.category !== 'string' ? product.category.title : product.category
-
-              const unformattedPrice = product.price * quantity
+            {products.map(({ title, price, quantity }) => {
+              const unformattedPrice = price * quantity
               const formattedProductPrice = formatPrice(unformattedPrice)
 
               return (
-                <Row key={product.title}>
-                  <Column style={{ width: '64px' }}>
+                <Row key={title}>
+                  {/* <Column style={{ width: '64px' }}>
                     <Img
-                      src={productImageUrl! ?? '/placeholder.png'}
+                      src="/placeholder.png"
                       width="64"
                       height="64"
-                      alt={product.title}
+                      alt={title}
                       style={productIcon}
                     />
-                  </Column>
+                  </Column> */}
                   <Column style={{ paddingLeft: '22px' }}>
                     <Text style={productTitle}>
-                      {product.title} x {quantity}ks
+                      {title} x {quantity}ks
                     </Text>
-                    <Text style={productDescription}>{productCategory}</Text>
-                    {/* TODO: Add product link */}
-                    {/* <Link
-                      href="https://userpub.itunes.apple.com/WebObjects/MZUserPublishing.woa/wa/addUserReview?cc=us&amp;id=1497977514&amp;o=i&amp;type=Subscription%20Renewal"
-                      style={productLink}
-                      data-saferedirecturl="https://www.google.com/url?q=https://userpub.itunes.apple.com/WebObjects/MZUserPublishing.woa/wa/addUserReview?cc%3Dus%26id%3D1497977514%26o%3Di%26type%3DSubscription%2520Renewal&amp;source=gmail&amp;ust=1673963081204000&amp;usg=AOvVaw2DFCLKMo1snS-Swk5H26Z1"
-                    >
-
-                    </Link> */}
                   </Column>
-
                   <Column style={productPriceWrapper} align="right">
                     <Text style={productPrice}>{formattedProductPrice}</Text>
                   </Column>
@@ -316,7 +278,10 @@ const productIcon = {
   border: '1px solid rgba(128,128,128,0.2)',
 }
 
-const productTitle = { fontSize: '12px', fontWeight: '600', ...resetText }
+const productTitle = {
+  fontSize: '14px', // увеличили с 12px до 14px
+  fontWeight: '600', ...resetText
+}
 
 const productDescription = {
   fontSize: '12px',

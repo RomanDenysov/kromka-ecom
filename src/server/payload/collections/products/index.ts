@@ -30,37 +30,37 @@ const Products: CollectionConfig = {
         }
       },
     ],
-    beforeChange: [
-      async ({ req, operation, data }) => {
-        if (req.user && operation === 'create') {
-          data.createdBy = req.user.id
-        }
-        if (operation === 'create' && data) {
-          const stripeProduct = await stripe.products.create({
-            name: data.title,
-            default_price_data: {
-              currency: 'eur',
-              unit_amount: PriceFormatter.toStripeAmount(data.price),
-            },
-          })
-          data.stripeId = stripeProduct.id
-          data.priceId = stripeProduct.default_price as string
-        }
-        if (operation === 'update' && data.stripeId) {
-          const newPrice = await stripe.prices.create({
-            product: data.stripeId,
-            currency: 'eur',
-            unit_amount: PriceFormatter.toStripeAmount(data.price),
-          })
-          await stripe.products.update(data.stripeId, {
-            name: data.title,
-            default_price: newPrice.id,
-          })
-          data.priceId = newPrice.id
-        }
-        return data
-      },
-    ],
+    // beforeChange: [
+    //   async ({ req, operation, data }) => {
+    //     if (req.user && operation === 'create') {
+    //       data.createdBy = req.user.id
+    //     }
+    //     if (operation === 'create' && data) {
+    //       const stripeProduct = await stripe.products.create({
+    //         name: data.title,
+    //         default_price_data: {
+    //           currency: 'eur',
+    //           unit_amount: PriceFormatter.toStripeAmount(data.price),
+    //         },
+    //       })
+    //       data.stripeId = stripeProduct.id
+    //       data.priceId = stripeProduct.default_price as string
+    //     }
+    //     if (operation === 'update' && data.stripeId) {
+    //       const newPrice = await stripe.prices.create({
+    //         product: data.stripeId,
+    //         currency: 'eur',
+    //         unit_amount: PriceFormatter.toStripeAmount(data.price),
+    //       })
+    //       await stripe.products.update(data.stripeId, {
+    //         name: data.title,
+    //         default_price: newPrice.id,
+    //       })
+    //       data.priceId = newPrice.id
+    //     }
+    //     return data
+    //   },
+    // ],
   },
   fields: [
     {

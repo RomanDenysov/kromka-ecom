@@ -1,10 +1,12 @@
-import type { User as TUser } from '@payload-types'
+import type { User as PayloadUser } from '@payload-types'
 import type { DefaultSession, NextAuthConfig, Profile } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Google from 'next-auth/providers/google'
 import Nodemailer from 'next-auth/providers/nodemailer'
+import { PayloadAuthjsUser } from 'payload-authjs'
 import { env } from '~/env'
+import { useAuth } from '~/hooks/use-auth'
 
 declare module 'next-auth/jwt' {
   interface JWT extends Pick<Profile, 'role'> {
@@ -14,13 +16,10 @@ declare module 'next-auth/jwt' {
 
 declare module 'next-auth' {
   interface Profile {
-    role: TUser['role']
+    role: PayloadUser['role']
   }
-
   interface User extends Pick<JWT, 'id' | 'role'> {}
-  interface Session extends DefaultSession {
-    user: User & DefaultSession['user']
-  }
+  interface Session extends PayloadAuthjsUser<PayloadUser> {}
 }
 
 const providers: Provider[] = [
@@ -46,39 +45,6 @@ const providers: Provider[] = [
 
 export default {
   providers,
-  trustHost: true,
-  useSecureCookies: env.NODE_ENV === 'production',
-  // cookies:
-  //   env.NODE_ENV === 'production'
-  //     ? {
-  //         sessionToken: {
-  //           name: `__Secure-next-auth.session-token`,
-  //           options: {
-  //             httpOnly: true,
-  //             sameSite: 'lax',
-  //             path: '/',
-  //             secure: true,
-  //           },
-  //         },
-  //         callbackUrl: {
-  //           name: `__Secure-next-auth.callback-url`,
-  //           options: {
-  //             sameSite: 'lax',
-  //             path: '/',
-  //             secure: true,
-  //           },
-  //         },
-  //         csrfToken: {
-  //           name: `__Host-next-auth.csrf-token`,
-  //           options: {
-  //             httpOnly: true,
-  //             sameSite: 'lax',
-  //             path: '/',
-  //             secure: true,
-  //           },
-  //         },
-  //       }
-  //     : undefined,
   session: {
     strategy: 'jwt',
     maxAge: 5 * 24 * 60 * 60, // 5 days
@@ -94,7 +60,6 @@ export default {
     jwt: async ({ token, user, profile }) => {
       if (user) {
         token.id = user.id
-        // Убедимся, что роль всегда присутствует
         token.role = user.role || profile?.role || 'user'
       }
       return token
@@ -102,7 +67,7 @@ export default {
     session: async ({ session, token }) => {
       if (token) {
         session.user.id = token.id as string
-        session.user.role = token.role as TUser['role']
+        session.user.role = token.role as PayloadUser['role']
         // Убедимся, что email всегда присутствует
         if (token.email) {
           session.user.email = token.email
@@ -120,7 +85,9 @@ export default {
   },
   events: {
     async signIn({ user, account, profile }) {
+      const { auth } = useAuth()
       console.log('Signing in', { user, account, profile })
+      auth()
     },
   },
 } satisfies NextAuthConfig

@@ -1,15 +1,19 @@
 import type { Field } from 'payload'
-import { COLLECTIONS } from '../config'
 
 const productItemsField: Field = {
   name: 'productItems',
   type: 'array',
   fields: [
     {
-      name: 'product',
-      type: 'relationship',
-      relationTo: COLLECTIONS.PRODUCTS,
+      name: 'title',
+      type: 'text',
       required: true,
+    },
+    {
+      name: 'price',
+      type: 'number',
+      required: true,
+      min: 0,
     },
     {
       name: 'quantity',

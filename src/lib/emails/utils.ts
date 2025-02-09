@@ -34,3 +34,5 @@ export const getProductImageUrl = (imageUrl: string): string => {
 
   return `${baseUrl}${cleanPath}`
 }
+
+export const formatOrderId = (orderId: string): string => orderId.split('-')[0]

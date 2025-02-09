@@ -1,259 +1,283 @@
+import 'server-only'
 import { TRPCError } from '@trpc/server'
 import type { Payload } from 'payload'
-import type Stripe from 'stripe'
+import { cache } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { env } from '~/env'
-import { EmailService } from '~/lib/emails'
-import { stripe } from '~/lib/stripe'
+import { sendNewOrderEmail, sendReceiptEmail } from '~/lib/emails'
 import { DateService, PriceFormatter } from '~/lib/utils'
-import type { Profile } from '~/server/payload/payload-types'
 import { initPayload } from '~/server/payload/utils/payload'
-import type { CheckoutOptions, CheckoutProduct } from './validator'
+import { CheckoutOptions, CheckoutProduct } from './validator'
 
 interface OrderProduct {
-  productId: string
+  title: string
+  price: number
   quantity: number
-  priceId?: string
 }
 
 interface CheckoutUser {
   id?: string
-  email?: string | null
-  name?: string | null
+  email: string
+  name: string
+  phone: string
 }
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
-// biome-ignore lint/complexity/noThisInStatic: <explanation>
-export class CheckoutService {
-  private static readonly BASE_URL = `${env.NEXT_PUBLIC_SERVER_URL}/checkout`
-  private static payload: Payload | null = null
+// const ADMIN_EMAILS = ['romandenysovsk@gmail.com', 'kromka@kavejo.sk']
+const ADMIN_EMAILS = ['romandenysovsk@gmail.com']
 
-  private static async getPayloadInstance() {
-    if (!this.payload) {
-      this.payload = await initPayload()
-    }
-    return this.payload
+const BASE_URL = `${env.NEXT_PUBLIC_SERVER_URL}/checkout`
+
+let payloadInstance: Payload | null = null
+
+const getPayload = cache(async () => {
+  if (!payloadInstance) {
+    payloadInstance = await initPayload()
+  }
+  return payloadInstance
+})
+
+function getSuccessUrl(orderId: string) {
+  return `${BASE_URL}/confirm?order=${orderId}`
+}
+
+async function getProducts(productsIds: string[]) {
+  const payload = await getPayload()
+
+  const { docs: items } = await payload.find({
+    collection: 'products',
+    where: { id: { in: productsIds } },
+    depth: 2,
+  })
+
+  if (!items.length) {
+    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid products ids' })
   }
 
-  static async getProducts(productsIds: string[]) {
-    const payload = await this.getPayloadInstance()
-    const { docs: items } = await payload.find({
-      collection: 'products',
-      where: { id: { in: productsIds } },
-      depth: 2,
-    })
+  return items
+}
 
-    if (!items.length) {
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Invalid products',
-      })
-    }
+export function calculateOrderDetails(
+  items: any[],
+  products: { product: string; quantity?: number }[],
+) {
+  const orderDetails = products.reduce<{
+    totalPrice: number
+    orderProducts: OrderProduct[]
+  }>(
+    (acc, { product, quantity = 1 }) => {
+      const item = items.find((i) => i.id === product)
 
-    return items
-  }
-
-  static calculateOrderDetails(items: any[], products: { product: string; quantity?: number }[]) {
-    let totalPrice = 0
-    const orderProducts: OrderProduct[] = []
-
-    for (const item of items) {
-      const productData = products.find(({ product }) => product === item.id)
-      const quantity = productData?.quantity ?? 1
-
-      if (typeof item.price !== 'number') {
+      if (!item || typeof item.price !== 'number') {
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Invalid product price',
+          message: `Invalid product price ${product}`,
         })
       }
 
-      totalPrice += item.price * quantity
-      orderProducts.push({
-        productId: item.id,
-        quantity,
-        priceId: item?.priceId || '',
-      })
-    }
+      return {
+        totalPrice: acc.totalPrice + item.price * quantity,
+        orderProducts: [
+          ...acc.orderProducts,
+          {
+            title: item.title,
+            price: item.price,
+            quantity,
+          },
+        ],
+      }
+    },
+    { totalPrice: 0, orderProducts: [] },
+  )
 
-    return {
-      totalPrice,
-      orderProducts,
-    }
-  }
+  return orderDetails
+}
 
-  static async getProfile(profileId: string) {
-    const payload = await this.getPayloadInstance()
-    const profile = await payload.findByID({
-      collection: 'profiles',
-      id: profileId,
-    })
+async function findOrCreateUser(options: CheckoutOptions): Promise<CheckoutUser> {
+  const payload = await getPayload()
 
-    if (!profile) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'Profile not found',
-      })
-    }
+  // Попробуем найти пользователя по email
+  const { docs: existingUsers } = await payload.find({
+    collection: 'users',
+    where: {
+      email: {
+        equals: options.email.toLowerCase(),
+      },
+    },
+  })
 
-    return profile
-  }
-
-  static async updateProfile(profileId: string, options: CheckoutOptions) {
-    const payload = await this.getPayloadInstance()
-    await payload.update({
-      collection: 'profiles',
-      id: profileId,
-      data: {
-        contacts: {
+  if (existingUsers.length > 0) {
+    const user = existingUsers[0]
+    // Обновляем информацию о пользователе, если она изменилась
+    if (user.name !== options.name || user.phone !== options.phone) {
+      await payload.update({
+        collection: 'users',
+        id: user.id,
+        data: {
           name: options.name,
           phone: options.phone,
-          email: options.email,
         },
-        customerOptions: {
-          store: options.store,
-          method: options.method,
-        },
-        options: {
-          terms: options.terms,
-          privacy: true,
-          cookie: true,
-        },
-      },
-    })
-  }
-
-  static async createOrder(
-    options: CheckoutOptions,
-    totalPrice: number,
-    products: CheckoutProduct[],
-    profile: Profile | null,
-    user?: CheckoutUser | null,
-  ) {
-    const payload = await this.getPayloadInstance()
-
-    return payload.create({
-      collection: 'orders',
-      data: {
-        user: user?.id || null,
-        profile: profile?.id || null,
-        pickupStore: profile?.customerOptions?.store || options.store,
-        productItems: products,
-        pickupDate: DateService.formatToISO(options.date),
-        method: options.method || profile?.customerOptions?.method,
-        paymentStatus: 'pending',
-        status: 'new',
-        optionalPrice: null,
-        total: PriceFormatter.formatPriceNumber(totalPrice),
-        _isPaid: false,
-      },
-    })
-  }
-
-  static getSuccessUrl(orderId: string) {
-    return `${this.BASE_URL}/confirm?order=${orderId}`
-  }
-
-  static async createStripeSession(
-    orderProducts: OrderProduct[],
-    orderId: string,
-    userEmail: string,
-  ) {
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = orderProducts.map(
-      (product) => ({
-        price: product.priceId,
-        quantity: product.quantity,
-        adjustable_quantity: { enabled: false },
-      }),
-    )
-
-    return stripe.checkout.sessions.create({
-      payment_method_types: ['card', 'mobilepay'],
-      line_items: lineItems,
-      mode: 'payment',
-      success_url: this.getSuccessUrl(orderId),
-      cancel_url: this.BASE_URL,
-      metadata: {
-        userInfo: userEmail,
-        orderId,
-      },
-
-      payment_intent_data: {
-        metadata: {
-          orderId,
-        },
-      },
-    })
-  }
-
-  static async checkOrderStatus(orderId: string) {
-    const payload = await this.getPayloadInstance()
-    const order = await payload.findByID({
-      collection: 'orders',
-      id: orderId,
-    })
-
+      })
+    }
     return {
-      isPaid: order?._isPaid || false,
-      status: order?.status,
-      paymentStatus: order?.paymentStatus,
+      id: user.id,
+      email: user.email,
+      name: user.name ?? '',
+      phone: user.phone ?? '',
     }
   }
 
-  static async processCheckout(
-    products: CheckoutProduct[],
-    options: CheckoutOptions,
-    user?: CheckoutUser,
-  ) {
-    const profile = await this.getProfile(options!.profileId!)
-    const items = await this.getProducts(products.map(({ product }) => product))
-    const { totalPrice, orderProducts } = this.calculateOrderDetails(items, products)
+  try {
+    const userData = {
+      id: uuidv4(),
+      email: options.email.toLowerCase(),
+      name: options.name,
+      phone: options.phone,
+      role: 'user' as const, // вернем role, он может быть нужен
+    }
 
-    await this.updateProfile(profile.id, options)
+    console.log('Attempting to create user with data:', userData)
 
-    const order = await this.createOrder(options, totalPrice, products, profile, user)
+    const newUser = await payload.create({
+      collection: 'users',
+      data: userData,
+    }) // убрали лишнюю скобку
 
-    const userEmail = options.email ?? user?.email ?? profile?.contacts?.email
-    const userName = user?.name ?? profile?.contacts?.name ?? options.name
-    const userPhone = profile?.contacts?.phone ?? options.phone
+    console.log('Payload response:', newUser)
 
-    if (options.method === 'store') {
-      await EmailService.sendReceiptEmail({
-        email: userEmail,
+    if (!newUser?.id) {
+      throw new Error('User created but no ID returned')
+    }
+
+    return {
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name ?? '',
+      phone: newUser.phone ?? '',
+    }
+  } catch (error) {
+    console.error('Detailed create error:', {
+      error,
+    })
+    throw error
+  }
+}
+
+export async function createOrder(
+  options: CheckoutOptions,
+  totalPrice: number,
+  products: OrderProduct[],
+  user: CheckoutUser,
+) {
+  const payload = await getPayload()
+
+  const order = await payload.create({
+    collection: 'orders',
+    data: {
+      user: user.id,
+      pickupStore: options.store,
+      productItems: products,
+      pickupDate: DateService.formatToISO(options.date),
+      status: 'new',
+      total: PriceFormatter.formatPriceNumber(totalPrice),
+      _isPaid: false,
+    },
+  })
+
+  console.log('Created order:', order) // Добавим лог
+  return order
+}
+
+export async function checkOrderStatus(orderId: string) {
+  const payload = await getPayload()
+  const order = await payload.findByID({
+    collection: 'orders',
+    id: orderId,
+  })
+
+  return {
+    status: order?.status,
+  }
+}
+
+async function sendOrderEmails(order: any, user: CheckoutUser) {
+  const getPickupPlace = (store: any) => {
+    if (typeof store === 'string') return ''
+    return store.title || ''
+  }
+
+  const getPickupPlaceUrl = (store: any) => {
+    if (typeof store === 'string') return ''
+    return store.addressUrl || ''
+  }
+  try {
+    await Promise.all([
+      sendReceiptEmail({
+        email: user.email,
         date: DateService.formatForEmail(order.createdAt),
         status: 'Nová objednávka',
         orderId: order.id,
-        method: order.method,
-        pickupPlace: typeof order.pickupStore !== 'string' ? order.pickupStore.title : '',
-        pickupPlaceUrl: typeof order.pickupStore !== 'string' ? order.pickupStore.addressUrl : '',
-        // @ts-ignore
-        products: order.productItems,
+        method: 'store',
+        pickupPlace: getPickupPlace(order.pickupStore),
+        pickupPlaceUrl: getPickupPlaceUrl(order.pickupStore),
+        products: order.productItems.map((item: any) => ({
+          title: item.title,
+          price: item.price,
+          quantity: item.quantity,
+        })),
         pickupDate: DateService.formatForEmail(order.pickupDate),
         total: order.total,
-      })
-
-      await EmailService.sendNewOrderEmail({
-        email: ['romandenysovsk@gmail.com', 'kromka@kavejo.sk'],
+      }),
+      sendNewOrderEmail({
+        email: ADMIN_EMAILS,
         orderId: order.id,
-        pickupPlace: typeof order.pickupStore !== 'string' ? order.pickupStore.title : '',
-        // @ts-ignore
-        products: order.productItems,
-        paymentMethod: order.method,
+        pickupPlace: getPickupPlace(order.pickupStore),
+        products: order.productItems.map((item: any) => ({
+          title: item.title,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        paymentMethod: 'store',
         pickupTime: DateService.formatForEmail(order.pickupDate),
         customer: {
-          name: userName,
-          email: userEmail,
-          phone: userPhone,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
         },
-      })
-      return {
-        url: this.getSuccessUrl(order.id),
-      }
-    }
+      }),
+    ])
+  } catch (error) {
+    console.log('Failed to send order emails:', error)
+  }
+}
 
-    const paymentSession = await this.createStripeSession(orderProducts, order.id, userEmail)
+export async function processCheckout(products: CheckoutProduct[], options: CheckoutOptions) {
+  try {
+    console.log('Starting checkout with products:', products)
+    console.log('Options:', options)
 
-    return {
-      url: paymentSession.url,
-    }
+    // Get products and create/update user
+    const [items, user] = await Promise.all([
+      getProducts(products.map(({ product }) => product)),
+      findOrCreateUser(options),
+    ])
+
+    console.log('Retrieved items:', items)
+    console.log('User:', user)
+
+    // Calculate order details
+    const { totalPrice, orderProducts } = calculateOrderDetails(items, products)
+    console.log('Order details:', { totalPrice, orderProducts })
+
+    // Create order
+    const order = await createOrder(options, totalPrice, orderProducts, user)
+
+    // Send emails
+    await sendOrderEmails(order, user)
+
+    // Return success URL
+    return { url: getSuccessUrl(order.id) }
+  } catch (error) {
+    console.error('Checkout process failed:', error)
+    throw error
   }
 }

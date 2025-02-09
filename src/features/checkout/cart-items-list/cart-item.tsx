@@ -2,25 +2,19 @@ import { ImageIcon, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { memo } from 'react'
-import { ItemQuantityButton } from '~/features/checkout/ui'
 import { useConfirm } from '~/hooks/use-confirm'
 import { formatPrice } from '~/lib/utils'
 import type { Product } from '~/server/payload/payload-types'
 import { useCart } from '~/store/cart/use-cart'
-
-type Props = {
-  product: Product
-  quantity: number
-}
+import ItemQuantityButton from './item-quantity-button'
 
 const CartItemImage = memo(
-  ({ image, title, slug }: { image: any; title: string; slug: string }) => {
+  (props: { image: any; title: string; slug: string }) => {
+    const { image, title, slug } = props
     if (image && typeof image !== 'string' && image?.url) {
       return (
         <Link href={`/products/${slug}`}>
           <Image
-            loading="eager"
-            decoding="sync"
             quality={65}
             src={image.url ?? '/placeholder.png'}
             alt={title}
@@ -41,7 +35,8 @@ const CartItemImage = memo(
 
 CartItemImage.displayName = 'CartItemImage'
 
-const CartItem = ({ product, quantity }: Props) => {
+export const CartItem = memo((props: { product: Product; quantity: number }) => {
+  const { product, quantity } = props
   const [ConfirmDialog, confirm] = useConfirm(
     'Odstrániť produkt',
     `Chcete odstrániť ${product?.title} z košíka?`,
@@ -98,6 +93,4 @@ const CartItem = ({ product, quantity }: Props) => {
       </div>
     </>
   )
-}
-
-export default memo(CartItem)
+})

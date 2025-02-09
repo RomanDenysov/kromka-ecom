@@ -4,7 +4,7 @@ import { EmailForm } from './email-form'
 
 export default function AuthCard() {
   return (
-    <Card className="z-50">
+    <Card className="z-50 rounded-md">
       <CardHeader className="w-full text-center">
         <CardTitle>Prihlášení</CardTitle>
         <CardDescription>Zvolte si prosím metodu přihlášení</CardDescription>

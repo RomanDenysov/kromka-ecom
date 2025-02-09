@@ -1,71 +1,42 @@
 import type { Product } from '@payload-types'
 import { render } from '@react-email/components'
-import nodemailer from 'nodemailer'
-import { env } from '~/env'
+import { sendEmail } from './config'
 import { NewOrderEmail } from './templates/new-order-email'
 import { OrderConfirmationEmail } from './templates/order-confirmation-email'
 import { OrderReadyEmail } from './templates/order-ready-email'
 import { OutOfStockEmail } from './templates/out-of-stock-email'
 import { ReceiptEmail } from './templates/receipt-email'
 import { ThankYouEmail } from './templates/thank-you-email'
+import { formatOrderId } from './utils'
 
-interface EmailConfig {
-  from: string
-  fromName: string
-  host: string
-  port: number
-  user: string
-  password: string
+interface OrderProduct {
+  title: string
+  price: number
+  quantity: number
+}
+// Base types
+interface BaseEmailData {
+  email: string | string[]
+  orderId: string
 }
 
-type ReceiptEmailData = {
-  email: string
+interface BaseOrderData extends BaseEmailData {
+  pickupPlace: string
+}
+
+// Email types
+export interface ReceiptEmailData extends BaseOrderData {
   date: string
   status: string
-  orderId: string
   method: 'card' | 'store'
-  pickupPlace: string
   pickupPlaceUrl: string
-  products: Array<{
-    product: Product
-    quantity: number
-  }>
+  products: OrderProduct[]
   pickupDate: string
   total: number
 }
 
-type OrderConfirmationData = {
-  email: string
-  orderId: string
-  pickupPlace: string
-  pickupPlaceUrl: string
-}
-
-type OrderReadyData = {
-  email: string
-  orderId: string
-  pickupPlace: string
-}
-
-type OutOfStockData = {
-  email: string
-  orderId: string
-  productName: string
-}
-
-type ThankYouData = {
-  email: string
-  orderId: string
-}
-
-type NewOrderData = {
-  email: string | string[]
-  orderId: string
-  pickupPlace: string
-  products: Array<{
-    product: Product
-    quantity: number
-  }>
+export interface NewOrderEmailData extends BaseOrderData {
+  products: OrderProduct[]
   paymentMethod: 'card' | 'store'
   pickupTime: string
   customer: {
@@ -75,134 +46,86 @@ type NewOrderData = {
   }
 }
 
-type EmailTemplate =
-  | 'receipt'
-  | 'order-confirmation'
-  | 'order-ready'
-  | 'out-of-stock'
-  | 'thank-you'
-  | 'new-order'
+export interface OrderConfirmationData extends BaseOrderData {
+  pickupPlaceUrl: string
+}
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
-// biome-ignore lint/complexity/noThisInStatic: <explanation>
-export class EmailService {
-  private static transporter: nodemailer.Transporter | null = null
-  private static config: EmailConfig = {
-    from: env.EMAIL_FROM2,
-    fromName: 'Pekaren Kromka',
-    host: env.EMAIL_HOST,
-    port: 587,
-    user: env.EMAIL_FROM,
-    password: env.EMAIL_PASS,
-  }
+export interface OrderReadyData extends BaseOrderData {}
 
-  private static async getTransporter() {
-    if (!this.transporter) {
-      this.transporter = nodemailer.createTransport({
-        host: this.config.host,
-        port: this.config.port,
-        secure: false,
-        auth: {
-          user: this.config.user,
-          pass: this.config.password,
-        },
-      })
-    }
-    return this.transporter
-  }
+export interface OutOfStockData extends BaseEmailData {
+  productName: string
+}
 
-  private static orderIdFormatter(orderId: string) {
-    return orderId.split('-')[0]
-  }
+export interface ThankYouData extends BaseEmailData {}
 
-  private static async renderTemplate(template: EmailTemplate, data: any) {
-    switch (template) {
-      case 'receipt':
-        return render(ReceiptEmail(data as ReceiptEmailData))
-      case 'order-confirmation':
-        return render(OrderConfirmationEmail(data as OrderConfirmationData))
-      case 'order-ready':
-        return render(OrderReadyEmail(data as OrderReadyData))
-      case 'out-of-stock':
-        return render(OutOfStockEmail(data as OutOfStockData))
-      case 'thank-you':
-        return render(ThankYouEmail(data as OrderConfirmationData))
-      case 'new-order':
-        return render(NewOrderEmail(data as NewOrderData))
-      default:
-        throw new Error(`Unknown email template: ${template}`)
-    }
-  }
+// Email templates type
+type EmailType =
+  | { type: 'receipt'; data: ReceiptEmailData }
+  | { type: 'order-confirmation'; data: OrderConfirmationData }
+  | { type: 'order-ready'; data: OrderReadyData }
+  | { type: 'out-of-stock'; data: OutOfStockData }
+  | { type: 'thank-you'; data: ThankYouData }
+  | { type: 'new-order'; data: NewOrderEmailData }
 
-  private static async sendEmail({
-    to,
-    subject,
-    html,
-  }: {
-    to: string | string[]
-    subject: string
-    html: string
-  }) {
-    const transporter = await this.getTransporter()
-    return transporter.sendMail({
-      from: `"${this.config.fromName}" < ${this.config.from} >`, // TODO: Add email from
-      to,
-      subject,
-      html,
-    })
-  }
-
-  static async sendReceiptEmail(data: ReceiptEmailData) {
-    const html = await this.renderTemplate('receipt', data)
-    return this.sendEmail({
-      to: data.email,
-      subject: `Objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
-      html,
-    })
-  }
-
-  static async sendOrderConfirmationEmail(data: OrderConfirmationData) {
-    const html = await this.renderTemplate('order-confirmation', data)
-    return this.sendEmail({
-      to: data.email,
-      subject: `Už sa to pečie! Objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
-      html,
-    })
-  }
-
-  static async sendOrderReadyEmail(data: OrderReadyData) {
-    const html = await this.renderTemplate('order-ready', data)
-    return this.sendEmail({
-      to: data.email,
-      subject: `Vaša objednávka #${this.orderIdFormatter(data.orderId)} je pripravená - Pekaren Kromka`,
-      html,
-    })
-  }
-
-  static async sendOutOfStockEmail(data: OutOfStockData) {
-    const html = await this.renderTemplate('out-of-stock', data)
-    return this.sendEmail({
-      to: data.email,
-      subject: `Produkt nie je k dispozícii - Objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
-      html,
-    })
-  }
-
-  static async sendThankYouEmail(data: ThankYouData) {
-    const html = await this.renderTemplate('thank-you', data)
-    return this.sendEmail({
-      to: data.email,
-      subject: `Ďakujeme za vašu objednávku - Pekaren Kromka`,
-      html,
-    })
-  }
-
-  static async sendNewOrderEmail(data: NewOrderData) {
-    const html = await this.renderTemplate('new-order', data)
-    return this.sendEmail({
-      to: data.email,
-      subject: `Nová objednávka #${this.orderIdFormatter(data.orderId)} - Pekaren Kromka`,
-      html,
-    })
+// Render template based on type
+const renderTemplate = async ({ type, data }: EmailType): Promise<string> => {
+  switch (type) {
+    case 'receipt':
+      return render(ReceiptEmail(data))
+    case 'order-confirmation':
+      return render(OrderConfirmationEmail(data))
+    case 'order-ready':
+      return render(OrderReadyEmail(data))
+    case 'out-of-stock':
+      return render(OutOfStockEmail(data))
+    case 'thank-you':
+      return render(ThankYouEmail(data))
+    case 'new-order':
+      return render(NewOrderEmail(data))
   }
 }
+
+// Get email subject based on type
+const getEmailSubject = ({ type, data }: EmailType): string => {
+  switch (type) {
+    case 'receipt':
+      return `Objednávka #${formatOrderId(data.orderId)} - Pekaren Kromka`
+    case 'order-confirmation':
+      return `Už sa to pečie! Objednávka #${formatOrderId(data.orderId)} - Pekaren Kromka`
+    case 'order-ready':
+      return `Vaša objednávka #${formatOrderId(data.orderId)} je pripravená - Pekaren Kromka`
+    case 'out-of-stock':
+      return `Produkt nie je k dispozícii - Objednávka #${formatOrderId(data.orderId)} - Pekaren Kromka`
+    case 'thank-you':
+      return `Ďakujeme za vašu objednávku - Pekaren Kromka`
+    case 'new-order':
+      return `Nová objednávka #${formatOrderId(data.orderId)} - Pekaren Kromka`
+  }
+}
+
+// Main send email function
+export const sendEmailByType = async (emailData: EmailType) => {
+  const html = await renderTemplate(emailData)
+  const subject = getEmailSubject(emailData)
+
+  return sendEmail(emailData.data.email, subject, html)
+}
+
+// Helper functions for specific email types
+export const sendReceiptEmail = async (data: ReceiptEmailData) =>
+  sendEmailByType({ type: 'receipt', data })
+
+export const sendOrderConfirmationEmail = async (data: OrderConfirmationData) =>
+  sendEmailByType({ type: 'order-confirmation', data })
+
+export const sendOrderReadyEmail = async (data: OrderReadyData) =>
+  sendEmailByType({ type: 'order-ready', data })
+
+export const sendOutOfStockEmail = async (data: OutOfStockData) =>
+  sendEmailByType({ type: 'out-of-stock', data })
+
+export const sendThankYouEmail = async (data: ThankYouData) =>
+  sendEmailByType({ type: 'thank-you', data })
+
+export const sendNewOrderEmail = async (data: NewOrderEmailData) =>
+  sendEmailByType({ type: 'new-order', data })

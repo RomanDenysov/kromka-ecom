@@ -7,6 +7,7 @@ const Users: CollectionConfig = {
   admin: {
     group: COLLECTIONS_GROUPS.ADMIN,
     useAsTitle: 'email',
+    defaultColumns: ['email', 'name', 'phone', 'role'],
   },
   access: {
     read: () => true,
@@ -15,6 +16,17 @@ const Users: CollectionConfig = {
     delete: () => false,
   },
   fields: [
+    {
+      name: 'visitorId',
+      type: 'text',
+      hidden: true,
+      index: true,
+    },
+    {
+      name: 'phone',
+      type: 'text',
+      label: 'Phone number',
+    },
     {
       name: 'role',
       type: 'select',

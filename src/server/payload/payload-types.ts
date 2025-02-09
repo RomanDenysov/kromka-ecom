@@ -88,25 +88,20 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  role: 'admin' | 'user' | 'manager' | 'author' | 'partner';
   id: string;
   email: string;
+  emailVerified?: string | null;
   name?: string | null;
   image?: string | null;
-  emailVerified?: string | null;
+  visitorId?: string | null;
+  phone?: string | null;
+  role: 'admin' | 'user' | 'manager' | 'author' | 'partner';
   accounts?:
     | {
         id?: string | null;
         provider: string;
         providerAccountId: string;
         type: string;
-      }[]
-    | null;
-  sessions?:
-    | {
-        id?: string | null;
-        sessionToken: string;
-        expires: string;
       }[]
     | null;
   verificationTokens?:
@@ -254,48 +249,20 @@ export interface Media {
 export interface Order {
   id: string;
   user?: (string | null) | User;
-  profile?: (string | null) | Profile;
   pickupStore: string | Store;
   productItems?:
     | {
-        product: string | Product;
+        title: string;
+        price: number;
         quantity: number;
         id?: string | null;
       }[]
     | null;
   pickupDate: string;
-  method: 'store' | 'card';
-  paymentStatus: 'pending' | 'progress' | 'completed' | 'cancelled';
   status: 'new' | 'processing' | 'ready' | 'complete' | 'cancelled';
-  optionalPrice?: number | null;
   total: number;
   _isPaid: boolean;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "profiles".
- */
-export interface Profile {
-  id: string;
-  contactDisplay?: string | null;
-  user?: (string | null) | User;
-  contacts?: {
-    name?: string | null;
-    phone?: string | null;
-    email?: string | null;
-  };
-  customerOptions?: {
-    store?: (string | null) | Store;
-    method?: ('store' | 'card') | null;
-  };
-  options: {
-    terms: boolean;
-    privacy: boolean;
-    cookie: boolean;
-  };
-  isRegistered?: boolean | null;
+  note?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -343,7 +310,8 @@ export interface Cart {
   user: string | User;
   productItems?:
     | {
-        product: string | Product;
+        title: string;
+        price: number;
         quantity: number;
         id?: string | null;
       }[]
@@ -351,6 +319,32 @@ export interface Cart {
   total: number;
   profile?: (string | null) | Profile;
   link?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "profiles".
+ */
+export interface Profile {
+  id: string;
+  contactDisplay?: string | null;
+  user?: (string | null) | User;
+  contacts?: {
+    name?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
+  customerOptions?: {
+    store?: (string | null) | Store;
+    method?: ('store' | 'card') | null;
+  };
+  options: {
+    terms: boolean;
+    privacy: boolean;
+    cookie: boolean;
+  };
+  isRegistered?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -560,12 +554,14 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  role?: T;
   id?: T;
   email?: T;
+  emailVerified?: T;
   name?: T;
   image?: T;
-  emailVerified?: T;
+  visitorId?: T;
+  phone?: T;
+  role?: T;
   accounts?:
     | T
     | {
@@ -573,13 +569,6 @@ export interface UsersSelect<T extends boolean = true> {
         provider?: T;
         providerAccountId?: T;
         type?: T;
-      };
-  sessions?:
-    | T
-    | {
-        id?: T;
-        sessionToken?: T;
-        expires?: T;
       };
   verificationTokens?:
     | T
@@ -624,22 +613,20 @@ export interface ProductsSelect<T extends boolean = true> {
  */
 export interface OrdersSelect<T extends boolean = true> {
   user?: T;
-  profile?: T;
   pickupStore?: T;
   productItems?:
     | T
     | {
-        product?: T;
+        title?: T;
+        price?: T;
         quantity?: T;
         id?: T;
       };
   pickupDate?: T;
-  method?: T;
-  paymentStatus?: T;
   status?: T;
-  optionalPrice?: T;
   total?: T;
   _isPaid?: T;
+  note?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -652,7 +639,8 @@ export interface CartsSelect<T extends boolean = true> {
   productItems?:
     | T
     | {
-        product?: T;
+        title?: T;
+        price?: T;
         quantity?: T;
         id?: T;
       };

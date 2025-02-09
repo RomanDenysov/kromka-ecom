@@ -39,15 +39,6 @@ const Orders: CollectionConfig = {
       },
     },
     {
-      name: 'profile',
-      type: 'relationship',
-      relationTo: COLLECTIONS.PROFILES,
-      hasMany: false,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
       name: 'pickupStore',
       type: 'relationship',
       relationTo: COLLECTIONS.STORES,
@@ -65,50 +56,6 @@ const Orders: CollectionConfig = {
       admin: {
         position: 'sidebar',
       },
-    },
-    {
-      name: 'method',
-      type: 'select',
-      required: true,
-      options: [
-        {
-          label: 'Store',
-          value: 'store',
-        },
-        {
-          label: 'Card',
-          value: 'card',
-        },
-      ],
-      defaultValue: 'store',
-    },
-    {
-      name: 'paymentStatus',
-      type: 'select',
-      required: true,
-      admin: {
-        position: 'sidebar',
-        description: 'The status of the payment',
-      },
-      options: [
-        {
-          label: 'Pending',
-          value: 'pending',
-        },
-        {
-          label: 'In progress',
-          value: 'progress',
-        },
-        {
-          label: 'Completed',
-          value: 'completed',
-        },
-        {
-          label: 'Cancelled',
-          value: 'cancelled',
-        },
-      ],
-      defaultValue: 'pending',
     },
     {
       name: 'status',
@@ -142,16 +89,6 @@ const Orders: CollectionConfig = {
       defaultValue: 'new',
     },
     {
-      name: 'optionalPrice',
-      type: 'number',
-      required: false,
-      admin: {
-        position: 'sidebar',
-        step: 0.01,
-        hidden: true,
-      },
-    },
-    {
       name: 'total',
       type: 'number',
       required: true,
@@ -172,6 +109,12 @@ const Orders: CollectionConfig = {
       admin: {
         hidden: true,
       },
+    },
+    {
+      name: 'note',
+      type: 'text',
+      label: 'Note',
+      maxLength: 1000,
     },
   ],
   timestamps: true,

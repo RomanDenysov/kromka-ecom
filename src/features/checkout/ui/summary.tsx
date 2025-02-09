@@ -5,11 +5,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/lib/ui/c
 import { LoaderButton } from '~/lib/ui/loader-button'
 import { formatPrice } from '~/lib/utils'
 import { useCart } from '~/store/cart/use-cart'
-import { useCanSubmit, useCheckoutLoading } from '~/store/checkout/use-checkout-store'
 
 const Summary = () => {
-  const isLoading = useCheckoutLoading()
-  const canSubmit = useCanSubmit()
   const items = useCart((state) => state.items)
   const totalPrice = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
 
@@ -40,8 +37,8 @@ const Summary = () => {
       </CardContent>
       <CardFooter>
         <div className="size-full flex flex-col item-center justify-center gap-4">
-          {!canSubmit && items.length === 0 && (
-            <Alert>
+          {items.length === 0 && (
+            <Alert variant='destructive'>
               <AlertDescription>
                 Váš košík je prázdny. Pridajte produkty pre pokračovanie.
               </AlertDescription>
@@ -52,9 +49,8 @@ const Summary = () => {
             form="checkout-form"
             size={'lg'}
             className="w-full text-lg"
-            isLoading={isLoading}
-            disabled={!canSubmit}
-            // disabled={true}
+            isLoading={false}
+          // disabled={true}
           >
             Objednať
           </LoaderButton>
