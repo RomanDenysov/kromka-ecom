@@ -15,7 +15,7 @@ import { availableDates } from '../hooks/use-checkout-form'
 import { DatePicker } from './date-picker'
 import { DateSelector } from './date-selector'
 
-const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = false
+const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = true
 
 const Options = () => {
   const { control } = useFormContext()

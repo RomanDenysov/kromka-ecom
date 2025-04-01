@@ -23,7 +23,7 @@ export function DateSelector(props: {
     >
       {availableDates.map((dateString) => {
         const date = parse(dateString, 'yyyy-MM-dd', new Date())
-        const displayDateString = format(date, 'MMM d')
+        const displayDateString = format(date, 'MMMM d')
 
         return (
           <div key={dateString}>

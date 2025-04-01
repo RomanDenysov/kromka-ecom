@@ -19,8 +19,8 @@ import { api } from '~/trpc/react'
 import { DatePicker } from './date-picker'
 import { DateSelector } from './date-selector'
 
-const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = false
-const availableDates = ['2024-12-31']
+const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = true
+const availableDates = ['2025-04-16', '2025-04-18']
 const formFields = [
   {
     name: 'name' as const,
