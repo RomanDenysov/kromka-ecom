@@ -28,7 +28,7 @@ export default async function PostPage({ params }: Props) {
   const postBanner = typeof post.banner !== 'string' && post.banner.url
 
   return (
-    <Container className="py-10 space-y-10 md:py-20">
+    <Container className="py-4 space-y-8 md:py-8">
       <article>
         <div className="relative aspect-video mb-8 overflow-hidden rounded grid place-content-center px-8 text-center">
           {postBanner && (

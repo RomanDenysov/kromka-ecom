@@ -28,7 +28,8 @@ const slugifyConfig = {
 }
 
 function generateSlug(slug: string): string {
-  return slugify(slug, slugifyConfig)
+  const shortenedSlug = slug.slice(0, 100)
+  return slugify(shortenedSlug, slugifyConfig)
 }
 
 export { generateSlug }

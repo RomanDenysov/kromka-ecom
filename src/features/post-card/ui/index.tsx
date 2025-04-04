@@ -22,7 +22,7 @@ export function PostCard(props: { post: Post; index: number; className?: string 
           placeholder="blur"
           blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkAAIAAAoAAv/lxKUAAAAASUVORK5CYII="
         />
-        <div className="absolute z-10 inset-0 from-black/95 via-black/70 to-black/10 bg-gradient-to-t"></div>
+        <div className="absolute z-10 inset-0 from-black/35 via-black/25 to-black/10 bg-gradient-to-t"></div>
         <div className="size-full flex flex-col items-start justify-end p-4 z-20">
           {/* TODO: Add post tags */}
           <div className="flex flex-wrap mb-2">
