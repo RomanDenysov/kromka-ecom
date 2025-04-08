@@ -1,9 +1,19 @@
+import { Metadata } from 'next/types'
 import { Suspense } from 'react'
 import CartList from '~/features/checkout/cart-items-list/cart-list'
 
 import { CartTitleCounter } from '~/features/checkout/cart-items-list/cart-title-counter'
 import { CheckoutForm } from '~/features/checkout/ui/checkout-form'
 import { Container } from '~/lib/ui/container'
+import { createMetadata } from '~/lib/utils/metadata'
+
+const meta = {
+  title: 'Dokončenie objednávky | Košík',
+  description: 'Dokončenie objednávky',
+  image: '/images/end-banner.webp',
+}
+
+export const metadata: Metadata = createMetadata(meta)
 
 export default function CheckoutPage() {
   return (

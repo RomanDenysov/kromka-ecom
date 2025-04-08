@@ -13,8 +13,8 @@ export function ProductsList() {
 
   const selectedCategoriesSlug = categorySlug
     ? categorySlug
-        .split(',')
-        .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
+      .split(',')
+      .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0)
     : []
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -47,13 +47,7 @@ export function ProductsList() {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
   if (isLoading) {
-    return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 pt-5 pb-20">
-        {Array.from({ length: 8 }).map((_, index) => (
-          <ProductCardSkeleton key={index} />
-        ))}
-      </div>
-    )
+    return <ProductsListLoader />
   }
 
   return (
@@ -69,6 +63,16 @@ export function ProductsList() {
           {'Už žiadne produkty'}
         </p>
       )}
+    </div>
+  )
+}
+
+export const ProductsListLoader = () => {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 pt-5 pb-20">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <ProductCardSkeleton key={index} />
+      ))}
     </div>
   )
 }

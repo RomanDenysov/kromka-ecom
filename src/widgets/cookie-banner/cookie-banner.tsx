@@ -61,7 +61,7 @@ export function CookieBanner() {
           <br />
           <span className="text-xs">
             Viac informácií o tom, ako používame súbory cookie, nájdete v našej{' '}
-            <Link href="#" className="text-xs underline">
+            <Link href="/cookies" className="text-xs underline">
               zásade používania súborov cookie
             </Link>
             .

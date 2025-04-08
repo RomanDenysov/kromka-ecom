@@ -43,6 +43,7 @@ const policyNav = [
 
 const LegalNavigation = () => {
   const pathname = usePathname()
+
   return (
     <nav className="space-y-1 px-4 pt-2">
       {policyNav.map(({ label, href, subitems }) => {
@@ -51,6 +52,7 @@ const LegalNavigation = () => {
         return (
           <div key={href} className="space-y-1">
             <Link
+              prefetch={true}
               href={href}
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
@@ -65,6 +67,7 @@ const LegalNavigation = () => {
               <div className="pl-4 space-y-1">
                 {subitems.map((subitem) => (
                   <Link
+                    prefetch={true}
                     key={subitem.href}
                     href={subitem.href}
                     className={cn(

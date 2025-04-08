@@ -9,7 +9,7 @@ import { api } from '~/trpc/server'
 export const alt = 'About the product'
 export const size = {
   width: 1200,
-  heigh: 630,
+  height: 630,
 }
 
 export const contentType = 'image/png'

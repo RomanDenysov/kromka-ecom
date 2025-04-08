@@ -1,13 +1,13 @@
 import { type MetadataRoute } from 'next'
-
-import { absoluteUrl } from '~/lib/utils'
+import { prodUrl } from '~/lib/utils/absolute-url'
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
       allow: '/',
+      disallow: ['/admin', '/admin/*', '/api/*'],
     },
-    sitemap: absoluteUrl('/sitemap.xml'),
+    sitemap: new URL('/sitemap.xml', prodUrl.href).href,
   }
 }

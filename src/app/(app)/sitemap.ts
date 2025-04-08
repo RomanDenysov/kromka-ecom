@@ -1,25 +1,32 @@
+import fs from 'node:fs'
 import { MetadataRoute } from 'next/types'
-import { env } from '~/env'
+import { prodUrl } from '~/lib/utils/absolute-url'
 
-const host = (() => {
-  if (env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000') {
-    return env.NEXT_PUBLIC_SERVER_URL
-  }
+let appFolders: fs.Dirent[]
+try {
+  appFolders = fs.readdirSync('app', { withFileTypes: true })
+} catch (error) {
+  console.error('Error reading app directory:', error)
+  appFolders = []
+}
 
-  // if (env.VERCEL_URL) {
-  //   return `https://${env.VERCEL_URL}`
-  // }
+const pages = appFolders
+  .filter((file) => file.isDirectory())
+  .filter((folder) => !folder.name.startsWith('_'))
+  .filter((folder) => !folder.name.startsWith('('))
+  .map((folder) => folder.name)
 
-  const port = env.PORT || 3000
-
-  return `http://localhost:${port}`
-})()
-
-export default function sitemap(): MetadataRoute.Sitemap {
+const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   return [
     {
-      url: host,
+      url: new URL('/', prodUrl).href,
       lastModified: new Date(),
     },
+    ...pages.map((page) => ({
+      url: new URL(page, prodUrl).href,
+      lastModified: new Date(),
+    })),
   ]
 }
+
+export default sitemap
