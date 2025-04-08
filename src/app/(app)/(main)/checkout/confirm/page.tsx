@@ -15,7 +15,7 @@ type Props = {
 const meta = {
   title: 'Dokončenie objednávky | Košík',
   description: 'Prehľad objednávky, ktorú ste si objednali',
-  image: '/images/end-banner.webp',
+  image: 'images/end-banner.webp',
 }
 
 export const metadata: Metadata = createMetadata(meta)

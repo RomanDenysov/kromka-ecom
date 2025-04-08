@@ -43,42 +43,14 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       enhancedDescription += ' Navštívte našu pekáreň alebo si objednajte online.';
     }
 
-    const jsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: product.title,
-      description: product.descr,
-      image: (product.images[0].image as Media).url,
-      offers: {
-        '@type': 'Offer',
-        price: product.price,
-        priceCurrency: 'EUR',
-        availability: product.status === 'active' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-        url: `${prodUrl}/products/${product.slug}`,
-        priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
-      },
-      brand: {
-        '@type': 'Brand',
-        name: 'Pekáreň Kromka'
-      },
-      category: categoryTitle,
-      sku: product.id,
-      url: `${prodUrl}/products/${product.slug}`
-    };
-
     const meta = {
       title: enhancedTitle,
       description: enhancedDescription,
-      image: (product.images[0]?.image as Media)?.url || '/images/kromka_breads.webp',
-      canonicalUrl: `${prodUrl}/products/${product.slug}`,
+      image: (product.images[0]?.image as Media)?.url || 'images/kromka_breads.webp',
+      canonicalUrl: `products/${product.slug}`,
     }
 
-    return {
-      ...createMetadata(meta),
-      other: {
-        'application/ld+json': JSON.stringify(jsonLd),
-      },
-    }
+    return createMetadata(meta)
   } catch (error) {
     return createMetadata({
       title: 'Chyba pri načítaní produktu',
@@ -86,8 +58,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     })
   }
 }
-
-// type Param = string | string[] | undefined
 
 export default async function Page({ params }: Props) {
   const { product: productParam } = await params
@@ -106,7 +76,7 @@ export default async function Page({ params }: Props) {
     '@type': 'Product',
     name: product.title,
     description: product.descr,
-    image: (product.images[0]?.image as Media)?.url || '/images/kromka_breads.webp',
+    image: `${prodUrl}${(product.images[0]?.image as Media)?.url || 'images/kromka_breads.webp'}`,
     offers: {
       '@type': 'Offer',
       price: product.price,
@@ -114,7 +84,7 @@ export default async function Page({ params }: Props) {
       availability: product.status === 'active'
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
-      url: `${prodUrl}/products/${product.slug}`,
+      url: `${prodUrl}products/${product.slug}`,
       priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     },
     brand: {
@@ -123,7 +93,7 @@ export default async function Page({ params }: Props) {
     },
     category: categoryTitle,
     sku: product.id,
-    url: `${prodUrl}/products/${product.slug}`
+    url: `${prodUrl}products/${product.slug}`
   } as const;
 
   return (

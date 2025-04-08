@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation'
 import { ImageResponse } from 'next/og'
-import { formatPrice } from '~/lib/utils'
+import { formatPrice, prodUrl } from '~/lib/utils'
 import { api } from '~/trpc/server'
 
 // Route segment config
 // export const runtime = 'edge'
 // Image metadata
-export const alt = 'About the product'
+export const alt = 'Obrázok produktu v Pekárni Kromka'
 export const size = {
   width: 1200,
   height: 630,
@@ -31,6 +31,10 @@ export default async function Image(props: {
     typeof product.images[0].image !== 'string'
       ? product.images[0].image.url
       : product.images[0].image
+
+  const imageUrl = productImage?.startsWith('http')
+
+  const productImageUrl = imageUrl ? productImage : `${prodUrl}${productImage}`
 
   return new ImageResponse(
     <div
@@ -67,8 +71,8 @@ export default async function Image(props: {
               width: '300px',
               marginBottom: '30px',
             }}
-            src={productImage ?? '/placeholder.svg'}
-            alt={product.title}
+            src={productImageUrl ?? '/placeholder.svg'}
+            alt={product.title || alt}
           />
         </div>
       </div>
@@ -89,8 +93,8 @@ export default async function Image(props: {
           width: '100%',
         }}
       >
-        <div style={{ textAlign: 'center', display: 'flex', fontSize: '24px' }}>
-          {product.descr}
+        <div style={{ textAlign: 'center', display: 'flex', fontSize: '24px', textDecorationLine: 'none' }}>
+          {product.descr.slice(0, 155)}
         </div>
       </div>
       <div

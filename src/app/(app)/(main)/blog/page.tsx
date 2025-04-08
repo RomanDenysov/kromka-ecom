@@ -11,6 +11,7 @@ import { api } from '~/trpc/server'
 const meta = {
   title: 'Náš Kromka Blog',
   description: 'Vitajte v našom kulinárskom svete! Objavte chutné recepty, tipy na pečenie a varenie, a inšpiráciu pre vašu kuchyňu. Od tradičných slovenských jedál po moderné kulinárske trendy.',
+  image: 'images/kromka_bunner_bg_b2b.webp',
 }
 
 const jsonLd: WithContext<WebSite> = {
@@ -18,16 +19,12 @@ const jsonLd: WithContext<WebSite> = {
   '@type': 'WebSite',
   name: meta.title,
   description: meta.description,
+  image: `${prodUrl}${meta.image}`,
   url: createSchemaUrl(new URL('/blog', prodUrl)),
   publisher: createOrganizationSchema(prodUrl)
 }
 
-export const metadata: Metadata = {
-  ...createMetadata(meta),
-  other: {
-    'application/ld+json': JSON.stringify(jsonLd),
-  },
-}
+export const metadata: Metadata = createMetadata(meta)
 
 export default async function BlogPage() {
   const posts = await api.posts.getPosts()

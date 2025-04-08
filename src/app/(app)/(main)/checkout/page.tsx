@@ -7,10 +7,11 @@ import { CheckoutForm } from '~/features/checkout/ui/checkout-form'
 import { Container } from '~/lib/ui/container'
 import { createMetadata } from '~/lib/utils/metadata'
 
+
 const meta = {
   title: 'Dokončenie objednávky | Košík',
   description: 'Dokončenie objednávky',
-  image: '/images/end-banner.webp',
+  image: `images/end-banner.webp`,
 }
 
 export const metadata: Metadata = createMetadata(meta)

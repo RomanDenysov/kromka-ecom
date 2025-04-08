@@ -41,27 +41,14 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     }
   }
 
-  const jsonLd: WithContext<WebSite> = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: title,
-    description: description,
-    url: createSchemaUrl(new URL('/products', prodUrl)),
-    publisher: createOrganizationSchema(prodUrl)
-  }
-
   const meta = {
     title,
     description,
-    image: '/images/kromka_breads.webp',
+    image: 'images/kromka_breads.webp',
+    canonicalUrl: 'products',
   }
 
-  return {
-    ...createMetadata(meta),
-    other: {
-      'application/ld+json': JSON.stringify(jsonLd),
-    },
-  }
+  return createMetadata(meta)
 }
 
 export default async function ShopPage({ searchParams }: Props) {

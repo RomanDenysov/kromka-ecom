@@ -1,7 +1,6 @@
 import { TagIcon } from 'lucide-react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { CtaSection } from '~/features/cta-section/ui'
 import { Badge } from '~/lib/ui/components/badge'
 import { Container } from '~/lib/ui/container'
 import RichText from '~/lib/ui/rich-text'
@@ -29,36 +28,18 @@ export const generateMetadata = async ({ params }: Props) => {
   if (!post) return {
     title: 'Blog Pekárne Kromka',
     description: 'Blog Pekárne Kromka',
-    image: '/images/end-banner.webp',
+    image: 'images/end-banner.webp',
   }
 
   const meta = {
     title: post.title.slice(0, 60),
     // TODO: Add description to post db table collection
     description: `Prečítajte si článok ${post.title} v blogu Pekárne Kromka`,
-    image: (post.banner as Media).url || '/images/end-banner.webp',
+    image: (post.banner as Media).url || 'images/end-banner.webp',
+    canonicalUrl: `blog/${post.slug}`,
   }
 
-  const jsonLd: WithContext<Article> = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: `Prečítajte si článok ${post.title} v blogu Pekárne Kromka`,
-    image: (post.banner as Media).url || '/images/end-banner.webp',
-    datePublished: post.createdAt,
-    dateModified: post.updatedAt,
-    author: createOrganizationSchema(prodUrl),
-    publisher: createOrganizationSchema(prodUrl),
-    url: createSchemaUrl(new URL(`/blog/${post.slug}`, prodUrl)),
-    articleSection: post.tags ? (post.tags as Tag[]).map(tag => tag.title).join(', ') : 'Blog'
-  }
-
-  return {
-    ...createMetadata(meta),
-    other: {
-      'application/ld+json': JSON.stringify(jsonLd),
-    },
-  }
+  return createMetadata(meta)
 }
 
 export default async function PostPage({ params }: Props) {
@@ -75,7 +56,7 @@ export default async function PostPage({ params }: Props) {
     '@type': 'Article',
     headline: post.title,
     description: `Prečítajte si článok ${post.title} v blogu Pekárne Kromka`,
-    image: (post.banner as Media).url || '/images/end-banner.webp',
+    image: `${prodUrl}${(post.banner as Media).url || 'images/end-banner.webp'}`,
     datePublished: post.createdAt,
     dateModified: post.updatedAt,
     author: createOrganizationSchema(prodUrl),

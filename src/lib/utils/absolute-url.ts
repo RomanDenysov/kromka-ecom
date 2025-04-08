@@ -15,6 +15,7 @@ function getBaseUrl() {
     const cleanServerUrl = env.NEXT_PUBLIC_SERVER_URL.replace(/^https?:\/\//, '')
     // Detect protocol (defaulting to https in production)
     const protocol = env.NEXT_PUBLIC_SERVER_URL.startsWith('https') ? 'https' : 'http'
+
     return new URL(`${protocol}://${cleanServerUrl}`)
   }
   return new URL('http://localhost:3000')
