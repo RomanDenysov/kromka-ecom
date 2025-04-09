@@ -5,15 +5,18 @@ import posthog from "posthog-js"
 import { PostHogProvider as PHProvider, usePostHog } from "posthog-js/react"
 import { Suspense, useEffect } from "react"
 import { useCookieConsentStore } from "~/store/cookie/use-cookie-store"
+import { api } from "~/trpc/react"
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   const cookieConsent = useCookieConsentStore((state) => state.cookieConsent)
+  const { data: user } = api.users.me.useQuery()
 
   useEffect(() => {
     if (cookieConsent) {
       posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
         api_host: "/ingest",
         ui_host: "https://eu.posthog.com",
+        persistence: cookieConsent ? 'localStorage+cookie' : 'memory',
         capture_pageview: false, // We capture pageviews manually
         capture_pageleave: true, // Enable pageleave capture
         loaded: (posthog) => {
@@ -23,7 +26,13 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         }
       })
     }
-  }, [cookieConsent])
+    if (user) {
+      posthog.identify(user.id, {
+        email: user.email,
+        name: user.name,
+      })
+    }
+  }, [cookieConsent, user])
 
   if (!cookieConsent) {
     return <>{children}</>

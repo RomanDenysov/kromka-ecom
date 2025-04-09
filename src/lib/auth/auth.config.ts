@@ -1,10 +1,11 @@
 import type { User as PayloadUser } from '@payload-types'
-import type { DefaultSession, NextAuthConfig, Profile } from 'next-auth'
+import type { NextAuthConfig, Profile } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Google from 'next-auth/providers/google'
 import Nodemailer from 'next-auth/providers/nodemailer'
 import { PayloadAuthjsUser } from 'payload-authjs'
+import posthog from 'posthog-js'
 import { env } from '~/env'
 import { useAuth } from '~/hooks/use-auth'
 
@@ -105,6 +106,12 @@ export default {
   events: {
     async signIn({ user, account, profile }) {
       console.log('Signing in', { user, account, profile })
+      if (user) {
+        posthog.identify(user.id, {
+          email: user.email,
+          name: user.name,
+        })
+      }
     },
   },
 } satisfies NextAuthConfig
