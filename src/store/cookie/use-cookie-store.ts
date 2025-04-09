@@ -13,7 +13,7 @@ export const useCookieConsentStore = create<CookieConsentState>()(
       setCookieConsent: () => set({ cookieConsent: true }),
     }),
     {
-      name: 'krmk',
+      name: 'krmk_cookie_consent',
       storage: createJSONStorage(() => localStorage),
     },
   ),

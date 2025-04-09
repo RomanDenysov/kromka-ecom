@@ -1,6 +1,6 @@
 import { FacebookIcon, InstagramIcon, MailIcon, PinIcon } from 'lucide-react'
 import Image from 'next/image'
-import { SubscribeSection } from '~/features/cta-section/ui'
+// import { SubscribeSection } from '~/features/cta-section/ui'
 import { Alert, AlertDescription } from '~/lib/ui/components/alert'
 import { Button } from '~/lib/ui/components/button'
 import { Card } from '~/lib/ui/components/card'
@@ -152,7 +152,7 @@ export default function Page() {
       </div>
 
       {/* SUBSCRIBE SECTIONS */}
-      <SubscribeSection />
+      {/* <SubscribeSection /> */}
     </Container>
   )
 }
