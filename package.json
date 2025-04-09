@@ -84,6 +84,8 @@
     "payload": "3.9.0",
     "payload-admin-bar": "^1.0.6",
     "payload-authjs": "^0.6.1",
+    "posthog-js": "^1.235.0",
+    "posthog-node": "^4.11.3",
     "react": "^19.0.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^19.0.0",

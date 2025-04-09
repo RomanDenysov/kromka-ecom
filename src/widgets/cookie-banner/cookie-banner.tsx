@@ -16,7 +16,7 @@ export function CookieBanner() {
   const isMounted = useMountedState()
   const cookieConsent = useCookieConsentStore((state) => state.cookieConsent)
   const setCookieConsent = useCookieConsentStore((state) => state.setCookieConsent)
-  const visitorId = useVisitorStore((state) => state.visitorId)
+  // const visitorId = useVisitorStore((state) => state.visitorId)
   const setVisitorId = useVisitorStore((state) => state.setVisitorId)
 
   useEffect(() => {
@@ -32,9 +32,9 @@ export function CookieBanner() {
   const handleAccept = async () => {
     setIsVisible(false)
     setCookieConsent()
-    if (!visitorId) {
-      setVisitorId()
-    }
+    // if (!visitorId) {
+    //   setVisitorId()
+    // }
     await acceptCookie()
   }
 

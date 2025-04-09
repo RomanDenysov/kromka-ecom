@@ -31,6 +31,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SERVER_URL: z.string().min(1),
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string().min(1),
     NEXT_PUBLIC_MAPS_API_KEY: z.string().min(1),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
   },
   runtimeEnv: {
     PORT: process.env.PORT,
@@ -58,6 +59,8 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,
