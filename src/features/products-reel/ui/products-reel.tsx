@@ -136,4 +136,23 @@ const ProductsReel = memo(
   },
 )
 
-export default ProductsReel
+const ProductsReelLoading = ({ className, query }: { className?: string, query: ProductsQueryType }) => {
+  return (
+    <article className={cn('py-10', className)} aria-label="Product showcase loading state">
+      <div className="mb-4 md:flex md:flex-grow md:items-center md:justify-between">
+        <Skeleton className="h-10 w-1/3" />
+      </div>
+      <div className="relative">
+        <div className="mt-6 flex w-full items-center">
+          <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
+            {Array.from({ length: query.limit ?? 12 }).map((_, index) => (
+              <ProductCardSkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export { ProductsReel, ProductsReelLoading }

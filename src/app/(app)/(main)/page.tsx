@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { CtaSection } from '~/features/cta-section/ui'
 import { HeroSection } from '~/features/hero-section'
 import { MarketingBanner } from '~/features/marketing-banner/ui'
-import { ProductsReel } from '~/features/products-reel/ui'
+import { ProductsReel, ProductsReelLoading } from '~/features/products-reel/ui'
 import { Container } from '~/lib/ui/container'
 import { FeaturesSection } from '~/lib/ui/features-section'
 import { createMetadata } from '~/lib/utils/metadata'
+import { api } from '~/trpc/server'
 
 const meta = {
   title: 'Veľká noc z Kromky',
@@ -18,6 +20,11 @@ const meta = {
 export const metadata: Metadata = createMetadata(meta)
 
 export default function HomePage() {
+
+  const query = { limit: 8, category: ['Naše pečivo', 'Z našej produkcie'] }
+
+  void api.products.infiniteProducts.prefetchInfinite({ query })
+
   return (
     <Container className="pb-5 md:pb-8 space-y-5 md:space-y-10">
       <HeroSection />
@@ -28,12 +35,14 @@ export default function HomePage() {
         image="/images/velka-noc.jpeg"
       />
       <FeaturesSection />
-      <Suspense fallback={null}>
-        <ProductsReel
-          href
-          title={'Náš chlieb a lakocinky'}
-          query={{ limit: 8, category: ['Naše pečivo', 'Z našej produkcie'] }}
-        />
+      <Suspense fallback={<ProductsReelLoading query={query} />}>
+        <ErrorBoundary fallback={<ProductsReelLoading query={query} />}>
+          <ProductsReel
+            href
+            title={'Náš chlieb a lakocinky'}
+            query={query}
+          />
+        </ErrorBoundary>
       </Suspense>
       <CtaSection />
     </Container>
