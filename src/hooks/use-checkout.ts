@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -69,6 +70,34 @@ export function useCheckout() {
     }
   }, [currentStore, form])
 
+  const { data: user } = api.users.me.useQuery()
+
+  const sendPostHogAnalytics = useCallback(
+    (data: CheckoutFormData) => {
+      posthog.capture('checkout_completed', {
+        products: itemsInCart.map((item) => ({
+          product: item.product.id,
+          quantity: item.quantity,
+        })),
+        total_price: itemsInCart.reduce((acc, item) => acc + item.product.price * item.quantity, 0),
+      })
+      if (!user) {
+        posthog.identify(data.email, {
+          email: data.email,
+          name: data.name,
+          phone: data.phone,
+        })
+      } else {
+        posthog.identify(user.email, {
+          email: user.email,
+          name: user.name,
+          phone: user.phone,
+        })
+      }
+    },
+    [itemsInCart, user],
+  )
+
   // Mutations
   const checkoutMutation = api.checkout.checkout.useMutation({
     onSuccess: ({ url }) => {
@@ -95,20 +124,22 @@ export function useCheckout() {
       setIsSubmitting(true)
       setError(null)
 
-      await checkoutMutation.mutateAsync({
-        products: itemsInCart.map((item) => ({
-          product: item.product.id,
-          quantity: item.quantity,
-        })),
-        options: {
-          email: data.email,
-          name: data.name,
-          phone: data.phone,
-          store: data.store,
-          terms: data.terms,
-          date: data.date,
-        },
-      })
+      await checkoutMutation
+        .mutateAsync({
+          products: itemsInCart.map((item) => ({
+            product: item.product.id,
+            quantity: item.quantity,
+          })),
+          options: {
+            email: data.email,
+            name: data.name,
+            phone: data.phone,
+            store: data.store,
+            terms: data.terms,
+            date: data.date,
+          },
+        })
+        .then(() => sendPostHogAnalytics(data))
     },
     [itemsInCart, checkoutMutation, setError, setIsSubmitting],
   )
