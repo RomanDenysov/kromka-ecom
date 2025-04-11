@@ -7,7 +7,6 @@ import Nodemailer from 'next-auth/providers/nodemailer'
 import { PayloadAuthjsUser } from 'payload-authjs'
 import posthog from 'posthog-js'
 import { env } from '~/env'
-import { useAuth } from '~/hooks/use-auth'
 
 declare module 'next-auth/jwt' {
   interface JWT extends Pick<Profile, 'role'> {
@@ -22,6 +21,8 @@ declare module 'next-auth' {
   interface User extends Pick<JWT, 'id' | 'role'> {}
   interface Session extends PayloadAuthjsUser<PayloadUser> {}
 }
+
+const staffRoles = ['admin', 'manager', 'staff']
 
 const providers: Provider[] = [
   Google({
@@ -88,7 +89,6 @@ export default {
       if (token) {
         session.user.id = token.id as string
         session.user.role = token.role as PayloadUser['role']
-        // Убедимся, что email всегда присутствует
         if (token.email) {
           session.user.email = token.email
         }
@@ -96,20 +96,21 @@ export default {
       return session
     },
     authorized: ({ auth, request: { nextUrl } }) => {
-      // Добавляем проверку для админ-роутов
       if (nextUrl.pathname.startsWith('/admin')) {
-        return auth?.user?.role === 'admin'
+        return staffRoles.includes(auth?.user?.role ?? '')
       }
       return !!auth
     },
   },
   events: {
     async signIn({ user, account, profile }) {
-      console.log('Signing in', { user, account, profile })
       if (user) {
-        posthog.identify(user.id, {
+        posthog.identify(user.email || user.id, {
+          user_id: user.id,
           email: user.email,
           name: user.name,
+          role: user.role,
+          last_sign_in: new Date().toISOString(),
         })
       }
     },

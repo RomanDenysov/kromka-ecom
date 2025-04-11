@@ -27,9 +27,10 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       })
     }
     if (user) {
-      posthog.identify(user.id, {
+      posthog.identify(user.email, {
         email: user.email,
-        name: user.name,
+        name: user.name || undefined,
+        phone: user.phone || undefined,
       })
     }
   }, [cookieConsent, user])

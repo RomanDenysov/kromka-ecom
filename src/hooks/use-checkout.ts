@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import posthog from 'posthog-js'
 import { useCallback, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useFormState } from 'react-hook-form'
 import { z } from 'zod'
 import { useCart } from '~/store/cart/use-cart'
 import { checkoutStore } from '~/store/chechkout'
@@ -72,27 +72,72 @@ export function useCheckout() {
 
   const { data: user } = api.users.me.useQuery()
 
-  const sendPostHogAnalytics = useCallback(
-    (data: CheckoutFormData) => {
-      posthog.capture('checkout_completed', {
-        products: itemsInCart.map((item) => ({
-          product: item.product.id,
-          quantity: item.quantity,
-        })),
-        total_price: itemsInCart.reduce((acc, item) => acc + item.product.price * item.quantity, 0),
+  const { isValid } = useFormState({
+    control: form.control,
+    name: ['name', 'email', 'phone'],
+    exact: true,
+  })
+
+  useEffect(() => {
+    // Only identify user if not already identified during auth
+    if (user && !posthog.get_distinct_id()) {
+      posthog.identify(user.email, {
+        user_id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        role: user.role,
       })
-      if (!user) {
-        posthog.identify(data.email, {
-          email: data.email,
-          name: data.name,
-          phone: data.phone,
+    } else if (isValid && !user) {
+      const { email, name, phone } = form.getValues()
+      posthog.identify(email, {
+        email,
+        name,
+        phone,
+        role: 'guest',
+      })
+    }
+  }, [form, user, isValid])
+
+  const sendPostHogAnalytics = useCallback(
+    (data: CheckoutFormData, success: boolean, errorMessage?: string) => {
+      try {
+        const totalPrice = itemsInCart.reduce(
+          (acc, item) => acc + item.product.price * item.quantity,
+          0,
+        )
+
+        const userProperties = user
+          ? {
+              user_id: user.id,
+              email: user.email,
+              name: user.name,
+              role: user.role,
+            }
+          : {
+              email: data.email,
+              name: data.name,
+              role: 'guest',
+            }
+
+        posthog.capture('checkout_completed', {
+          ...userProperties,
+          success,
+          error: errorMessage,
+          products: itemsInCart.map((item) => ({
+            product_name: item.product.title,
+            quantity: item.quantity,
+            price: item.product.price,
+          })),
+          total_price: totalPrice,
+          store_id: data.store,
+          pickup_date: data.date?.toISOString(),
+          method: 'store',
+          cart_size: itemsInCart.length,
+          timestamp: new Date().toISOString(),
         })
-      } else {
-        posthog.identify(user.email, {
-          email: user.email,
-          name: user.name,
-          phone: user.phone,
-        })
+      } catch (error) {
+        console.error('Failed to send analytics:', error)
       }
     },
     [itemsInCart, user],
@@ -124,8 +169,8 @@ export function useCheckout() {
       setIsSubmitting(true)
       setError(null)
 
-      await checkoutMutation
-        .mutateAsync({
+      try {
+        await checkoutMutation.mutateAsync({
           products: itemsInCart.map((item) => ({
             product: item.product.id,
             quantity: item.quantity,
@@ -139,9 +184,16 @@ export function useCheckout() {
             date: data.date,
           },
         })
-        .then(() => sendPostHogAnalytics(data))
+        sendPostHogAnalytics(data, true)
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        sendPostHogAnalytics(data, false, errorMessage)
+        throw error
+      } finally {
+        setIsSubmitting(false)
+      }
     },
-    [itemsInCart, checkoutMutation, setError, setIsSubmitting],
+    [itemsInCart, checkoutMutation, setError, setIsSubmitting, sendPostHogAnalytics],
   )
 
   return {
