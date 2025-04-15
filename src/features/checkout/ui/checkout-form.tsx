@@ -20,7 +20,7 @@ import { DatePicker } from './date-picker'
 import { DateSelector } from './date-selector'
 
 const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = true
-const availableDates = ['2025-04-17', '2025-04-19']
+const availableDates = ['2025-04-19']
 const formFields = [
   {
     name: 'name' as const,
