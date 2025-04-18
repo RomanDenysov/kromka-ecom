@@ -199,7 +199,7 @@ export function CheckoutForm(props: { className?: string }) {
               size={'lg'}
               className="w-full text-lg"
               isLoading={isSubmitting}
-            // disabled={true}
+              disabled={true}
             >
               Objednať
             </LoaderButton>
