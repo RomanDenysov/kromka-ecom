@@ -19,8 +19,8 @@ import { api } from '~/trpc/react'
 import { DatePicker } from './date-picker'
 import { DateSelector } from './date-selector'
 
-const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = true
-const availableDates = ['2025-04-19']
+const DUMMY_CHRISTMAS_DATES_FEATURE_FLAG = false
+// const availableDates = ['2025-04-19']
 const formFields = [
   {
     name: 'name' as const,
@@ -199,7 +199,7 @@ export function CheckoutForm(props: { className?: string }) {
               size={'lg'}
               className="w-full text-lg"
               isLoading={isSubmitting}
-              disabled={true}
+              disabled={items.length === 0 || isSubmitting}
             >
               Objednať
             </LoaderButton>
