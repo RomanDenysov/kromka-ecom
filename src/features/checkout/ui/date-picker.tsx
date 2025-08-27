@@ -10,6 +10,8 @@ import { Calendar } from '~/lib/ui/components/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '~/lib/ui/components/popover'
 import { cn } from '~/lib/utils'
 
+const SPECIAL_DISABLED_DATE = new Date(2025, 7, 29)
+
 type Props = {
   onDateSelect?: (date: Date | undefined) => void
 }
@@ -32,6 +34,9 @@ export function DatePicker({ onDateSelect }: Props) {
 
     // Проверка на воскресенье
     if (isSunday(newDate)) return
+
+    // Специально заблокированная дата
+    if (isSameDay(newDate, SPECIAL_DISABLED_DATE)) return
 
     // Проверка на прошедшие даты
     if (isBefore(newDate, today)) return
@@ -57,6 +62,7 @@ export function DatePicker({ onDateSelect }: Props) {
 
       return (
         isSunday(date) || // Запрет воскресений
+        isSameDay(date, SPECIAL_DISABLED_DATE) || // Специально заблокированная дата
         isBefore(date, today) || // Запрет прошедших дат
         isSameDay(date, today) || // Запрет текущего дня
         (isSameDay(date, tomorrow) && !isBeforeNoon) // Запрет завтрашнего дня после 12:00
