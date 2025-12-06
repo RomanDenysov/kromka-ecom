@@ -20,29 +20,29 @@ export const Providers = ({ children }: { children: Readonly<React.ReactNode> })
   return (
     <TRPCReactProvider>
       <WBProvider>
-        <PostHogProvider>
-          <DynamicThemeProvider
-            attribute="class"
-            disableTransitionOnChange
-            defaultTheme="light"
-            enableSystem
-          >
-            <Suspense fallback={null}>
-              <SheetsProvider />
-            </Suspense>
+        {/* <PostHogProvider> */}
+        <DynamicThemeProvider
+          attribute="class"
+          disableTransitionOnChange
+          defaultTheme="light"
+          enableSystem
+        >
+          <Suspense fallback={null}>
+            <SheetsProvider />
+          </Suspense>
 
-            <Suspense fallback={null}>
-              <SearchModal />
-            </Suspense>
+          <Suspense fallback={null}>
+            <SearchModal />
+          </Suspense>
 
-            <Suspense fallback={null}>
-              <CookieBanner />
-            </Suspense>
+          <Suspense fallback={null}>
+            <CookieBanner />
+          </Suspense>
 
-            <Toaster position="top-center" richColors />
-            {children}
-          </DynamicThemeProvider>
-        </PostHogProvider>
+          <Toaster position="top-center" richColors />
+          {children}
+        </DynamicThemeProvider>
+        {/* </PostHogProvider> */}
       </WBProvider>
     </TRPCReactProvider>
   )
